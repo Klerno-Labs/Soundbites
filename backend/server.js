@@ -29,9 +29,66 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// Body parsing
+// Body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Root route - API info page
+app.get('/', (req, res) => {
+    res.send(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Soundbites Quiz API</title>
+            <style>
+                body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; background: #f5f5f5; }
+                h1 { color: #c92a76; }
+                .endpoint { background: white; padding: 15px; margin: 10px 0; border-radius: 8px; border-left: 4px solid #c92a76; }
+                code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; }
+                .status { color: #00b894; font-weight: bold; }
+            </style>
+        </head>
+        <body>
+            <h1>🎯 Soundbites Quiz API</h1>
+            <p class="status">✅ Backend is running successfully!</p>
+            
+            <h2>Available Endpoints:</h2>
+            
+            <div class="endpoint">
+                <strong>GET /health</strong><br>
+                Check API health status
+            </div>
+            
+            <div class="endpoint">
+                <strong>GET /api/quiz/questions</strong><br>
+                Get all quiz questions
+            </div>
+            
+            <div class="endpoint">
+                <strong>POST /api/quiz/submit</strong><br>
+                Submit quiz results
+            </div>
+            
+            <div class="endpoint">
+                <strong>POST /api/auth/login</strong><br>
+                Admin login
+            </div>
+            
+            <div class="endpoint">
+                <strong>GET /api/admin/questions</strong><br>
+                Manage questions (requires authentication)
+            </div>
+            
+            <div class="endpoint">
+                <strong>GET /api/admin/results</strong><br>
+                View quiz results (requires authentication)
+            </div>
+            
+            <p><em>Frontend URL:</em> <a href="https://soundbites-quiz-frontend.onrender.com">https://soundbites-quiz-frontend.onrender.com</a></p>
+        </body>
+        </html>
+    `);
+});
 
 // Health check
 app.get('/health', (req, res) => {
