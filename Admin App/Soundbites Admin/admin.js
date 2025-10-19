@@ -8,6 +8,7 @@ class QuizAdmin {
         this.filteredResults = [];
         this.filteredLeads = [];
         this.charts = {}; // Chart.js instances
+        this.editingQuestionId = null; // Track which question is being edited
         this.init();
     }
 
@@ -261,8 +262,11 @@ class QuizAdmin {
         const questionText = document.getElementById('question-text').value;
         const questionType = document.getElementById('question-type').value;
         
-        const newQuestion = {
-            id: this.getNextId(),
+        // Check if we're editing an existing question
+        const isEditing = this.editingQuestionId !== undefined && this.editingQuestionId !== null;
+        
+        const questionData = {
+            id: isEditing ? this.editingQuestionId : this.getNextId(),
             text: questionText,
             type: questionType,
             weight: 2
@@ -271,24 +275,37 @@ class QuizAdmin {
         // Add type-specific properties
         switch (questionType) {
             case 'slider':
-                newQuestion.min = parseInt(document.getElementById('slider-min')?.value || 1);
-                newQuestion.max = parseInt(document.getElementById('slider-max')?.value || 10);
-                newQuestion.labels = [
-                    document.getElementById('slider-label-min')?.value || newQuestion.min.toString(),
-                    document.getElementById('slider-label-max')?.value || newQuestion.max.toString()
+                questionData.min = parseInt(document.getElementById('slider-min')?.value || 1);
+                questionData.max = parseInt(document.getElementById('slider-max')?.value || 10);
+                questionData.labels = [
+                    document.getElementById('slider-label-min')?.value || questionData.min.toString(),
+                    document.getElementById('slider-label-max')?.value || questionData.max.toString()
                 ];
                 break;
             case 'hours-slider':
-                newQuestion.min = 1;
-                newQuestion.max = 24;
-                newQuestion.unit = 'hours';
+                questionData.min = 1;
+                questionData.max = 24;
+                questionData.unit = 'hours';
                 break;
             case 'multiple-choice':
-                newQuestion.options = this.getMultipleChoiceOptions();
+                questionData.options = this.getMultipleChoiceOptions();
                 break;
         }
 
-        this.questions.push(newQuestion);
+        if (isEditing) {
+            // Update existing question
+            const index = this.questions.findIndex(q => q.id === this.editingQuestionId);
+            if (index !== -1) {
+                this.questions[index] = questionData;
+            }
+            this.editingQuestionId = null;
+            alert('Question updated successfully!');
+        } else {
+            // Add new question
+            this.questions.push(questionData);
+            alert('Question added successfully!');
+        }
+        
         this.saveQuestions();
         this.loadQuestionsList();
         
@@ -296,7 +313,9 @@ class QuizAdmin {
         event.target.reset();
         this.updateTypeOptions({ target: { value: 'slider' } });
         
-        alert('Question added successfully!');
+        // Reset submit button text
+        const submitBtn = document.querySelector('#question-form button[type="submit"]');
+        if (submitBtn) submitBtn.textContent = 'Add Question';
     }
 
     getNextId() {
@@ -407,14 +426,42 @@ class QuizAdmin {
         if (!question) return;
         
         // Fill form with question data
-        document.getElementById('question-text').value = question.text;
+        document.getElementById('question-text').value = question.question || question.text;
         document.getElementById('question-type').value = question.type;
         
         // Update type-specific options
         this.updateTypeOptions({ target: { value: question.type } });
         
-        // Remove question temporarily for editing
-        this.deleteQuestion(id, false);
+        // Parse and populate options based on type
+        if (question.options) {
+            try {
+                const opts = typeof question.options === 'string' ? JSON.parse(question.options) : question.options;
+                
+                if (question.type === 'multiple-choice' && Array.isArray(opts)) {
+                    const mcOptions = document.getElementById('mc-options');
+                    if (mcOptions) mcOptions.value = opts.join('\n');
+                } else if (question.type === 'slider' && opts.min !== undefined) {
+                    const sliderMin = document.getElementById('slider-min');
+                    const sliderMax = document.getElementById('slider-max');
+                    const sliderLabel = document.getElementById('slider-label');
+                    if (sliderMin) sliderMin.value = opts.min || 0;
+                    if (sliderMax) sliderMax.value = opts.max || 100;
+                    if (sliderLabel) sliderLabel.value = opts.label || '';
+                }
+            } catch (e) {
+                console.error('Error parsing options:', e);
+            }
+        }
+        
+        // Store the ID being edited so we can update instead of create
+        this.editingQuestionId = id;
+        
+        // Update submit button text
+        const submitBtn = document.querySelector('#question-form button[type="submit"]');
+        if (submitBtn) submitBtn.textContent = 'Update Question';
+        
+        // Scroll to form
+        document.getElementById('question-form').scrollIntoView({ behavior: 'smooth' });
     }
 
     deleteQuestion(id, confirm = true) {
