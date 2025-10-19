@@ -153,9 +153,9 @@
                   </button>
                 </div>
               </div>
-              <div class="form-group" style="display:flex;align-items:center;gap:0.5rem;">
-                <input type="checkbox" id="remember-me" name="remember">
-                <label for="remember-me" style="margin:0;font-size:0.75rem;">Keep me logged in</label>
+              <div class="form-group" style="display:flex;align-items:center;gap:0.25rem;">
+                <input type="checkbox" id="remember-me" name="remember" style="width:14px;height:14px;margin:0;">
+                <label for="remember-me" style="margin:0;font-size:0.7rem;">Keep me logged in</label>
               </div>
               <div id="error-message" style="color:#ff6b6b;margin:1rem 0;display:none;"></div>
               <button type="submit" class="btn btn-primary" style="width:100%;">Login</button>
