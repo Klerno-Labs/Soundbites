@@ -495,10 +495,10 @@
       <div class="container" role="application">
         <header>
           <div class="logo-container">
-            <img src="../../Main%20app/soundbites_logo_magenta.webp" alt="Soundbites Logo" class="brand-logo">
+            <img src="../../Main app/soundbites_logo_magenta.webp" alt="Soundbites Logo" class="brand-logo">
             <span class="play-button-accent" aria-hidden="true"></span>
           </div>
-          <div class="wave-decoration"><img src="../../Main%20app/dot_wave_2.webp" alt="Sound Wave" class="wave-graphic"></div>
+          <div class="wave-decoration"><img src="../../Main app/dot_wave_2.webp" alt="Sound Wave" class="wave-graphic"></div>
         </header>
         <main id="main">
           <div class="quiz-container" style="max-width:520px;margin:0 auto;">
@@ -556,10 +556,10 @@
       <div class="container" role="application">
         <header>
           <div class="logo-container">
-            <img src="../../Main%20app/soundbites_logo_magenta.webp" alt="Soundbites Logo" class="brand-logo">
+            <img src="../../Main app/soundbites_logo_magenta.webp" alt="Soundbites Logo" class="brand-logo">
             <span class="play-button-accent" aria-hidden="true"></span>
           </div>
-          <div class="wave-decoration"><img src="../../Main%20app/dot_wave_2.webp" alt="Sound Wave" class="wave-graphic"></div>
+          <div class="wave-decoration"><img src="../../Main app/dot_wave_2.webp" alt="Sound Wave" class="wave-graphic"></div>
         </header>
         <main id="main">
           <div class="quiz-container" style="max-width:520px;margin:0 auto;">
@@ -627,3 +627,4 @@
     });
   };
 })();
+
