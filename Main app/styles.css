@@ -395,11 +395,11 @@ textarea:focus-visible,
 }
 
 .recommendation.high-need {
-    background: linear-gradient(135deg, var(--accent, var(--sb-primary)), #f44336);
+    background: var(--sb-primary);
     color: white;
 }
-.recommendation.moderate-need { background: linear-gradient(135deg, #9c27b0, #ff9800); color: #fff; }
-.recommendation.low-need { background: linear-gradient(135deg, #3f51b5, #4caf50); color: #fff; }
+.recommendation.moderate-need { background: var(--sb-primary); color: #fff; }
+.recommendation.low-need { background: var(--sb-primary); color: #fff; }
 .score-meter {
     display: grid;
     place-items: center;

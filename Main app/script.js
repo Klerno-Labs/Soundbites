@@ -496,8 +496,9 @@ class SoundbiteQuiz {
                     <h3>${title}</h3>
                     <p>${message}</p>
                     <p><strong>${recommendation.action}</strong></p>
-                    <div style="margin-top: 1rem;">
+                    <div style="margin-top: 1rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
                         <a href="${ctaUrl}" class="btn btn-primary" target="_blank" rel="noopener">${ctaText}</a>
+                        <button id="retake-btn" class="btn btn-secondary" onclick="location.reload()">Retake Quiz</button>
                     </div>
                 </div>
             </div>
