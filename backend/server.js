@@ -44,6 +44,18 @@ app.get('/health', (req, res) => {
     });
 });
 
+// Database initialization route
+app.get('/api/init-database', async (req, res) => {
+    try {
+        const { initDatabase } = require('./scripts/init-db-postgres');
+        await initDatabase();
+        res.json({ success: true, message: 'Database initialized successfully' });
+    } catch (error) {
+        console.error('Database initialization error:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/quiz', quizRoutes);
