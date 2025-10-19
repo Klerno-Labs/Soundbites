@@ -157,8 +157,24 @@
                 <input type="checkbox" id="remember-me" name="remember" style="width:14px;height:14px;margin:0;">
                 <label for="remember-me" style="margin:0;font-size:0.7rem;">Keep me logged in</label>
               </div>
-              <div id="error-message" style="color:#ff6b6b;margin:1rem 0;display:none;"></div>
-              <button type="submit" class="btn btn-primary" style="width:100%;">Login</button>
+              <div id="error-message" style="display:none;background:#fff5f5;border:1px solid #ff6b6b;border-radius:8px;padding:0.75rem 1rem;margin:1rem 0;color:#c92a2a;">
+                <div style="display:flex;align-items:center;gap:0.5rem;">
+                  <span style="font-size:1.2rem;">⚠️</span>
+                  <span id="error-text"></span>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" id="login-btn" style="width:100%;position:relative;">
+                <span id="login-text">Login</span>
+                <span id="login-spinner" style="display:none;">
+                  <span style="display:inline-block;width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin 0.6s linear infinite;"></span>
+                  <span style="margin-left:0.5rem;">Logging in...</span>
+                </span>
+              </button>
+              <style>
+                @keyframes spin {
+                  to { transform: rotate(360deg); }
+                }
+              </style>
             </form>
           </div>
         </main>
@@ -170,7 +186,11 @@
     const togglePassword = document.getElementById('toggle-password');
     const passwordInput = document.getElementById('password');
     const errorMessage = document.getElementById('error-message');
+    const errorText = document.getElementById('error-text');
     const usernameInput = document.getElementById('username');
+    const loginBtn = document.getElementById('login-btn');
+    const loginText = document.getElementById('login-text');
+    const loginSpinner = document.getElementById('login-spinner');
 
     // Toggle password visibility
     if (togglePassword && passwordInput) {
@@ -191,10 +211,11 @@
         const remember = document.getElementById('remember-me').checked;
 
         // Show loading state
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
-        submitBtn.textContent = 'Logging in...';
-        submitBtn.disabled = true;
+        loginText.style.display = 'none';
+        loginSpinner.style.display = 'inline-block';
+        loginBtn.disabled = true;
+        usernameInput.disabled = true;
+        passwordInput.disabled = true;
         errorMessage.style.display = 'none';
 
         // Attempt login
@@ -207,11 +228,16 @@
           // Reload to show admin panel
           window.location.reload();
         } else {
-          // Show error
-          errorMessage.textContent = result.error || 'Login failed. Please check your credentials.';
+          // Show error with animation
+          errorText.textContent = result.error || 'Login failed. Please check your credentials.';
           errorMessage.style.display = 'block';
-          submitBtn.textContent = originalText;
-          submitBtn.disabled = false;
+          
+          // Reset form
+          loginText.style.display = 'inline-block';
+          loginSpinner.style.display = 'none';
+          loginBtn.disabled = false;
+          usernameInput.disabled = false;
+          passwordInput.disabled = false;
           passwordInput.value = '';
           passwordInput.focus();
         }
