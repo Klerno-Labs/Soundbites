@@ -6,13 +6,9 @@
 
 
 
-### Live URLs:The Admin panel lives at `Admin App/Soundbites Admin/admin.html` and is protected by a lightweight client-side login suitable for static hosting.
-
+### Live URLs:
 - **Quiz**: https://otis.soundbites.com
-
-- **Admin**: https://otis.soundbites.com/Admin%20App/Soundbites%20Admin/admin.html- First use (initialize):
-
-  - Open the admin page. If no credentials are set in this browser, click "Initialize Admin".
+- **Admin**: https://otis.soundbites.com/admin/
 
 ### Local Development:  - Enter a new password (min 6 characters). The username defaults to `admin` unless you type a different username before initializing.
 
@@ -56,20 +52,12 @@ Quiz/
 
 │  - This is a client-side guard intended for static deployments. For production environments handling sensitive data, use a real backend with secure authentication and storage.
 
-├── Admin App/                      # Admin panel (live version)
-
-│   └── Soundbites Admin/## Troubleshooting
-
-│       ├── admin.html              # Admin dashboard
-
-│       ├── admin.js                # Admin logic- I don’t see "Initialize Admin":
-
-│       ├── admin.css               # Admin styles  - It’s hidden after credentials exist. Click "Reset Login" to clear and re-initialize if needed.
-
-│       └── [auth files]- I forgot the password:
-
-│  - Use "Reset Login" to clear credentials, then initialize a new password. This only affects the current browser.
-
+├── admin/                         # Admin panel (live version)
+│   ├── index.html                 # Admin dashboard
+│   ├── admin.js                   # Admin logic
+│   ├── admin.css                  # Admin styles
+│   └── [auth files]
+│
 ├── backend/                        # Backend API- "Too many attempts" message:
 
 │   ├── server.js                   # Express server  - Wait until the timer expires or close/reopen the tab after a minute.
@@ -165,10 +153,9 @@ git push origin dashboard-upgrade
 
 ### Update Admin:
 ```powershell
-# 1. Edit files in Admin App/Soundbites Admin/
+# 1. Edit files in admin/
 # 2. Test locally
-OPEN-ADMIN.bat
-
+python -m http.server 8000
 # 3. Deploy (same as above)
 git add .
 git commit -m "Update admin"
@@ -199,7 +186,7 @@ git push
 4. Verify events fire in TikTok Events Manager
 
 ### Access Admin:
-1. Visit: https://otis.soundbites.com/Admin%20App/Soundbites%20Admin/admin.html
+1. Visit: https://otis.soundbites.com/admin/
 2. Login with admin credentials
 3. Navigate tabs: Questions, Analytics, Marketing, OTIS
 
