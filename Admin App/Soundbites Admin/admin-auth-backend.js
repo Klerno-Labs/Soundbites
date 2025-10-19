@@ -210,8 +210,8 @@
           <div class="login-box">
             <form id="login-form">
               <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" class="form-input" value="${lastUsername}" required autocomplete="username" autofocus>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="form-input" value="${lastUsername}" required autocomplete="email" autofocus>
               </div>
               <div class="form-group">
                 <label for="password">Password</label>
@@ -257,7 +257,7 @@
     const passwordInput = document.getElementById('password');
     const errorMessage = document.getElementById('error-message');
     const errorText = document.getElementById('error-text');
-    const usernameInput = document.getElementById('username');
+    const emailInput = document.getElementById('email');
     const loginBtn = document.getElementById('login-btn');
     const loginText = document.getElementById('login-text');
     const loginSpinner = document.getElementById('login-spinner');
@@ -290,7 +290,7 @@
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        const username = usernameInput.value.trim();
+        const email = emailInput.value.trim();
         const password = passwordInput.value;
         const remember = document.getElementById('remember-me').checked;
 
@@ -298,16 +298,16 @@
         loginText.style.display = 'none';
         loginSpinner.style.display = 'inline-block';
         loginBtn.disabled = true;
-        usernameInput.disabled = true;
+        emailInput.disabled = true;
         passwordInput.disabled = true;
         errorMessage.style.display = 'none';
 
         // Attempt login
-        const result = await login(username, password, remember);
+        const result = await login(email, password, remember);
 
         if (result.success) {
-          // Save last username
-          localStorage.setItem('sb-admin-last-user', username);
+          // Save last email
+          localStorage.setItem('sb-admin-last-user', email);
           
           // Reload to show admin panel
           window.location.reload();
@@ -320,7 +320,7 @@
           loginText.style.display = 'inline-block';
           loginSpinner.style.display = 'none';
           loginBtn.disabled = false;
-          usernameInput.disabled = false;
+          emailInput.disabled = false;
           passwordInput.disabled = false;
           passwordInput.value = '';
           passwordInput.focus();

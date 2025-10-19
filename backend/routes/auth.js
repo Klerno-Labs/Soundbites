@@ -8,16 +8,19 @@ const router = express.Router();
 // Admin login
 router.post('/login', async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { username, email, password } = req.body;
+        
+        // Accept either username or email
+        const loginIdentifier = email || username;
 
-        if (!username || !password) {
-            return res.status(400).json({ error: 'Username and password required' });
+        if (!loginIdentifier || !password) {
+            return res.status(400).json({ error: 'Email/Username and password required' });
         }
 
-        // Get user from database
+        // Get user from database by email or username
         const result = await pool.query(
-            'SELECT * FROM admin_users WHERE username = $1',
-            [username]
+            'SELECT * FROM admin_users WHERE email = $1 OR username = $1',
+            [loginIdentifier]
         );
 
         if (result.rows.length === 0) {
@@ -35,7 +38,7 @@ router.post('/login', async (req, res) => {
 
         // Generate JWT token
         const token = jwt.sign(
-            { id: user.id, username: user.username },
+            { id: user.id, username: user.username, email: user.email },
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
