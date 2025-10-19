@@ -26,7 +26,9 @@
             </div>
             <nav class="admin-nav">
                 <button id="questions-tab" class="tab-btn" type="button" onclick="console.log('Questions clicked'); if(window.admin){window.admin.switchTab('questions')}else{console.error('window.admin not found')}">Questions</button>
-                <button id="analytics-tab" class="tab-btn active" type="button" onclick="console.log('Analytics clicked'); if(window.admin){window.admin.switchTab('analytics')}else{console.error('window.admin not found')}">Analytics & Data</button>
+                <button id="analytics-tab" class="tab-btn active" type="button" onclick="console.log('Analytics clicked'); if(window.admin){window.admin.switchTab('analytics')}else{console.error('window.admin not found')}">Analytics</button>
+                <button id="marketing-tab" class="tab-btn" type="button" onclick="console.log('Marketing clicked'); if(window.admin){window.admin.switchTab('marketing')}else{console.error('window.admin not found')}">Marketing</button>
+                <button id="otis-tab" class="tab-btn" type="button" onclick="console.log('OTIS clicked'); if(window.admin){window.admin.switchTab('otis')}else{console.error('window.admin not found')}">OTIS</button>
                 <span style="flex:1"></span>
                 <button id="logout-btn" class="btn btn-danger" type="button">Log out</button>
             </nav>
@@ -62,18 +64,115 @@
         </section>
 
         <div id="analytics-panel" class="admin-panel" style="display: block;">
-            <h2>Analytics & Data Export</h2>
+            <!-- Quarterly Reminder Banner -->
+            <div id="quarterly-reminder" class="quarterly-banner" style="display: none;">
+                <div class="banner-content">
+                    <span class="banner-icon">📅</span>
+                    <div class="banner-text">
+                        <strong id="banner-title">Q4 2025 ends December 31</strong>
+                        <span id="banner-message">Export your quarterly report now!</span>
+                    </div>
+                </div>
+                <div class="banner-actions">
+                    <button id="auto-export-quarter" class="btn btn-primary">📥 Export Quarter</button>
+                    <button id="dismiss-reminder" class="btn btn-ghost">Dismiss</button>
+                </div>
+            </div>
 
-            <!-- Quick stats -->
-            <section class="stats-overview">
-                <div class="stat-card"><h3>Total Responses</h3><span id="total-responses">0</span></div>
-                <div class="stat-card"><h3>Conversion Rate</h3><span id="conversion-rate">0%</span></div>
-                <div class="stat-card"><h3>Average Score</h3><span id="average-score">0</span></div>
+            <h2>Dashboard Overview</h2>
+
+            <!-- Modern KPI Cards -->
+            <section class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-icon">📊</span>
+                        <span class="kpi-label">Total Responses</span>
+                    </div>
+                    <div class="kpi-value" id="total-responses">0</div>
+                    <div class="kpi-trend" id="responses-trend">
+                        <span class="trend-indicator">—</span>
+                        <span class="trend-text">vs. previous period</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-icon">🎯</span>
+                        <span class="kpi-label">Conversion Rate</span>
+                    </div>
+                    <div class="kpi-value" id="conversion-rate">0%</div>
+                    <div class="kpi-trend" id="conversion-trend">
+                        <span class="trend-indicator">—</span>
+                        <span class="trend-text">vs. previous period</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-icon">📈</span>
+                        <span class="kpi-label">Average Score</span>
+                    </div>
+                    <div class="kpi-value" id="average-score">0</div>
+                    <div class="kpi-trend" id="score-trend">
+                        <span class="trend-indicator">—</span>
+                        <span class="trend-text">vs. previous period</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-icon">✉️</span>
+                        <span class="kpi-label">Email Leads</span>
+                    </div>
+                    <div class="kpi-value" id="total-leads">0</div>
+                    <div class="kpi-trend" id="leads-trend">
+                        <span class="trend-indicator">—</span>
+                        <span class="trend-text">vs. previous period</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Insights -->
+            <section class="quick-insights">
+                <div class="insight-card">
+                    <div class="insight-icon">📈</div>
+                    <div class="insight-content">
+                        <div class="insight-label">Top Campaign</div>
+                        <div class="insight-value" id="top-campaign">Loading...</div>
+                    </div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-icon">🎯</div>
+                    <div class="insight-content">
+                        <div class="insight-label">Best Traffic Source</div>
+                        <div class="insight-value" id="top-source">Loading...</div>
+                    </div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-icon">⏱️</div>
+                    <div class="insight-content">
+                        <div class="insight-label">Avg. Completion Time</div>
+                        <div class="insight-value" id="avg-time">Loading...</div>
+                    </div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-icon">📊</div>
+                    <div class="insight-content">
+                        <div class="insight-label">High Need Users</div>
+                        <div class="insight-value" id="high-need-count">Loading...</div>
+                    </div>
+                </div>
             </section>
 
             <!-- Filters -->
             <section class="filters-section" style="margin: 0.5rem 0 1.25rem 0;">
-                <h3>Filters</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3 style="margin: 0;">Filters</h3>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button id="export-csv" class="btn btn-secondary" type="button">📥 Export CSV</button>
+                        <button id="export-pdf" class="btn btn-secondary" type="button">📄 Export PDF</button>
+                    </div>
+                </div>
                 <div class="form-row">
                     <div class="form-col">
                         <label for="filter-from">From date</label>
@@ -135,16 +234,15 @@
                 <div class="chart-container"><canvas id="utm-campaign-score-chart"></canvas></div>
             </section>
 
-            <!-- Export / housekeeping -->
+            <!-- Housekeeping -->
             <section class="export-section">
-                <h3>Export & Housekeeping</h3>
+                <h3>Data Management</h3>
                 <div class="form-row">
                     <div class="form-col" style="display:flex; gap:.5rem; align-items:center; flex-wrap:wrap;">
-                        <button id="export-csv" class="btn btn-secondary" type="button">Export CSV</button>
-                        <button id="export-json" class="btn btn-secondary" type="button">Export JSON</button>
-                        <button id="clear-data" class="btn btn-danger" type="button">Clear All Data</button>
+                        <button id="clear-data" class="btn btn-danger" type="button">🗑️ Clear All Data</button>
                         <span style="flex:1"></span>
-                        <input type="email" id="company-email" placeholder="Email to receive leads" style="max-width:320px;" />
+                        <label style="color: var(--sb-muted); font-size: 0.875rem; margin-right: 0.5rem;">Lead notification email:</label>
+                        <input type="email" id="company-email" placeholder="your@email.com" style="max-width:320px;" />
                     </div>
                 </div>
             </section>
@@ -187,6 +285,184 @@
                 <button id="generate-recovery" type="button" class="btn btn-secondary">Generate New Recovery Code</button>
             </section>
         </div>
+
+        <!-- Marketing Panel -->
+        <div id="marketing-panel" class="admin-panel" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 style="margin: 0;">📊 Marketing Analytics</h2>
+                <span class="section-badge">Campaign Performance & ROI</span>
+            </div>
+
+            <!-- Campaign Performance Table -->
+            <div class="analytics-card">
+                <h3>Campaign Performance</h3>
+                <div class="table-container">
+                    <table id="campaign-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Campaign</th>
+                                <th>Visits</th>
+                                <th>Leads</th>
+                                <th>Conv. Rate</th>
+                                <th>Avg Score</th>
+                                <th>High Need %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="6" style="text-align: center; color: #999;">Loading data...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Traffic Source & Conversion Funnel -->
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3>Traffic Sources</h3>
+                    <div class="chart-container"><canvas id="traffic-source-chart"></canvas></div>
+                </div>
+                <div class="analytics-card">
+                    <h3>Conversion Funnel</h3>
+                    <div class="chart-container"><canvas id="conversion-funnel-chart"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Time-Based Analysis -->
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3>Conversions by Day of Week</h3>
+                    <div class="chart-container"><canvas id="day-of-week-chart"></canvas></div>
+                </div>
+                <div class="analytics-card">
+                    <h3>Conversions by Hour</h3>
+                    <div class="chart-container"><canvas id="hour-of-day-chart"></canvas></div>
+                </div>
+            </div>
+
+            <!-- UTM Source/Medium Performance -->
+            <div class="analytics-card">
+                <h3>Source/Medium Performance</h3>
+                <div class="chart-container"><canvas id="source-medium-chart"></canvas></div>
+            </div>
+        </div>
+
+        <!-- OTIS Clinical Trial Panel -->
+        <div id="otis-panel" class="admin-panel" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 style="margin: 0;">🔬 OTIS Clinical Trial Data</h2>
+                <span class="section-badge" style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);">Research Analytics</span>
+            </div>
+
+            <!-- Trial Summary Stats -->
+            <div class="trial-summary-grid">
+                <div class="trial-stat-card">
+                    <div class="trial-stat-icon">👥</div>
+                    <div class="trial-stat-content">
+                        <div class="trial-stat-label">Total Participants</div>
+                        <div class="trial-stat-value" id="trial-participants">0</div>
+                    </div>
+                </div>
+                <div class="trial-stat-card">
+                    <div class="trial-stat-icon">📊</div>
+                    <div class="trial-stat-content">
+                        <div class="trial-stat-label">Mean Score</div>
+                        <div class="trial-stat-value" id="trial-mean-score">0</div>
+                        <div class="trial-stat-detail" id="trial-std-dev">SD: 0</div>
+                    </div>
+                </div>
+                <div class="trial-stat-card">
+                    <div class="trial-stat-icon">🎯</div>
+                    <div class="trial-stat-content">
+                        <div class="trial-stat-label">High Need Cases</div>
+                        <div class="trial-stat-value" id="trial-high-need">0</div>
+                        <div class="trial-stat-detail" id="trial-high-need-pct">0%</div>
+                    </div>
+                </div>
+                <div class="trial-stat-card">
+                    <div class="trial-stat-icon">📈</div>
+                    <div class="trial-stat-content">
+                        <div class="trial-stat-label">95% CI</div>
+                        <div class="trial-stat-value" id="trial-confidence">—</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demographics Analysis -->
+            <div class="analytics-card">
+                <h3>📋 Participant Demographics</h3>
+                <div class="table-container">
+                    <table id="demographics-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Age Range</th>
+                                <th>N</th>
+                                <th>Mean Score</th>
+                                <th>SD</th>
+                                <th>High Need %</th>
+                                <th>Conversion %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="6" style="text-align: center; color: #999;">Calculating demographics...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Score Distribution & Statistical Analysis -->
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3>Score Distribution (Histogram)</h3>
+                    <div class="chart-container"><canvas id="trial-score-dist"></canvas></div>
+                </div>
+                <div class="analytics-card">
+                    <h3>Recommendation Breakdown</h3>
+                    <div class="chart-container"><canvas id="trial-recommendation-chart"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Question-Level Analysis -->
+            <div class="analytics-card">
+                <h3>📊 Question Performance Analysis</h3>
+                <div class="table-container">
+                    <table id="question-analysis-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Question</th>
+                                <th>Mean Response</th>
+                                <th>SD</th>
+                                <th>Median</th>
+                                <th>Range</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="5" style="text-align: center; color: #999;">Analyzing questions...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Correlation Matrix -->
+            <div class="analytics-card">
+                <h3>🔗 Correlations (Score vs. Questions)</h3>
+                <div class="chart-container"><canvas id="correlation-chart"></canvas></div>
+            </div>
+
+            <!-- Export Options for Clinical Trial -->
+            <div class="analytics-card">
+                <h3>📤 Export Trial Data</h3>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button id="export-trial-csv" class="btn btn-primary">📊 Export Raw Data (CSV)</button>
+                    <button id="export-trial-report" class="btn btn-primary">📄 Generate Statistical Report (PDF)</button>
+                    <button id="export-spss" class="btn btn-secondary">💾 Export for SPSS</button>
+                    <button id="export-r" class="btn btn-secondary">📈 Export for R</button>
+                </div>
+                <p style="margin-top: 1rem; color: var(--sb-muted); font-size: 0.875rem;">
+                    Data exports are formatted for clinical trial submission and statistical analysis software.
+                </p>
+            </div>
+        </div>
+
         </main>
     </div>
 

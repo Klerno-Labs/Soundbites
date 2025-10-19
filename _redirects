@@ -1,0 +1,8 @@
+# Render Static Site Redirects
+
+# Admin panel routing
+/admin    /Admin%20App/Soundbites%20Admin/admin.html    200
+/admin/   /Admin%20App/Soundbites%20Admin/admin.html    200
+
+# Fallback for SPA routing (if needed)
+/*    /index.html    200
