@@ -138,7 +138,6 @@
         </header>
         <main id="main">
           <div class="quiz-container" style="max-width:420px;margin:2rem auto;">
-            <h2 style="margin-bottom:1rem;">Login to Admin Panel</h2>
             <form id="login-form" style="margin-top:1.5rem;">
               <div class="form-group">
                 <label for="username">Username</label>
