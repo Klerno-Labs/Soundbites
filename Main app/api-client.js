@@ -3,7 +3,7 @@
 
 class APIClient {
     constructor(baseURL) {
-        this.baseURL = baseURL || 'http://localhost:3000/api';
+        this.baseURL = baseURL || 'https://soundbites-quiz-backend.onrender.com/api';
         this.token = localStorage.getItem('sb-admin-token');
     }
 
