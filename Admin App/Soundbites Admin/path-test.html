@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Path Test</title>
+</head>
+<body>
+    <h1>Testing Paths</h1>
+    <script>
+        console.log('Current location:', window.location.href);
+        console.log('Testing relative path to Main app...');
+        
+        // Test loading header-sizer.js
+        fetch('../../Main app/header-sizer.js')
+            .then(response => {
+                if (response.ok) {
+                    console.log('✅ Successfully found: ../../Main app/header-sizer.js');
+                } else {
+                    console.error('❌ Failed to load: ../../Main app/header-sizer.js');
+                }
+            })
+            .catch(err => console.error('❌ Error:', err));
+        
+        // Test loading api-client.js  
+        fetch('../../Main app/api-client.js')
+            .then(response => {
+                if (response.ok) {
+                    console.log('✅ Successfully found: ../../Main app/api-client.js');
+                } else {
+                    console.error('❌ Failed to load: ../../Main app/api-client.js');
+                }
+            })
+            .catch(err => console.error('❌ Error:', err));
+    </script>
+</body>
+</html>
