@@ -245,7 +245,7 @@ header p {
 
 .option.selected {
     border-color: var(--sb-pink);
-    background: linear-gradient(135deg, var(--sb-pink), var(--sb-purple));
+    background: var(--sb-primary);
     color: white;
 }
 
