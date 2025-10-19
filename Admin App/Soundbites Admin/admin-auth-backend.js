@@ -69,14 +69,14 @@
   };
 
   // Login function
-  const login = async (username, password, remember = false) => {
+  const login = async (email, password, remember = false) => {
     try {
       const response = await fetch('https://soundbites-quiz-backend.onrender.com/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ email, password })
       });
 
       if (!response.ok) {
