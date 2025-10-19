@@ -498,7 +498,7 @@ class SoundbiteQuiz {
                     <p><strong>${recommendation.action}</strong></p>
                     <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
                         <a href="${ctaUrl}" class="btn btn-secondary" target="_blank" rel="noopener">${ctaText}</a>
-                        <a href="https://www.tiktok.com/shop/store/soundbites/7494162119735018619?source=product_detail&enter_from=product_detail&enter_method=product_info_right_shop&first_entrance=homepage_hot" class="btn btn-primary" target="_blank" rel="noopener">Try on TikTok Shop</a>
+                        <a href="https://www.tiktok.com/shop/store/soundbites/7494162119735018619?source=product_detail&enter_from=product_detail&enter_method=product_info_right_shop&first_entrance=homepage_hot" class="btn btn-secondary" target="_blank" rel="noopener">Try on TikTok Shop</a>
                     </div>
                 </div>
             </div>
