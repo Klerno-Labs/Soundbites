@@ -125,7 +125,77 @@
     const lastUsername = localStorage.getItem('sb-admin-last-user') || '';
     
     document.body.innerHTML = `
-      <div class="container" role="application">
+      <style>
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+        .login-container {
+          animation: fadeIn 0.5s ease-out;
+        }
+        .login-box {
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+          padding: 2rem;
+          max-width: 420px;
+          margin: 2rem auto;
+        }
+        .form-input {
+          width: 100%;
+          padding: 0.75rem 1rem;
+          border: 2px solid #e0e0e0;
+          border-radius: 8px;
+          font-size: 1rem;
+          transition: all 0.3s ease;
+          box-sizing: border-box;
+        }
+        .form-input:focus {
+          outline: none;
+          border-color: #C92A76;
+          box-shadow: 0 0 0 3px rgba(201, 42, 118, 0.1);
+        }
+        .form-input:hover {
+          border-color: #b0b0b0;
+        }
+        .btn-primary:hover:not(:disabled) {
+          background: #b02466;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(201, 42, 118, 0.3);
+        }
+        .btn-primary:active:not(:disabled) {
+          transform: translateY(0);
+        }
+        .btn-primary {
+          transition: all 0.2s ease;
+        }
+        .forgot-password {
+          text-align: center;
+          margin-top: 1rem;
+        }
+        .forgot-password a {
+          color: #C92A76;
+          text-decoration: none;
+          font-size: 0.875rem;
+          transition: opacity 0.2s ease;
+        }
+        .forgot-password a:hover {
+          opacity: 0.8;
+          text-decoration: underline;
+        }
+        .login-footer {
+          text-align: center;
+          margin-top: 2rem;
+          padding-top: 1.5rem;
+          border-top: 1px solid #e0e0e0;
+          color: #666;
+          font-size: 0.8rem;
+        }
+      </style>
+      <div class="container login-container" role="application">
         <header>
           <div class="logo-container">
             <img src="../../Main app/soundbites_logo_magenta.webp" alt="Soundbites Logo" class="brand-logo">
@@ -137,22 +207,22 @@
           </div>
         </header>
         <main id="main">
-          <div class="quiz-container" style="max-width:420px;margin:2rem auto;">
-            <form id="login-form" style="margin-top:1.5rem;">
+          <div class="login-box">
+            <form id="login-form">
               <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" value="${lastUsername}" required autocomplete="username" autofocus>
+                <input type="text" id="username" name="username" class="form-input" value="${lastUsername}" required autocomplete="username" autofocus>
               </div>
               <div class="form-group">
                 <label for="password">Password</label>
                 <div style="position:relative;">
-                  <input type="password" id="password" name="password" required autocomplete="current-password">
+                  <input type="password" id="password" name="password" class="form-input" style="padding-right:40px;" required autocomplete="current-password">
                   <button type="button" id="toggle-password" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:5px;" aria-label="Toggle password visibility">
                     <span id="eye-icon">👁️</span>
                   </button>
                 </div>
               </div>
-              <div class="form-group" style="display:flex;align-items:center;gap:0.25rem;">
+              <div class="form-group" style="display:flex;align-items:center;gap:0.25rem;margin-top:0.75rem;">
                 <input type="checkbox" id="remember-me" name="remember" style="width:14px;height:14px;margin:0;">
                 <label for="remember-me" style="margin:0;font-size:0.7rem;">Keep me logged in</label>
               </div>
@@ -162,19 +232,20 @@
                   <span id="error-text"></span>
                 </div>
               </div>
-              <button type="submit" class="btn btn-primary" id="login-btn" style="width:100%;position:relative;">
+              <button type="submit" class="btn btn-primary" id="login-btn" style="width:100%;position:relative;margin-top:1.5rem;">
                 <span id="login-text">Login</span>
                 <span id="login-spinner" style="display:none;">
                   <span style="display:inline-block;width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin 0.6s linear infinite;"></span>
                   <span style="margin-left:0.5rem;">Logging in...</span>
                 </span>
               </button>
-              <style>
-                @keyframes spin {
-                  to { transform: rotate(360deg); }
-                }
-              </style>
             </form>
+            <div class="forgot-password">
+              <a href="#" id="forgot-password-link">Forgot password?</a>
+            </div>
+            <div class="login-footer">
+              © ${new Date().getFullYear()} Soundbites. All rights reserved.
+            </div>
           </div>
         </main>
       </div>
@@ -190,6 +261,20 @@
     const loginBtn = document.getElementById('login-btn');
     const loginText = document.getElementById('login-text');
     const loginSpinner = document.getElementById('login-spinner');
+    const forgotPasswordLink = document.getElementById('forgot-password-link');
+
+    // Handle forgot password
+    if (forgotPasswordLink) {
+      forgotPasswordLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        errorText.textContent = 'Please contact your administrator to reset your password.';
+        errorMessage.style.display = 'block';
+        errorMessage.style.background = '#e7f5ff';
+        errorMessage.style.borderColor = '#339af0';
+        errorMessage.style.color = '#1971c2';
+        errorMessage.querySelector('span:first-child').textContent = 'ℹ️';
+      });
+    }
 
     // Toggle password visibility
     if (togglePassword && passwordInput) {
