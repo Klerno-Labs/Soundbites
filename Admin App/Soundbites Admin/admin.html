@@ -475,6 +475,11 @@
             if (window.enforceAuth && !window.enforceAuth()) return;
             if (window.sbIsAuthed && window.sbIsAuthed()) {
                 if (!window.admin && typeof QuizAdmin === 'function') { window.admin = new QuizAdmin(); }
+                // Attach logout handler
+                const logoutBtn = document.getElementById('logout-btn');
+                if (logoutBtn && window.sbAdminLogout) {
+                    logoutBtn.onclick = window.sbAdminLogout;
+                }
             }
         }, { once: true });
     </script>
