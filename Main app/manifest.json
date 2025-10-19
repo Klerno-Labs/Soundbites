@@ -1,0 +1,39 @@
+{
+  "name": "Soundbites Hearing Quiz",
+  "short_name": "Soundbites Quiz",
+  "description": "Interactive hearing assessment to determine if you need better hearing solutions",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#C92A76",
+  "theme_color": "#6E49B2",
+  "icons": [
+    {
+      "src": "soundbites_logo_magenta.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "soundbites_logo_magenta.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ],
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["health", "lifestyle", "medical"],
+  "screenshots": [
+    {
+      "src": "screenshots/quiz-main.png",
+      "sizes": "540x720",
+      "type": "image/png"
+    },
+    {
+      "src": "screenshots/quiz-question.png",
+      "sizes": "540x720",
+      "type": "image/png"
+    }
+  ]
+}

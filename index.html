@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soundbites Quiz - Do You Need Better Hearing Solutions?</title>
+    <meta name="description" content="Take our interactive hearing assessment to discover if Soundbites can improve your listening experience">
+    <link rel="manifest" href="Main%20app/manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="Main%20app/soundbites_logo_magenta.webp" type="image/webp">
+    <meta property="og:title" content="Soundbites Hearing Quiz">
+    <meta property="og:description" content="Discover if Soundbites can improve your hearing experience.">
+    <meta property="og:image" content="Main%20app/soundbites_logo_magenta.webp">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="theme-color" content="#C92A76">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Soundbites Quiz">
+    <link rel="stylesheet" href="Main%20app/styles.css">
+    <link rel="stylesheet" href="Main%20app/brand.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script src="Main%20app/api-client.js"></script>
+        <script src="Main%20app/header-sizer.js"></script>
+        <script>
+            // Initialize shared header sizer for consistent, fluid header on the main app
+            if (window.initHeaderSizer) window.initHeaderSizer();
+        </script>
+    <!-- Production mode: allow indexing if desired -->
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <div class="container" role="application">
+        <header>
+            <div class="logo-container">
+                <img src="Main%20app/soundbites_logo_magenta.webp" alt="Soundbites Logo" class="brand-logo">
+                <span class="play-button-accent" aria-hidden="true"></span>
+            </div>
+            
+            <p class="sb-copy">Discover if Soundbites can improve your hearing experience</p>
+            <div class="wave-decoration">
+                <img src="Main%20app/dot_wave_2.webp" alt="Sound Wave" class="wave-graphic">
+            </div>
+        </header>
+
+    <main id="main" role="main">
+    <div id="quiz-container" class="quiz-container" aria-live="polite">
+            <div id="progress-bar">
+                <div id="progress" class="progress"></div>
+            </div>
+            
+            <div id="question-container" class="question-container" role="group" aria-label="Quiz Questions">
+                <!-- Questions will be dynamically loaded here -->
+            </div>
+
+            <div class="navigation">
+                <button id="prev-btn" class="btn btn-secondary" disabled>Previous</button>
+                <button id="next-btn" class="btn btn-primary">Next</button>
+                <button id="submit-btn" class="btn btn-success" style="display: none;">Submit Quiz</button>
+            </div>
+        </div>
+        </main>
+
+        <div id="results-container" class="results-container" style="display: none;" aria-live="assertive">
+            <h2>Your Results</h2>
+            <div id="result-content"></div>
+            
+            <div class="email-form">
+                <h3>Get Your Detailed Results</h3>
+                <p>Enter your email to receive personalized recommendations and your complete hearing assessment.</p>
+                <form id="email-form">
+                    <input type="email" id="user-email" placeholder="Enter your email address" required>
+                    <button type="submit" class="btn btn-primary">Send My Results</button>
+                </form>
+            </div>
+        </div>
+        <footer style="text-align:center;color:#fff;opacity:0.9;">
+            <small>By continuing, you agree to receive communication about your results. We respect your privacy.</small>
+        </footer>
+    </div>
+
+    <script src="Main%20app/script.js"></script>
+</body>
+</html>

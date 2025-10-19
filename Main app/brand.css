@@ -1,0 +1,176 @@
+/* Soundbites Brand Overrides
+   Update this file to match the exact specs from the brand PDF.
+   It overrides CSS variables defined in styles.css and sets brand fonts.
+*/
+
+:root {
+  /* Semantic brand tokens (update these to exact hex values): */
+  --sb-primary: #C92A76;   /* Primary */
+  --sb-secondary: #6E49B2; /* Secondary */
+  --sb-accent: #00B1D9;    /* Accent */
+  --sb-info: #00B1D9;
+  --sb-success: #51cf66;
+  --sb-warning: #ffa500;
+  --sb-danger: #ff6b6b;
+
+  /* Typography */
+  /* Prefer T-Star Medium per brand spec */
+  --sb-font: 'T-Star Medium', 'T-Star', 'T-Star Light', 'T-Star Heavy', 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --sb-font-heading: 'T-Star Medium', 'T-Star Heavy', 'T-Star', 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --sb-font-body: 'T-Star Medium', 'T-Star Light', 'T-Star', 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  /* Sizing & radii */
+  --sb-radius: 14px;
+  --sb-focus: 0 0 0 3px rgba(201, 42, 118, 0.35);
+
+  /* Map to existing component variables (aliases) */
+  --sb-pink: var(--sb-primary);
+  --sb-purple: var(--sb-secondary);
+  --sb-indigo: var(--sb-accent);
+  --sb-blue: var(--sb-info);
+
+  /* Neutrals and brand zone */
+  --sb-neutral-light: #ffffff;
+  --sb-neutral-dark: #000000;
+  --sb-brandzone-bg: #ffffff;
+
+  /* Spacing tokens */
+  --sb-space-desktop: 32px;
+  --sb-space-mobile: 24px;
+  /* Convenience variable used in rules below; defaults to desktop */
+  --sb-space: var(--sb-space-desktop);
+
+  /* Slider tokens (used by app styles) */
+  --sb-slider-track: #e5e7eb; /* neutral light gray */
+  --sb-slider-fill: var(--sb-primary);
+  --sb-slider-thumb-size: 24px;
+
+  /* Signature sizing multipliers */
+  --sb-logo-unit-multiplier: 4.0;     /* logo width = units × this multiplier */
+  /* Double the dot wave size (width & height) */
+  --sb-wave-width-multiplier: 8.84;    /* 4.42 × 2 */
+  --sb-wave-height-multiplier: 1.43;   /* 0.715 × 2 */
+  /* Increase play button ~1.4× */
+  --sb-play-size-multiplier: 1.1025;  /* 0.7875 × 1.4 ≈ 1.1025 */
+  --sb-play-min-touch: 44px;          /* ensure ≥44px on mobile */
+  --sb-play-gap: 12px;                /* space from logo right edge to play badge */
+}
+
+/* Typography rules from spec */
+body {
+  color: var(--sb-neutral-dark); /* Type is always black unless reversed */
+}
+
+/* White background behind logo, play badge, and dot wave for clean presentation */
+header {
+  background: var(--sb-brandzone-bg);
+  color: var(--sb-neutral-dark) !important;
+  border-radius: 14px;
+  padding-top: var(--sb-space);
+  padding-bottom: var(--sb-space);
+}
+.sb-copy { color: #000; }
+
+.sb-headline {
+  font-family: var(--sb-font-heading);
+  font-weight: 800; /* Heavy */
+  text-transform: uppercase;
+  letter-spacing: normal;
+  line-height: 1.2;
+}
+.sb-headline--light {
+  font-family: var(--sb-font-body);
+  font-weight: 300; /* Light */
+  text-transform: uppercase;
+}
+.sb-subhead {
+  font-family: var(--sb-font-heading);
+  font-weight: 800; /* Heavy */
+  text-transform: uppercase; /* or remove for U/lc per spec usage */
+}
+.sb-copy {
+  font-family: var(--sb-font-body);
+  font-weight: 400; /* Regular */
+}
+.sb-callout {
+  font-family: var(--sb-font-heading);
+  font-weight: 700; /* Bold */
+}
+
+/* Accent gradient for a single emphasized word in headlines */
+.sb-accent-word {
+  background: linear-gradient(45deg, var(--sb-pink), var(--sb-purple), var(--sb-indigo));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Signature (logo + dot wave) ratio helpers */
+.logo-container {
+  display: inline-block;   /* shrink-wrap to logo width */
+  position: relative;      /* anchor for absolutely positioned play badge */
+}
+.wave-decoration {
+  display: flex;
+  justify-content: center;
+}
+.logo-container { margin-top: var(--sb-space); }
+.sb-copy { margin-top: var(--sb-space); }
+.wave-decoration { margin-top: var(--sb-space); }
+.brand-logo,
+.wave-graphic {
+  max-width: none !important; /* allow JS to set exact ratio widths */
+  max-height: none !important;
+}
+.brand-logo {
+  /* Safe defaults to avoid runaway growth when JS sizing isn't active */
+  width: clamp(140px, 24vw, 240px);
+  height: auto;
+}
+.wave-graphic {
+  /* Provide a conservative width range; JS may override */
+  width: clamp(200px, 28vw, 420px);
+  height: auto;
+}
+.wave-graphic {
+  object-fit: contain;
+}
+
+/* Ensure the play badge aligns nicely with the logo */
+.play-button-accent {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + var(--sb-play-gap));
+  transform: translateY(-50%);
+  display: block;
+  /* Default size clamp for stability */
+  width: clamp(var(--sb-play-min-touch), var(--sb-play-size, 44px), 64px);
+  height: clamp(var(--sb-play-min-touch), var(--sb-play-size, 44px), 64px);
+}
+
+/* Optional: register brand fonts (update src URLs to your font files)
+@font-face {
+  font-family: 'Soundbites Sans';
+  src: url('fonts/SoundbitesSans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Mobile spacing switch */
+@media (max-width: 768px) {
+  :root { --sb-space: var(--sb-space-mobile); }
+}
+@font-face {
+  font-family: 'Soundbites Sans';
+  src: url('fonts/SoundbitesSans-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  --sb-font: 'Soundbites Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --sb-font-heading: 'Soundbites Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --sb-font-body: 'Soundbites Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+*/
