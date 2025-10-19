@@ -343,12 +343,10 @@
         localStorage.setItem('sb-admin-token', token);
       }
       
-      // Expose auth functions globally
-      window.sbIsAuthed = () => true;
-      window.sbAdminLogout = logout;
-      
-      // Let the page load normally
-      return;
+  // Expose auth functions globally
+  window.sbAdminLogout = logout;
+  // Let the page load normally
+  return;
     }
 
     // Not authenticated - show login page
