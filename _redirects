@@ -1,7 +1,0 @@
-# Render Static Site Redirects
-# Rules are processed top to bottom, first match wins
-
-# Admin panel routing (must come BEFORE /* catch-all)
-/admin    /Admin%20App/Soundbites%20Admin/admin.html    200
-/admin/   /Admin%20App/Soundbites%20Admin/admin.html    200
-/admin/*  /Admin%20App/Soundbites%20Admin/:splat       200
