@@ -207,11 +207,9 @@ class QuizAdmin {
     }
 
     switchTab(tab) {
-        console.log('switchTab called with:', tab);
         
         // Hide all panels
         document.querySelectorAll('.admin-panel').forEach(panel => {
-            console.log('Hiding panel:', panel.id);
             panel.style.display = 'none';
         });
 
@@ -222,16 +220,12 @@ class QuizAdmin {
 
         // Show selected panel and activate tab
         const panel = document.getElementById(`${tab}-panel`);
-        console.log('Looking for panel:', `${tab}-panel`, 'Found:', panel);
         if (panel) {
             panel.style.display = 'block';
-            console.log('Showing panel:', panel.id);
         } else {
-            console.error('Panel not found:', `${tab}-panel`);
         }
         
         const tabBtn = document.getElementById(`${tab}-tab`);
-        console.log('Looking for tab button:', `${tab}-tab`, 'Found:', tabBtn);
         if (tabBtn) {
             tabBtn.classList.add('active');
         }
@@ -248,7 +242,6 @@ class QuizAdmin {
             this.loadAnalytics(); // Load data first
             this.renderOTISAnalytics(this.filteredResults, this.filteredLeads);
         } else if (tab === 'questions') {
-            console.log('Loading questions list...');
             this.loadQuestionsList();
         }
     }
@@ -504,7 +497,6 @@ class QuizAdmin {
         const container = document.getElementById('questions-list');
         
         if (!container) {
-            console.warn('questions-list container not found');
             return;
         }
         
@@ -556,7 +548,6 @@ class QuizAdmin {
                     if (sliderLabel) sliderLabel.value = opts.label || '';
                 }
             } catch (e) {
-                console.error('Error parsing options:', e);
             }
         }
         
@@ -591,16 +582,13 @@ class QuizAdmin {
             .then(([resultsData, leadsData]) => {
                 this.results = resultsData.results || [];
                 this.leads = leadsData.leads || [];
-                console.log(`✅ Loaded ${this.results.length} results and ${this.leads.length} leads from API`);
                 this.populateFilterOptions();
                 this.applyFilters();
             })
             .catch(err => {
-                console.error('Failed to load from API, using localStorage:', err);
                 this.loadAnalyticsFromLocalStorage();
             });
         } else {
-            console.log('API not available or not authenticated, using localStorage');
             this.loadAnalyticsFromLocalStorage();
         }
     }
