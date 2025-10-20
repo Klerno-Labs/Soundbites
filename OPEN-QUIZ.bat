@@ -4,9 +4,15 @@ echo ========================================
 echo   SOUNDBITES QUIZ - OPEN QUIZ
 echo ========================================
 echo.
+echo Starting local web server on port 8000...
+echo.
+start /B python -m http.server 8000
+timeout /t 2 /nobreak >nul
 
-start chrome "file:///C:/Users/Somli/OneDrive/Desktop/Quiz/index.html"
+start chrome "http://localhost:8000/index.html"
 
 echo Quiz opened in Chrome!
 echo.
-timeout /t 2 /nobreak > nul
+echo Server running at: http://localhost:8000
+echo Press Ctrl+C in this window to stop the server
+echo.
