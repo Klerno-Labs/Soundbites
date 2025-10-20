@@ -180,7 +180,7 @@ Minor observations:
 To use:
 1. Keep backend running: `cd backend; node server.js`
 2. Open quiz: `index.html` in browser
-3. Open admin: `Admin App/Soundbites Admin/admin.html` in browser
+3. Open admin: `admin/index.html` in browser
 4. Login with: admin / admin123
 
 ---

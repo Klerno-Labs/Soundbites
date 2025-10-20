@@ -73,14 +73,14 @@ Replaced the insecure client-side authentication with industry-standard backend 
 ## Testing
 
 ### Local Testing:
-1. Open: `file:///C:/Users/Somli/OneDrive/Desktop/Quiz/Admin%20App/Soundbites%20Admin/admin.html`
+1. Open: `file:///C:/Users/Somli/OneDrive/Desktop/Quiz/admin/admin.html`
 2. Login with: `admin` / `admin123`
 3. Test "Remember me" checkbox
 4. Verify admin panel loads
 
 ### Production Testing:
 1. Deploy updated files to Render
-2. Visit: https://soundbites-quiz-frontend.onrender.com/Admin%20App/Soundbites%20Admin/admin.html
+2. Visit: https://soundbites-quiz-frontend.onrender.com/admin/index.html
 3. Login and verify
 
 ## Security Improvements

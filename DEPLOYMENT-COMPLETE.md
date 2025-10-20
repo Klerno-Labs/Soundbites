@@ -234,8 +234,8 @@ otis.soundbites.com/
 │   ├── header-sizer.js                  → Header sizing utility
 │   ├── soundbites_logo_magenta.webp     → Brand logo
 │   └── dot_wave_2.webp                  → Wave decoration
-├── Admin App/
-│   └── Soundbites Admin/
+├── admin/
+│   └── (consolidated admin files)
 │       ├── admin.html                   → Admin dashboard
 │       ├── admin.css                    → Admin styles
 │       ├── admin.js                     → Admin logic
@@ -288,6 +288,6 @@ All guides are in your Quiz folder:
 ## 🚀 You're Live!
 
 **Main Quiz**: https://otis.soundbites.com
-**Admin Panel**: https://otis.soundbites.com/Admin%20App/Soundbites%20Admin/admin.html
+**Admin Panel**: https://otis.soundbites.com/admin
 
 Everything is deployed, optimized, and ready for TikTok! 🎉
