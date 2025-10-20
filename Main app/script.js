@@ -4,7 +4,37 @@ class SoundbiteQuiz {
         this.currentQuestion = 0;
         this.answers = {};
         this.questions = this.getDefaultQuestions();
+        this.utmParams = this.captureUTMParams();
         this.init();
+    }
+
+    // Capture UTM parameters from URL
+    captureUTMParams() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+            source: params.get('utm_source') || 'direct',
+            medium: params.get('utm_medium') || 'none',
+            campaign: params.get('utm_campaign') || 'none',
+            content: params.get('utm_content') || '',
+            term: params.get('utm_term') || ''
+        };
+    }
+
+    // Track TikTok events
+    trackTikTokEvent(eventName, properties = {}) {
+        if (window.ttq && typeof window.ttq.track === 'function') {
+            try {
+                window.ttq.track(eventName, {
+                    ...properties,
+                    utm_source: this.utmParams.source,
+                    utm_medium: this.utmParams.medium,
+                    utm_campaign: this.utmParams.campaign
+                });
+                console.log('✅ TikTok Event:', eventName, properties);
+            } catch (error) {
+                console.warn('TikTok Pixel error:', error);
+            }
+        }
     }
 
     // Default 10 hearing-related questions
@@ -108,6 +138,12 @@ class SoundbiteQuiz {
     }
 
     init() {
+        // Track page view
+        this.trackTikTokEvent('PageView', {
+            content_type: 'quiz',
+            content_name: 'Hearing Assessment Quiz'
+        });
+        
         this.loadCustomQuestions();
         this.renderQuestion();
         this.attachEventListeners();
@@ -173,6 +209,15 @@ class SoundbiteQuiz {
     renderQuestion() {
         const container = document.getElementById('question-container');
         const question = this.questions[this.currentQuestion];
+        
+        // Track quiz start (first question only)
+        if (this.currentQuestion === 0 && Object.keys(this.answers).length === 0) {
+            this.trackTikTokEvent('ViewContent', {
+                content_type: 'quiz',
+                content_name: 'Hearing Quiz Started',
+                content_category: 'Health Assessment'
+            });
+        }
         
     let html = `<fieldset class="question active" role="group" aria-labelledby="q-${question.id}-legend">
               <legend id="q-${question.id}-legend">Question ${this.currentQuestion + 1} of ${this.questions.length}: ${question.text}</legend>`;
@@ -457,6 +502,15 @@ class SoundbiteQuiz {
         const score = this.calculateScore();
         const recommendation = this.getRecommendation(score);
         
+        // Track quiz completion
+        this.trackTikTokEvent('CompleteRegistration', {
+            content_name: 'Quiz Completed',
+            content_type: 'assessment',
+            value: score / 100,
+            currency: 'USD',
+            status: recommendation
+        });
+        
         // Store results for analytics
         this.storeResults(score, recommendation);
         
@@ -526,6 +580,56 @@ class SoundbiteQuiz {
         requestAnimationFrame(step);
 
         resultsContainer.style.display = 'block';
+        
+        // Add TikTok Shop CTA (prominent call-to-action)
+        setTimeout(() => {
+            this.addTikTokShopCTA(recommendation, score);
+        }, 1000); // Show after score animation
+    }
+    
+    addTikTokShopCTA(recommendation, score) {
+        const resultContent = document.getElementById('result-content');
+        if (!resultContent) return;
+        
+        // Customize TikTok Shop link with UTM parameters
+        const tiktokShopURL = 'https://www.tiktok.com/shop/store/soundbites/7494162119735018619';
+        const utmParams = new URLSearchParams({
+            utm_source: this.utmParams.source,
+            utm_medium: 'quiz-results',
+            utm_campaign: recommendation.level,
+            utm_content: `score-${score}`
+        });
+        
+        const tiktokCTA = `
+            <div class="tiktok-shop-cta">
+                <h3>🎵 Ready to Improve Your Hearing?</h3>
+                <p>Get Soundbites hearing solutions now - available on TikTok Shop!</p>
+                <a href="${tiktokShopURL}?${utmParams.toString()}" 
+                   id="tiktok-shop-btn"
+                   class="btn" 
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    🛒 Shop on TikTok
+                </a>
+            </div>
+        `;
+        
+        resultContent.insertAdjacentHTML('beforeend', tiktokCTA);
+        
+        // Track TikTok Shop button click
+        const shopBtn = document.getElementById('tiktok-shop-btn');
+        if (shopBtn) {
+            shopBtn.addEventListener('click', () => {
+                this.trackTikTokEvent('ClickButton', {
+                    content_name: 'TikTok Shop Button',
+                    content_type: 'cta',
+                    button_location: 'results_page',
+                    value: 10.00,
+                    currency: 'USD',
+                    recommendation: recommendation.level
+                });
+            });
+        }
     }
 
     storeResults(score, recommendation) {
@@ -577,6 +681,16 @@ class SoundbiteQuiz {
         const email = document.getElementById('user-email').value;
         const score = this.calculateScore();
         const recommendation = this.getRecommendation(score);
+        
+        // Track email capture
+        this.trackTikTokEvent('SubmitForm', {
+            content_name: 'Email Captured',
+            content_type: 'lead',
+            value: 5.00,
+            currency: 'USD',
+            score: score,
+            recommendation: recommendation.level
+        });
         
         // Show loading state
         const submitBtn = event.target.querySelector('button[type="submit"]');

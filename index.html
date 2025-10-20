@@ -2,35 +2,84 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soundbites Quiz - Do You Need Better Hearing Solutions?</title>
-    <meta name="description" content="Take our interactive hearing assessment to discover if Soundbites can improve your listening experience">
-    <link rel="manifest" href="Main%20app/manifest.json">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;800&display=swap" rel="stylesheet">
-    <link rel="icon" href="Main%20app/soundbites_logo_magenta.webp" type="image/webp">
-    <meta property="og:title" content="Soundbites Hearing Quiz">
-    <meta property="og:description" content="Discover if Soundbites can improve your hearing experience.">
-    <meta property="og:image" content="Main%20app/soundbites_logo_magenta.webp">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    
+    <!-- Primary Meta Tags (TikTok Optimized) -->
+    <title>Do You Need Better Hearing? Free 2-Min Quiz | Soundbites</title>
+    <meta name="title" content="Do You Need Better Hearing? Free 2-Min Quiz">
+    <meta name="description" content="Take our quick hearing assessment to discover if Soundbites can improve your listening experience. Get personalized recommendations instantly! 🎧">
+    
+    <!-- Open Graph / Facebook / TikTok -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://otis.soundbites.com/">
+    <meta property="og:title" content="Do You Need Better Hearing? Free Quiz">
+    <meta property="og:description" content="Take our 2-minute quiz to discover if Soundbites can improve your hearing experience. Get personalized recommendations!">
+    <meta property="og:image" content="https://otis.soundbites.com/Main%20app/soundbites_logo_magenta.webp">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:site_name" content="Soundbites">
+    
+    <!-- Twitter / TikTok Sharing -->
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://otis.soundbites.com/">
+    <meta name="twitter:title" content="Do You Need Better Hearing? Free Quiz">
+    <meta name="twitter:description" content="2-minute quiz • Personalized results • Improve your hearing experience 🎧">
+    <meta name="twitter:image" content="https://otis.soundbites.com/Main%20app/soundbites_logo_magenta.webp">
+    
+    <!-- PWA / Mobile -->
+    <link rel="manifest" href="Main%20app/manifest.json">
     <meta name="theme-color" content="#C92A76">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Soundbites Quiz">
+    <link rel="icon" href="Main%20app/soundbites_logo_magenta.webp" type="image/webp">
+    
+    <!-- Performance Optimizations -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://cdn.emailjs.com">
+    <link rel="preload" href="Main%20app/soundbites_logo_magenta.webp" as="image">
+    <link rel="preload" href="Main%20app/styles.css" as="style">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="Main%20app/styles.css">
     <link rel="stylesheet" href="Main%20app/brand.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    
+    <!-- Deferred Scripts (Load after page) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script defer src="https://cdn.emailjs.com/dist/email.min.js"></script>
     <script src="Main%20app/api-client.js"></script>
-        <script src="Main%20app/header-sizer.js"></script>
-        <script>
-            // Initialize shared header sizer for consistent, fluid header on the main app
-            if (window.initHeaderSizer) window.initHeaderSizer();
-        </script>
-    <!-- Production mode: allow indexing if desired -->
+    <script src="Main%20app/header-sizer.js"></script>
+    
+    <!-- TikTok Pixel Code Start -->
+    <script>
+    !function (w, d, t) {
+      w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie","holdConsent","revokeConsent","grantConsent"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(
+var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var r="https://analytics.tiktok.com/i18n/pixel/events.js",o=n&&n.partner;ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=r,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};n=document.createElement("script")
+;n.type="text/javascript",n.async=!0,n.src=r+"?sdkid="+e+"&lib="+t;e=document.getElementsByTagName("script")[0];e.parentNode.insertBefore(n,e)};
+
+      ttq.load('D3QKIABC77U1STIOMN20');
+      ttq.page();
+    }(window, document, 'ttq');
+    </script>
+    <!-- TikTok Pixel Code End -->
+    
+    <script>
+        // Initialize header sizer
+        if (window.initHeaderSizer) window.initHeaderSizer();
+    </script>
 </head>
 <body>
+    <!-- Loading Spinner -->
+    <div id="app-loader" class="app-loader">
+        <div class="loader-spinner"></div>
+        <p>Loading your hearing assessment...</p>
+    </div>
+    
     <a href="#main" class="skip-link">Skip to content</a>
     <div class="container" role="application">
         <header>
@@ -82,5 +131,18 @@
     </div>
 
     <script src="Main%20app/script.js"></script>
+    
+    <!-- Hide loading spinner when page is ready -->
+    <script>
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('app-loader');
+            if (loader) {
+                loader.classList.add('hidden');
+                setTimeout(function() { 
+                    loader.remove(); 
+                }, 400);
+            }
+        });
+    </script>
 </body>
 </html>

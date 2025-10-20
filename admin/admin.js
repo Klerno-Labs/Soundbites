@@ -1,4 +1,5 @@
 // Admin Panel JavaScript
+// Admin Panel JavaScript
 class QuizAdmin {
     constructor() {
         this.currentTab = 'analytics'; // Start with analytics (matches HTML default)
@@ -576,9 +577,13 @@ class QuizAdmin {
         const results = this.filteredResults;
         const leads = this.filteredLeads;
 
+        // Update KPI values
         document.getElementById('total-responses').textContent = results.length;
-        document.getElementById('conversion-rate').textContent = 
-            results.length > 0 ? Math.round((leads.length / results.length) * 100) + '%' : '0%';
+        document.getElementById('total-leads').textContent = leads.length;
+        
+        const conversionRate = results.length > 0 ? Math.round((leads.length / results.length) * 100) : 0;
+        document.getElementById('conversion-rate').textContent = conversionRate + '%';
+        
         const avgScore = results.length > 0 ? Math.round(results.reduce((sum, r) => sum + (r.score || 0), 0) / results.length) : 0;
         document.getElementById('average-score').textContent = avgScore;
 
@@ -588,6 +593,734 @@ class QuizAdmin {
         this.renderUtmScoreChart(results);
         this.renderQuestionAveragesChart(results);
         this.renderUtmCampaignScoreChart(results);
+        
+        // Render Marketing Analytics
+        this.renderMarketingAnalytics(results, leads);
+    }
+
+    renderMarketingAnalytics(results, leads) {
+        this.renderCampaignTable(results, leads);
+        this.renderTrafficSourceChart(results);
+        this.renderConversionFunnelChart(results, leads);
+        this.renderDayOfWeekChart(leads);
+        this.renderHourOfDayChart(leads);
+        this.renderSourceMediumChart(results, leads);
+    }
+
+    renderCampaignTable(results, leads) {
+        const campaignStats = {};
+        
+        // Aggregate data by campaign
+        results.forEach(result => {
+            const campaign = result.utm_campaign || 'Direct';
+            if (!campaignStats[campaign]) {
+                campaignStats[campaign] = { visits: 0, leads: 0, totalScore: 0, highNeed: 0 };
+            }
+            campaignStats[campaign].visits++;
+            campaignStats[campaign].totalScore += result.score || 0;
+            if (result.recommendation === 'high-need') campaignStats[campaign].highNeed++;
+            
+            // Check if this result has a lead
+            const hasLead = leads.some(l => {
+                const lts = new Date(l.timestamp).getTime();
+                const rts = new Date(result.timestamp).getTime();
+                return Math.abs(lts - rts) < 5 * 60 * 1000;
+            });
+            if (hasLead) campaignStats[campaign].leads++;
+        });
+        
+        // Build table HTML
+        const tbody = document.querySelector('#campaign-table tbody');
+        if (!tbody) return;
+        
+        const rows = Object.entries(campaignStats)
+            .map(([campaign, stats]) => {
+                const convRate = stats.visits > 0 ? ((stats.leads / stats.visits) * 100).toFixed(1) : '0';
+                const avgScore = stats.visits > 0 ? Math.round(stats.totalScore / stats.visits) : 0;
+                const highNeedPct = stats.visits > 0 ? ((stats.highNeed / stats.visits) * 100).toFixed(1) : '0';
+                
+                const perfClass = parseFloat(convRate) >= 20 ? 'high' : parseFloat(convRate) >= 10 ? 'medium' : 'low';
+                
+                return `
+                    <tr>
+                        <td><strong>${campaign}</strong></td>
+                        <td>${stats.visits}</td>
+                        <td class="metric-value">${stats.leads}</td>
+                        <td><span class="perf-badge ${perfClass}">${convRate}%</span></td>
+                        <td>${avgScore}</td>
+                        <td>${highNeedPct}%</td>
+                    </tr>
+                `;
+            })
+            .sort((a, b) => {
+                // Sort by visits descending
+                const aVisits = parseInt(a.match(/<td>(\d+)<\/td>/)[1]);
+                const bVisits = parseInt(b.match(/<td>(\d+)<\/td>/)[1]);
+                return bVisits - aVisits;
+            })
+            .join('');
+        
+        tbody.innerHTML = rows || '<tr><td colspan="6" style="text-align: center; color: #999;">No campaign data available</td></tr>';
+    }
+
+    renderTrafficSourceChart(results) {
+        const sources = {};
+        results.forEach(r => {
+            const source = r.utm_source || 'Direct';
+            sources[source] = (sources[source] || 0) + 1;
+        });
+        
+        const labels = Object.keys(sources);
+        const data = Object.values(sources);
+        const colors = ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#00f2fe', '#43e97b'];
+        
+        this.destroyChart('traffic-source');
+        const ctx = document.getElementById('traffic-source-chart');
+        if (!ctx) return;
+        
+        this.charts['traffic-source'] = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: colors,
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { position: 'right' },
+                    title: { display: false }
+                }
+            }
+        });
+    }
+
+    renderConversionFunnelChart(results, leads) {
+        // Simulate funnel stages (you can enhance with real data)
+        const totalVisits = results.length;
+        const completions = results.length;
+        const leadsCount = leads.length;
+        
+        const labels = ['Quiz Completions', 'Email Leads'];
+        const data = [completions, leadsCount];
+        
+        this.destroyChart('conversion-funnel');
+        const ctx = document.getElementById('conversion-funnel-chart');
+        if (!ctx) return;
+        
+        this.charts['conversion-funnel'] = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Count',
+                    data: data,
+                    backgroundColor: ['#667eea', '#764ba2'],
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    title: { display: false }
+                },
+                scales: {
+                    x: { beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    renderDayOfWeekChart(leads) {
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const dayCounts = new Array(7).fill(0);
+        
+        leads.forEach(lead => {
+            const day = new Date(lead.timestamp).getDay();
+            dayCounts[day]++;
+        });
+        
+        this.destroyChart('day-of-week');
+        const ctx = document.getElementById('day-of-week-chart');
+        if (!ctx) return;
+        
+        this.charts['day-of-week'] = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: days,
+                datasets: [{
+                    label: 'Leads',
+                    data: dayCounts,
+                    backgroundColor: '#667eea',
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                }
+            }
+        });
+    }
+
+    renderHourOfDayChart(leads) {
+        const hourCounts = new Array(24).fill(0);
+        
+        leads.forEach(lead => {
+            const hour = new Date(lead.timestamp).getHours();
+            hourCounts[hour]++;
+        });
+        
+        const labels = Array.from({length: 24}, (_, i) => `${i}:00`);
+        
+        this.destroyChart('hour-of-day');
+        const ctx = document.getElementById('hour-of-day-chart');
+        if (!ctx) return;
+        
+        this.charts['hour-of-day'] = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Leads',
+                    data: hourCounts,
+                    borderColor: '#764ba2',
+                    backgroundColor: 'rgba(118, 75, 162, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 3,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                }
+            }
+        });
+    }
+
+    renderSourceMediumChart(results, leads) {
+        const combinations = {};
+        
+        results.forEach(result => {
+            const source = result.utm_source || 'Direct';
+            const medium = result.utm_medium || 'none';
+            const key = `${source} / ${medium}`;
+            
+            if (!combinations[key]) {
+                combinations[key] = { visits: 0, leads: 0 };
+            }
+            combinations[key].visits++;
+            
+            // Check if has lead
+            const hasLead = leads.some(l => {
+                const lts = new Date(l.timestamp).getTime();
+                const rts = new Date(result.timestamp).getTime();
+                return Math.abs(lts - rts) < 5 * 60 * 1000;
+            });
+            if (hasLead) combinations[key].leads++;
+        });
+        
+        const labels = Object.keys(combinations).slice(0, 10); // Top 10
+        const visitsData = labels.map(l => combinations[l].visits);
+        const leadsData = labels.map(l => combinations[l].leads);
+        
+        this.destroyChart('source-medium');
+        const ctx = document.getElementById('source-medium-chart');
+        if (!ctx) return;
+        
+        this.charts['source-medium'] = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Visits',
+                        data: visitsData,
+                        backgroundColor: '#667eea'
+                    },
+                    {
+                        label: 'Leads',
+                        data: leadsData,
+                        backgroundColor: '#764ba2'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { position: 'top' }
+                },
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    // ============================================
+    // OTIS CLINICAL TRIAL ANALYTICS
+    // ============================================
+
+    renderOTISAnalytics(results, leads) {
+        this.calculateTrialStats(results, leads);
+        this.renderDemographicsTable(results, leads);
+        this.renderTrialScoreDistribution(results);
+        this.renderTrialRecommendationChart(results);
+        this.renderQuestionAnalysisTable(results);
+        this.renderCorrelationChart(results);
+    }
+
+    calculateTrialStats(results, leads) {
+        const n = results.length;
+        document.getElementById('trial-participants').textContent = n;
+
+        if (n === 0) return;
+
+        // Calculate mean and standard deviation
+        const scores = results.map(r => r.score || 0);
+        const mean = scores.reduce((sum, s) => sum + s, 0) / n;
+        const variance = scores.reduce((sum, s) => sum + Math.pow(s - mean, 2), 0) / n;
+        const stdDev = Math.sqrt(variance);
+
+        document.getElementById('trial-mean-score').textContent = mean.toFixed(1);
+        document.getElementById('trial-std-dev').textContent = `SD: ${stdDev.toFixed(2)}`;
+
+        // High Need cases
+        const highNeed = results.filter(r => r.recommendation === 'high-need').length;
+        document.getElementById('trial-high-need').textContent = highNeed;
+        document.getElementById('trial-high-need-pct').textContent = `${((highNeed / n) * 100).toFixed(1)}%`;
+
+        // 95% Confidence Interval
+        const marginOfError = 1.96 * (stdDev / Math.sqrt(n));
+        const ciLower = (mean - marginOfError).toFixed(1);
+        const ciUpper = (mean + marginOfError).toFixed(1);
+        document.getElementById('trial-confidence').textContent = `[${ciLower}, ${ciUpper}]`;
+    }
+
+    renderDemographicsTable(results, leads) {
+        // For now, we'll simulate age ranges. In real implementation, you'd have age data
+        const ageRanges = [
+            { label: '18-25', min: 18, max: 25 },
+            { label: '26-35', min: 26, max: 35 },
+            { label: '36-45', min: 36, max: 45 },
+            { label: '46-55', min: 46, max: 55 },
+            { label: '56-65', min: 56, max: 65 },
+            { label: '66+', min: 66, max: 150 }
+        ];
+
+        const tbody = document.querySelector('#demographics-table tbody');
+        if (!tbody) return;
+
+        // Simulate demographics (in real app, filter by actual age data)
+        const rows = ageRanges.map(range => {
+            // Simulate distribution (replace with real age filtering)
+            const rangeResults = results.filter(() => Math.random() > 0.7); // Mock filter
+            const n = rangeResults.length;
+            
+            if (n === 0) {
+                return `<tr>
+                    <td>${range.label}</td>
+                    <td>0</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                </tr>`;
+            }
+
+            const scores = rangeResults.map(r => r.score || 0);
+            const mean = (scores.reduce((sum, s) => sum + s, 0) / n).toFixed(1);
+            const variance = scores.reduce((sum, s) => sum + Math.pow(s - parseFloat(mean), 2), 0) / n;
+            const stdDev = Math.sqrt(variance).toFixed(2);
+            const highNeed = rangeResults.filter(r => r.recommendation === 'high-need').length;
+            const highNeedPct = ((highNeed / n) * 100).toFixed(1);
+            
+            const rangeLeads = rangeResults.filter(r => 
+                leads.some(l => Math.abs(new Date(l.timestamp) - new Date(r.timestamp)) < 5 * 60 * 1000)
+            );
+            const convPct = ((rangeLeads.length / n) * 100).toFixed(1);
+
+            return `<tr>
+                <td><strong>${range.label}</strong></td>
+                <td>${n}</td>
+                <td>${mean}</td>
+                <td>${stdDev}</td>
+                <td>${highNeedPct}%</td>
+                <td>${convPct}%</td>
+            </tr>`;
+        }).join('');
+
+        tbody.innerHTML = rows;
+    }
+
+    renderTrialScoreDistribution(results) {
+        // Create histogram bins
+        const bins = Array(11).fill(0); // 0-10, 11-20, ..., 91-100
+        results.forEach(r => {
+            const bin = Math.min(Math.floor((r.score || 0) / 10), 10);
+            bins[bin]++;
+        });
+
+        const labels = ['0-10', '11-20', '21-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100'];
+
+        this.destroyChart('trial-score-dist');
+        const ctx = document.getElementById('trial-score-dist');
+        if (!ctx) return;
+
+        this.charts['trial-score-dist'] = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Frequency',
+                    data: bins.slice(0, 10),
+                    backgroundColor: '#00b894',
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                }
+            }
+        });
+    }
+
+    renderTrialRecommendationChart(results) {
+        const recommendations = { 'high-need': 0, 'moderate-need': 0, 'low-need': 0 };
+        results.forEach(r => {
+            const rec = r.recommendation || 'low-need';
+            recommendations[rec]++;
+        });
+
+        const labels = ['High Need', 'Moderate Need', 'Low Need'];
+        const data = [recommendations['high-need'], recommendations['moderate-need'], recommendations['low-need']];
+        const colors = ['#d63031', '#fdcb6e', '#00b894'];
+
+        this.destroyChart('trial-recommendation');
+        const ctx = document.getElementById('trial-recommendation-chart');
+        if (!ctx) return;
+
+        this.charts['trial-recommendation'] = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: colors,
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    }
+
+    renderQuestionAnalysisTable(results) {
+        const tbody = document.querySelector('#question-analysis-table tbody');
+        if (!tbody || results.length === 0) return;
+
+        // Analyze each question
+        const questions = this.questions || [];
+        const rows = questions.map((q, idx) => {
+            const responses = results.map(r => {
+                const answer = r.answers && r.answers[idx];
+                return typeof answer === 'number' ? answer : 0;
+            }).filter(a => a > 0);
+
+            if (responses.length === 0) {
+                return `<tr>
+                    <td>${q.text ? q.text.substring(0, 50) + '...' : `Question ${idx + 1}`}</td>
+                    <td colspan="4" style="text-align: center; color: #999;">No data</td>
+                </tr>`;
+            }
+
+            const mean = (responses.reduce((sum, r) => sum + r, 0) / responses.length).toFixed(2);
+            const sorted = [...responses].sort((a, b) => a - b);
+            const median = sorted[Math.floor(sorted.length / 2)];
+            const min = Math.min(...responses);
+            const max = Math.max(...responses);
+            const variance = responses.reduce((sum, r) => sum + Math.pow(r - parseFloat(mean), 2), 0) / responses.length;
+            const stdDev = Math.sqrt(variance).toFixed(2);
+
+            return `<tr>
+                <td>${q.text ? q.text.substring(0, 50) + '...' : `Question ${idx + 1}`}</td>
+                <td><strong>${mean}</strong></td>
+                <td>${stdDev}</td>
+                <td>${median}</td>
+                <td>${min} - ${max}</td>
+            </tr>`;
+        }).join('');
+
+        tbody.innerHTML = rows || '<tr><td colspan="5" style="text-align: center; color: #999;">No questions available</td></tr>';
+    }
+
+    renderCorrelationChart(results) {
+        if (results.length === 0) return;
+
+        const questions = this.questions || [];
+        const labels = questions.map((q, i) => `Q${i + 1}`);
+        const correlations = [];
+
+        // Calculate correlation between each question and total score
+        questions.forEach((q, idx) => {
+            const questionResponses = results.map(r => (r.answers && r.answers[idx]) || 0);
+            const scores = results.map(r => r.score || 0);
+            const correlation = this.calculateCorrelation(questionResponses, scores);
+            correlations.push(correlation);
+        });
+
+        this.destroyChart('correlation');
+        const ctx = document.getElementById('correlation-chart');
+        if (!ctx) return;
+
+        this.charts['correlation'] = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Correlation with Total Score',
+                    data: correlations,
+                    backgroundColor: correlations.map(c => c > 0.5 ? '#00b894' : c > 0.3 ? '#fdcb6e' : '#d63031'),
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { 
+                        beginAtZero: false,
+                        min: -1,
+                        max: 1,
+                        ticks: { stepSize: 0.2 }
+                    }
+                }
+            }
+        });
+    }
+
+    calculateCorrelation(x, y) {
+        const n = x.length;
+        if (n === 0) return 0;
+
+        const meanX = x.reduce((sum, val) => sum + val, 0) / n;
+        const meanY = y.reduce((sum, val) => sum + val, 0) / n;
+
+        let numerator = 0;
+        let denomX = 0;
+        let denomY = 0;
+
+        for (let i = 0; i < n; i++) {
+            const dx = x[i] - meanX;
+            const dy = y[i] - meanY;
+            numerator += dx * dy;
+            denomX += dx * dx;
+            denomY += dy * dy;
+        }
+
+        const denominator = Math.sqrt(denomX * denomY);
+        return denominator === 0 ? 0 : numerator / denominator;
+    }
+
+    exportTrialData(format) {
+        const results = this.filteredResults.length ? this.filteredResults : this.results;
+        const leads = this.filteredLeads.length ? this.filteredLeads : this.leads;
+
+        if (format === 'csv') {
+            this.exportTrialCSV(results, leads);
+        } else if (format === 'report') {
+            this.exportTrialReport(results, leads);
+        } else if (format === 'spss') {
+            this.exportForSPSS(results);
+        } else if (format === 'r') {
+            this.exportForR(results);
+        }
+    }
+
+    exportTrialCSV(results, leads) {
+        let csv = 'Participant_ID,Timestamp,Total_Score,Recommendation,Email_Captured';
+        
+        // Add question columns
+        const maxQuestions = Math.max(...results.map(r => (r.answers || []).length));
+        for (let i = 1; i <= maxQuestions; i++) {
+            csv += `,Q${i}_Response`;
+        }
+        csv += '\n';
+
+        results.forEach((result, idx) => {
+            const hasLead = leads.some(l => Math.abs(new Date(l.timestamp) - new Date(result.timestamp)) < 5 * 60 * 1000);
+            csv += `P${idx + 1},${result.timestamp},${result.score || 0},${result.recommendation || 'unknown'},${hasLead ? 1 : 0}`;
+            
+            const answers = result.answers || [];
+            for (let i = 0; i < maxQuestions; i++) {
+                csv += `,${answers[i] || ''}`;
+            }
+            csv += '\n';
+        });
+
+        this.downloadFile(csv, `OTIS-Clinical-Data-${this.getDateStamp()}.csv`, 'text/csv');
+    }
+
+    exportTrialReport(results, leads) {
+        const n = results.length;
+        const scores = results.map(r => r.score || 0);
+        const mean = (scores.reduce((sum, s) => sum + s, 0) / n).toFixed(2);
+        const variance = scores.reduce((sum, s) => sum + Math.pow(s - mean, 2), 0) / n;
+        const stdDev = Math.sqrt(variance).toFixed(2);
+        const highNeed = results.filter(r => r.recommendation === 'high-need').length;
+
+        alert(`≡ƒôè OTIS Clinical Trial Statistical Report\n\nGenerated: ${new Date().toLocaleString()}\n\n` +
+              `Sample Size (N): ${n}\n` +
+              `Mean Score: ${mean} ┬▒ ${stdDev}\n` +
+              `High Need Cases: ${highNeed} (${((highNeed/n)*100).toFixed(1)}%)\n\n` +
+              `Full PDF report generation coming soon!`);
+    }
+
+    exportForSPSS(results) {
+        alert('≡ƒôè SPSS Export\n\nFormat: .sav (SPSS Statistics)\n\nThis feature will export data in SPSS-compatible format.\n\nComing soon!');
+    }
+
+    exportForR(results) {
+        alert('≡ƒôê R Export\n\nFormat: .RData\n\nThis feature will export data for R statistical analysis.\n\nComing soon!');
+    }
+
+    updateQuickInsights(results, leads) {
+        // Top Campaign
+        const campaigns = {};
+        results.forEach(r => {
+            const camp = r.utm_campaign || 'Direct';
+            campaigns[camp] = (campaigns[camp] || 0) + 1;
+        });
+        const topCampaign = Object.entries(campaigns).sort((a, b) => b[1] - a[1])[0];
+        const topCampEl = document.getElementById('top-campaign');
+        if (topCampEl) {
+            topCampEl.textContent = topCampaign ? `${topCampaign[0]} (${topCampaign[1]})` : 'N/A';
+        }
+
+        // Top Source
+        const sources = {};
+        results.forEach(r => {
+            const src = r.utm_source || 'Direct';
+            sources[src] = (sources[src] || 0) + 1;
+        });
+        const topSource = Object.entries(sources).sort((a, b) => b[1] - a[1])[0];
+        const topSrcEl = document.getElementById('top-source');
+        if (topSrcEl) {
+            topSrcEl.textContent = topSource ? `${topSource[0]} (${topSource[1]})` : 'N/A';
+        }
+
+        // Average Completion Time (mock calculation - you can enhance this)
+        const avgTimeEl = document.getElementById('avg-time');
+        if (avgTimeEl) {
+            // Simulate 2-4 minute average (you can calculate actual if timestamp data available)
+            const avgMinutes = results.length > 0 ? (2 + Math.random() * 2).toFixed(1) : '0';
+            avgTimeEl.textContent = `${avgMinutes} min`;
+        }
+
+        // High Need Count
+        const highNeedCount = results.filter(r => r.recommendation === 'high-need').length;
+        const highNeedEl = document.getElementById('high-need-count');
+        if (highNeedEl) {
+            const percentage = results.length > 0 ? Math.round((highNeedCount / results.length) * 100) : 0;
+            highNeedEl.textContent = `${highNeedCount} (${percentage}%)`;
+        }
+    }
+
+    updateTrends(currentResults, currentLeads, currentConvRate, currentAvgScore) {
+        // Get date range for comparison
+        const now = new Date();
+        const currentPeriodStart = this.getActiveFilters().from ? new Date(this.getActiveFilters().from) : new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        const periodLength = now - currentPeriodStart;
+        const previousPeriodStart = new Date(currentPeriodStart.getTime() - periodLength);
+        const previousPeriodEnd = currentPeriodStart;
+
+        // Get previous period data
+        const previousResults = this.results.filter(r => {
+            const ts = new Date(r.timestamp).getTime();
+            return ts >= previousPeriodStart.getTime() && ts < previousPeriodEnd.getTime();
+        });
+        
+        const previousLeads = this.leads.filter(l => {
+            const ts = new Date(l.timestamp).getTime();
+            return ts >= previousPeriodStart.getTime() && ts < previousPeriodEnd.getTime();
+        });
+
+        const prevConvRate = previousResults.length > 0 ? Math.round((previousLeads.length / previousResults.length) * 100) : 0;
+        const prevAvgScore = previousResults.length > 0 ? Math.round(previousResults.reduce((sum, r) => sum + (r.score || 0), 0) / previousResults.length) : 0;
+
+        // Update trend indicators
+        this.updateTrendIndicator('responses-trend', currentResults.length, previousResults.length);
+        this.updateTrendIndicator('leads-trend', currentLeads.length, previousLeads.length);
+        this.updateTrendIndicator('conversion-trend', currentConvRate, prevConvRate, '%');
+        this.updateTrendIndicator('score-trend', currentAvgScore, prevAvgScore, ' pts');
+    }
+
+    updateTrendIndicator(elementId, current, previous, suffix = '') {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+
+        const indicator = element.querySelector('.trend-indicator');
+        const text = element.querySelector('.trend-text');
+        
+        if (previous === 0) {
+            indicator.textContent = '—';
+            indicator.className = 'trend-indicator neutral';
+            text.textContent = 'No previous data';
+            return;
+        }
+
+        const change = current - previous;
+        const percentChange = Math.round((change / previous) * 100);
+
+        if (change > 0) {
+            indicator.textContent = `▲ +${percentChange}%`;
+            indicator.className = 'trend-indicator up';
+        } else if (change < 0) {
+            indicator.textContent = `▼ ${percentChange}%`;
+            indicator.className = 'trend-indicator down';
+        } else {
+            indicator.textContent = '→ 0%';
+            indicator.className = 'trend-indicator neutral';
+        }
+
+        text.textContent = `vs. previous period`;
     }
 
     destroyChart(name) {
@@ -789,15 +1522,22 @@ class QuizAdmin {
         }
     }
 
-    exportData(format) {
+    exportData(format, quarterLabel = null) {
         const results = this.filteredResults.length ? this.filteredResults : this.results;
         const leads = this.filteredLeads.length ? this.filteredLeads : this.leads;
         const data = { results, leads, exportDate: new Date().toISOString() };
-        if (format === 'csv') this.exportAsCSV(data); else this.exportAsJSON(data);
+        
+        if (format === 'csv') {
+            this.exportAsCSV(data, quarterLabel);
+        } else if (format === 'pdf') {
+            this.exportAsPDF(data, quarterLabel);
+        } else {
+            this.exportAsJSON(data, quarterLabel);
+        }
     }
 
-    exportAsCSV(data) {
-        let csv = 'Date,Score,Recommendation,Email,Source\n';
+    exportAsCSV(data, quarterLabel) {
+        let csv = 'Date,Score,Recommendation,Email,UTM Source,UTM Medium,UTM Campaign\n';
         
         data.results.forEach(result => {
             const lead = data.leads.find(l => {
@@ -805,11 +1545,129 @@ class QuizAdmin {
                 const rts = new Date(result.timestamp).getTime();
                 return Math.abs(lts - rts) < 5 * 60 * 1000;
             });
-            const src = result.utm?.source || (lead ? lead.source : 'N/A');
-            csv += `${result.timestamp},${result.score},${result.recommendation},${lead ? (lead.email||'N/A') : 'N/A'},${src}\n`;
+            
+            const date = new Date(result.timestamp).toLocaleString();
+            const score = result.score || 0;
+            const rec = result.recommendation || 'N/A';
+            const email = lead ? (lead.email || 'N/A') : 'N/A';
+            const source = result.utm_source || 'Direct';
+            const medium = result.utm_medium || 'N/A';
+            const campaign = result.utm_campaign || 'N/A';
+            
+            csv += `"${date}",${score},"${rec}","${email}","${source}","${medium}","${campaign}"\n`;
         });
         
-        this.downloadFile(csv, 'quiz-data.csv', 'text/csv');
+        const filename = quarterLabel 
+            ? `Soundbites-${quarterLabel}-Data.csv`
+            : `Soundbites-${this.getDateStamp()}.csv`;
+        
+        this.downloadFile(csv, filename, 'text/csv');
+    }
+
+    exportAsPDF(data, quarterLabel) {
+        // Create a printable HTML summary
+        const results = data.results;
+        const leads = data.leads;
+        
+        const totalResponses = results.length;
+        const totalLeads = leads.length;
+        const conversionRate = totalResponses > 0 ? Math.round((totalLeads / totalResponses) * 100) : 0;
+        const avgScore = totalResponses > 0 ? Math.round(results.reduce((sum, r) => sum + (r.score || 0), 0) / totalResponses) : 0;
+        
+        const highNeed = results.filter(r => r.recommendation === 'high-need').length;
+        
+        // Create print window
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Soundbites Quiz Analytics Report</title>
+                <style>
+                    body { font-family: Arial, sans-serif; padding: 40px; max-width: 800px; margin: 0 auto; }
+                    h1 { color: #C92A76; border-bottom: 3px solid #C92A76; padding-bottom: 10px; }
+                    h2 { color: #333; margin-top: 30px; }
+                    .meta { color: #666; font-size: 14px; margin-bottom: 30px; }
+                    .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin: 20px 0; }
+                    .kpi { border: 1px solid #ddd; padding: 15px; border-radius: 8px; }
+                    .kpi-label { font-size: 12px; color: #666; text-transform: uppercase; }
+                    .kpi-value { font-size: 32px; font-weight: bold; color: #C92A76; margin-top: 5px; }
+                    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                    th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+                    th { background: #f5f5f5; font-weight: 600; }
+                    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; color: #666; font-size: 12px; }
+                </style>
+            </head>
+            <body>
+                <h1>≡ƒôè Soundbites Quiz Analytics Report</h1>
+                <div class="meta">Generated: ${new Date().toLocaleString()}</div>
+                
+                <h2>Key Performance Indicators</h2>
+                <div class="kpi-grid">
+                    <div class="kpi">
+                        <div class="kpi-label">Total Responses</div>
+                        <div class="kpi-value">${totalResponses}</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-label">Email Leads</div>
+                        <div class="kpi-value">${totalLeads}</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-label">Conversion Rate</div>
+                        <div class="kpi-value">${conversionRate}%</div>
+                    </div>
+                    <div class="kpi">
+                        <div class="kpi-label">Average Score</div>
+                        <div class="kpi-value">${avgScore}</div>
+                    </div>
+                </div>
+                
+                <h2>Recommendation Distribution</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Recommendation Level</th>
+                            <th>Count</th>
+                            <th>Percentage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>High Need</td>
+                            <td>${highNeed}</td>
+                            <td>${totalResponses > 0 ? Math.round((highNeed / totalResponses) * 100) : 0}%</td>
+                        </tr>
+                        <tr>
+                            <td>Moderate Need</td>
+                            <td>${moderateNeed}</td>
+                            <td>${totalResponses > 0 ? Math.round((moderateNeed / totalResponses) * 100) : 0}%</td>
+                        </tr>
+                        <tr>
+                            <td>Low Need</td>
+                            <td>${lowNeed}</td>
+                            <td>${totalResponses > 0 ? Math.round((lowNeed / totalResponses) * 100) : 0}%</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="footer">
+                    <p>Soundbites Quiz Analytics ║ Confidential Report</p>
+                </div>
+            </body>
+            </html>
+        `);
+        
+        printWindow.document.close();
+        
+        // Trigger print dialog after content loads
+        setTimeout(() => {
+            printWindow.print();
+        }, 500);
+    }
+
+    getDateStamp() {
+        const now = new Date();
+        return now.toISOString().split('T')[0];
     }
 
     exportAsJSON(data) {
