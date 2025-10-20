@@ -38,40 +38,53 @@
 		<!-- Questions Panel (top-level sibling of Analytics) -->
 		<section id="questions-panel" class="admin-panel" style="display:none;">
 			<h2>Manage Questions</h2>
-			<form id="question-form">
-				<div class="form-group">
-					<label for="question-text">Question Text</label>
-					<input id="question-text" type="text" placeholder="Enter your question" required />
+			<body>
+				<div class="container" role="application">
+					<header>
+						<div class="logo-container">
+							<img src="../Main app/soundbites_logo_magenta.webp" alt="Soundbites Logo" class="brand-logo" />
+							<span class="play-button-accent" aria-hidden="true"></span>
+						</div>
+						<p class="sb-copy">Soundbites Admin Login</p>
+					</header>
+					<main id="main" role="main">
+						<section id="login-panel" class="admin-panel" style="max-width:400px;margin:40px auto;">
+							<h2>Admin Login</h2>
+							<form id="login-form">
+								<div class="form-group">
+									<label for="email">Email</label>
+									<input id="email" type="email" placeholder="Enter email" required value="c.hatfield309@gmail.com" />
+								</div>
+								<div class="form-group">
+									<label for="password">Password</label>
+									<input id="password" type="password" placeholder="Enter password" required value="Hearing2025" />
+								</div>
+								<button type="submit" class="btn btn-primary" style="width:100%;margin-top:1rem;">Log In</button>
+								<div id="login-error" style="color:#e3342f;margin-top:1rem;display:none;"></div>
+							</form>
+						</section>
+						<section id="dashboard-panel" class="admin-panel" style="display:none;">
+							<h2>Welcome to Soundbites Admin</h2>
+							<p>Login successful. Dashboard features will appear here.</p>
+						</section>
+					</main>
 				</div>
-				<div class="form-row">
-					<div class="form-col">
-						<label for="question-type">Type</label>
-						<select id="question-type">
-							<option value="slider">Slider (1-10)</option>
-							<option value="hours-slider">Hours per day (1-24)</option>
-							<option value="multiple-choice">Multiple Choice</option>
-							<option value="yes-no">Yes / No</option>
-							<option value="text">Open Text</option>
-						</select>
-					</div>
-					<div class="form-col"></div>
-				</div>
-				<div id="type-specific-options"></div>
-				<button type="submit" class="btn btn-primary">Add Question</button>
-			</form>
-			<h3 style="margin-top:1rem;">Question List</h3>
-			<div id="questions-list"></div>
-		</section>
-
-		<div id="analytics-panel" class="admin-panel" style="display: block;">
-			<!-- Analytics content (KPI cards, quick insights, filters) -->
-			<h2>Dashboard Overview</h2>
-			<!-- ...existing analytics HTML continues... -->
-		</div>
-
-		<!-- The rest of the admin HTML will be rendered/handled by admin.js -->
-		</main>
-	</div>
-	<script src="./admin.js" defer></script>
-</body>
-</html>
+				<script src="./admin-auth-backend.js"></script>
+				<script>
+					document.getElementById('login-form').addEventListener('submit', async function(e) {
+						e.preventDefault();
+						const email = document.getElementById('email').value.trim();
+						const password = document.getElementById('password').value;
+						const errorDiv = document.getElementById('login-error');
+						errorDiv.style.display = 'none';
+						// Hardcoded credentials for demo
+						if(email === 'c.hatfield309@gmail.com' && password === 'Hearing2025') {
+							document.getElementById('login-panel').style.display = 'none';
+							document.getElementById('dashboard-panel').style.display = 'block';
+						} else {
+							errorDiv.textContent = 'Invalid credentials. Please try again.';
+							errorDiv.style.display = 'block';
+						}
+					});
+				</script>
+			</body>
