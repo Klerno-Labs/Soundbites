@@ -6,7 +6,17 @@
     --sb-font: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 *{box-sizing:border-box}
-body{font-family:var(--sb-font);margin:0;background:#f7f7fb;color:#222}
+/* Header & branding fixes */
+.admin-header{display:flex;align-items:center;gap:16px}
+.logo-container{display:flex;align-items:center;gap:12px}
+.brand-logo{height:72px;max-width:60%;width:auto;display:block}
+.sb-copy{margin:0;color:#333;font-size:14px}
+.wave-decoration{margin-left:auto}
+.wave-graphic{max-height:72px;width:auto;display:block}
+
+/* Ensure font falls back to a sans-serif if Google Fonts fail */
+.sr-font-fallback{font-family:var(--sb-font), Arial, Helvetica, sans-serif}
+body{font-family:var(--sb-font), Arial, Helvetica, sans-serif;margin:0;background:#f7f7fb;color:#222}
 .admin-header{background:#fff;border-bottom:1px solid #eee;padding:16px 24px;display:flex;align-items:center;justify-content:space-between}
 .admin-header h1{margin:0;font-size:20px;color:var(--sb-primary)}
 .admin-container{display:flex;flex-direction:column;padding:20px;gap:20px}
