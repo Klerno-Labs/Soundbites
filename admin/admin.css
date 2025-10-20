@@ -9,10 +9,23 @@
 /* Header & branding fixes */
 .admin-header{display:flex;align-items:center;gap:16px}
 .logo-container{display:flex;align-items:center;gap:12px}
-.brand-logo{height:72px;max-width:60%;width:auto;display:block}
-.sb-copy{margin:0;color:#333;font-size:14px}
+.brand-logo{height:220px;max-width:100%;width:auto;display:block}
+.sb-copy{margin:0;color:#333;font-size:16px}
 .wave-decoration{margin-left:auto}
-.wave-graphic{max-height:72px;width:auto;display:block}
+.wave-graphic{max-height:140px;width:auto;display:block}
+
+/* Larger header on wide screens to match main site */
+@media (min-width:1100px){
+    .brand-logo{height:260px}
+    .wave-graphic{max-height:180px}
+}
+
+/* Mobile friendly scaling */
+@media (max-width:700px){
+    .brand-logo{height:84px}
+    .wave-graphic{max-height:48px}
+    .admin-header{padding:12px}
+}
 
 /* Ensure font falls back to a sans-serif if Google Fonts fail */
 .sr-font-fallback{font-family:var(--sb-font), Arial, Helvetica, sans-serif}
