@@ -139,7 +139,7 @@ otis.soundbites.com/
 ├── admin.html                           → Redirects to admin
 ├── _redirects                           → Render routing config ⭐
 ├── render.json                          → Additional config
-├── Main app/
+├── app/
 │   ├── script.js                        → Quiz logic + TikTok tracking
 │   ├── styles.css                       → TikTok optimized styles
 │   └── api-client.js                    → Backend connection

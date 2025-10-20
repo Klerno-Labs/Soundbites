@@ -2,7 +2,7 @@
 
 ## ✅ What Was Changed
 
-### 1. **Quiz (Main app/script.js)**
+### 1. **Quiz (app/script.js)**
 - ✅ Loads questions from API (`/api/quiz/questions`)
 - ✅ Submits quiz results to API (`/api/quiz/submit`)
 - ✅ Captures leads via API (`/api/quiz/lead`)

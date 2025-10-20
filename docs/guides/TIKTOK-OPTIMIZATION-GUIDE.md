@@ -251,7 +251,7 @@ await this.loadChartLibrary();
 Add to index.html `<head>`:
 ```html
 <!-- Preload critical resources -->
-<link rel="preload" href="Main%20app/soundbites_logo_magenta.webp" as="image">
+<link rel="preload" href="app/soundbites_logo_magenta.webp" as="image">
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;800&display=swap" as="style">
 <link rel="preconnect" href="https://soundbites-quiz-backend.onrender.com" crossorigin>
 ```

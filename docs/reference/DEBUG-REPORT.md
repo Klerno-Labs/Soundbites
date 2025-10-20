@@ -58,9 +58,9 @@ All endpoints tested and working:
 | File | Status | Size | Purpose |
 |------|--------|------|---------|
 | `index.html` | ✅ | 4,461 bytes | Main quiz page |
-| `Main app/script.js` | ✅ | 31,047 bytes | Quiz logic |
-| `Main app/api-client.js` | ✅ | 4,007 bytes | API communication |
-| `Main app/styles.css` | ✅ | 17,518 bytes | Quiz styling |
+| `app/script.js` | ✅ | 31,047 bytes | Quiz logic |
+| `app/api-client.js` | ✅ | 4,007 bytes | API communication |
+| `app/styles.css` | ✅ | 17,518 bytes | Quiz styling |
 | `admin/index.html` | ✅ | 11,944 bytes | Admin dashboard |
 | `admin/admin.js` | ✅ | 35,465 bytes | Dashboard logic |
 | `admin/admin-auth.js` | ✅ | 30,613 bytes | Authentication |

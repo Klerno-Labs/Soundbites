@@ -227,7 +227,7 @@ This appears in Marketing tab as:
 ```
 otis.soundbites.com/
 ├── index.html                           → Main quiz entry point
-├── Main app/
+├── app/
 │   ├── script.js                        → Quiz logic + TikTok tracking
 │   ├── styles.css                       → TikTok-optimized styles
 │   ├── api-client.js                    → Backend connection

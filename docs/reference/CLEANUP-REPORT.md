@@ -24,12 +24,12 @@
 - ❌ `LAUNCH-PLAN.md` - Old planning document
 
 ### Main App Directory (6 files)
-- ❌ `Main app/index.html` - Duplicate (root `index.html` is used)
-- ❌ `Main app/brand-guide.html` - Not connected to application
-- ❌ `Main app/demo-script.md` - Documentation only, not functional
-- ❌ `Main app/email-setup.md` - Setup guide, not needed in app
-- ❌ `Main app/tiktok-setup.md` - Marketing doc, not app-related
-- ❌ `Main app/README.md` - Duplicate (root README is main)
+- ❌ `app/index.html` - Duplicate (root `index.html` is used)
+- ❌ `app/brand-guide.html` - Not connected to application
+- ❌ `app/demo-script.md` - Documentation only, not functional
+- ❌ `app/email-setup.md` - Setup guide, not needed in app
+- ❌ `app/tiktok-setup.md` - Marketing doc, not app-related
+- ❌ `app/README.md` - Duplicate (root README is main)
 
 ### Backend Directory (6 files)
 - ❌ `backend/config/database.js` - Replaced by `database-local.js`
@@ -53,7 +53,7 @@ Quiz/
 ├── LOCAL-DEMO-GUIDE.md                 # Local setup guide
 ├── DEBUG-REPORT.md                     # System debug report
 │
-├── Main app/
+├── app/
 │   ├── api-client.js                   # API communication layer
 │   ├── script.js                       # Quiz logic (31KB)
 │   ├── styles.css                      # Main styling (17KB)

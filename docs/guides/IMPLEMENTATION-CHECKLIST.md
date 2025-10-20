@@ -52,7 +52,7 @@
 ### Phase 3: Mobile Optimizations (25 minutes)
 
 #### Step 1: Add Mobile Styles
-- [ ] Open `Main app/styles.css`
+- [ ] Open `app/styles.css`
 - [ ] Scroll to bottom of file
 - [ ] Copy ALL content from `TIKTOK-MOBILE-STYLES.css`
 - [ ] Paste at end of `styles.css`
@@ -87,7 +87,7 @@ window.addEventListener('load', () => {
 ### Phase 4: TikTok Event Tracking (30 minutes)
 
 #### Step 1: Add Tracking Functions
-- [ ] Open `Main app/script.js`
+- [ ] Open `app/script.js`
 - [ ] Find the `SoundbiteQuiz` class (around line 3)
 - [ ] After `constructor()` function, add:
 ```javascript

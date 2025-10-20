@@ -40,7 +40,7 @@ Quiz/
 
 │
 
-├── Main app/                       # Quiz frontend- Rate limiting:
+├── app/                       # Quiz frontend- Rate limiting:
 
 │   ├── script.js                   # Quiz logic + TikTok tracking  - Five failed login attempts within 5 minutes triggers a 60-second lockout.
 
@@ -141,7 +141,7 @@ Quiz/
 
 ### Update Quiz:
 ```powershell
-# 1. Edit files in Main app/
+# 1. Edit files in app/
 # 2. Test locally
 OPEN-QUIZ.bat
 

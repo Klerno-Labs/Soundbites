@@ -1,4 +1,4 @@
-/* Standalone Admin Styles (no dependency on Main app) */
+/* Standalone Admin Styles (no dependency on app) */
 :root {
   --sb-primary: #C92A76;
   --sb-text: #111;
@@ -25,7 +25,7 @@ header h1 { font-size: 1.5rem; font-weight: 800; margin: 0 0 6px; }
 .wave-decoration { opacity: 1; }
 .wave-graphic { max-width: 300px; width: 100%; height: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.12)); }
 .sb-copy { font-size: 1.05rem; opacity: .9; margin: .25rem 0 .25rem; }
-.play-button-accent { background-image: url("../../Main app/Play_button_magenta_to_blue_fade.webp"); background-size: contain; background-repeat: no-repeat; background-position: center; width: var(--sb-play-size, 44px); height: var(--sb-play-size, 44px); display: inline-block; margin: 0 10px; opacity: 0.85; }
+.play-button-accent { background-image: url("../../app/Play_button_magenta_to_blue_fade.webp"); background-size: contain; background-repeat: no-repeat; background-position: center; width: var(--sb-play-size, 44px); height: var(--sb-play-size, 44px); display: inline-block; margin: 0 10px; opacity: 0.85; }
 .admin-nav { display:flex; gap:.5rem; align-items:center; justify-content:flex-start; margin: .5rem 0 1rem; }
 .btn, .tab-btn { padding:10px 14px; border-radius:8px; cursor:pointer; font-weight:600; border:2px solid transparent; background:#000; color:#fff; transition: all 0.2s ease; }
 .tab-btn { font-size: 0.95rem; }

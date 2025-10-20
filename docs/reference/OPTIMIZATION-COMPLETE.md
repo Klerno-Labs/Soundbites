@@ -13,7 +13,7 @@
 - ✅ **Mobile-first container padding** (12px on small screens)
 
 **Files changed:**
-- `Main app/styles.css` - Added 400+ lines of mobile optimizations
+- `app/styles.css` - Added 400+ lines of mobile optimizations
 
 ---
 
@@ -36,7 +36,7 @@
 
 **Files changed:**
 - `index.html` - Added TikTok Pixel script
-- `Main app/script.js` - Added tracking functions
+- `app/script.js` - Added tracking functions
 
 **How to activate:**
 1. Get your TikTok Pixel ID from https://ads.tiktok.com
@@ -78,7 +78,7 @@ Create a custom 1200x630px OG image:
 
 **Files changed:**
 - `index.html` - Added preload/preconnect tags, loading spinner
-- `Main app/styles.css` - Added loading spinner styles and animations
+- `app/styles.css` - Added loading spinner styles and animations
 
 **Performance gains:**
 - Before: ~2-3 seconds load time
@@ -110,8 +110,8 @@ Create a custom 1200x630px OG image:
 - ✅ **12px height** (more visible)
 
 **Files changed:**
-- `Main app/script.js` - Added `addTikTokShopCTA()` function
-- `Main app/styles.css` - Added `.tiktok-shop-cta` and `.email-form` styles
+- `app/script.js` - Added `addTikTokShopCTA()` function
+- `app/styles.css` - Added `.tiktok-shop-cta` and `.email-form` styles
 
 ---
 
@@ -265,10 +265,10 @@ Deploy to production:
 - ✅ `index.html` - Meta tags, TikTok Pixel, loading spinner
 
 ### CSS (1 file)
-- ✅ `Main app/styles.css` - Mobile optimizations, CTAs, animations
+- ✅ `app/styles.css` - Mobile optimizations, CTAs, animations
 
 ### JavaScript (1 file)
-- ✅ `Main app/script.js` - TikTok tracking, UTM capture, Shop CTA
+- ✅ `app/script.js` - TikTok tracking, UTM capture, Shop CTA
 
 ---
 
