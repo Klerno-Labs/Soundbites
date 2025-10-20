@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-// Restored admin-auth.js (placeholder marker for full auth logic)
-// ...existing code from historical admin-auth.js...
-// ...existing code from Admin App/Soundbites Admin/admin-auth.js...
-=======
 // Lightweight client-side auth used for local demos or when backend isn't available
 (function(){
     function hashPassword(p) {
@@ -66,4 +61,3 @@
         }
     });
 })();
->>>>>>> 45e5595 (Restore admin: add admin panel assets)
