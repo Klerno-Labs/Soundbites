@@ -5,6 +5,7 @@
   --sb-muted: #666;
   --sb-border: #e5e7eb;
   --sb-surface: #fff;
+  --sb-bg: #fff;
   --sb-font: 'Montserrat','Segoe UI',Tahoma,Verdana,sans-serif;
 }
 * { box-sizing: border-box; }
