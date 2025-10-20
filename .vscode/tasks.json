@@ -11,7 +11,7 @@
 		{
 			"label": "Open Admin in Chrome",
 			"type": "shell",
-			"command": "Start-Process chrome 'file:///C:/Users/Somli/OneDrive/Desktop/Quiz/Admin%20App/Soundbites%20Admin/admin.html#sb-admin'",
+			"command": "Start-Process chrome 'file:///C:/Users/Somli/OneDrive/Desktop/Quiz/admin/admin.html#sb-admin'",
 			"isBackground": false,
 			"group": "build"
 		}

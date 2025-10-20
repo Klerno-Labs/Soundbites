@@ -9,7 +9,7 @@ https://otis.soundbites.com
 
 ### Admin Panel:
 ```
-https://otis.soundbites.com/Admin%20App/Soundbites%20Admin/admin.html
+https://otis.soundbites.com/admin
 ```
 
 **💡 Pro Tip:** Bookmark this URL or create a browser shortcut with a custom name like "Soundbites Admin" for easy access!
@@ -61,7 +61,7 @@ https://otis.soundbites.com/Admin%20App/Soundbites%20Admin/admin.html
 5. Optional: Submit email for results
 
 ### Accessing Admin Panel:
-1. Visit: `https://otis.soundbites.com/Admin%20App/Soundbites%20Admin/admin.html`
+1. Visit: `https://otis.soundbites.com/admin`
 2. Login with admin credentials
 3. View all 4 tabs:
    - **Questions**: Manage quiz questions
@@ -181,7 +181,7 @@ This appears in Marketing tab as:
 5. Render auto-deploys in 1-2 minutes
 
 ### Update Admin Panel:
-1. Edit files in `Admin App/Soundbites Admin/`
+1. Edit files in `admin/`
 2. Test locally: `OPEN-ADMIN.bat`
 3. Commit and push (same as above)
 4. Render auto-deploys

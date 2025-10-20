@@ -1,6 +1,6 @@
 @echo off
 REM Force refresh admin panel
-start chrome --new-window --disable-cache "file:///C:/Users/Somli/OneDrive/Desktop/Quiz/Admin App/Soundbites Admin/admin.html"
+start chrome --new-window --disable-cache "file:///C:/Users/Somli/OneDrive/Desktop/Quiz/admin/admin.html"
 echo.
 echo Admin panel opened with cache disabled!
 echo.

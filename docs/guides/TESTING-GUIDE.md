@@ -41,7 +41,7 @@
 ### **Test 2: Admin Dashboard with API (5 minutes)**
 
 1. **Open Admin Panel**
-   - File: `Admin App/Soundbites Admin/admin.html`
+   - File: `admin/index.html`
    - Add `#sb-admin` to URL or it will ask
 
 2. **Initialize Admin** (First time only)

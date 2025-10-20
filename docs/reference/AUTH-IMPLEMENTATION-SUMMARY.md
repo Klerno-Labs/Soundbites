@@ -160,7 +160,7 @@ The system automatically:
 ## Support
 
 All authentication code is in:
-- **Frontend:** `Admin App/Soundbites Admin/admin-auth-backend.js`
+- **Frontend:** `admin/admin-auth-backend.js`
 - **Backend:** `backend/routes/auth.js` and `backend/middleware/auth.js`
 
 ---

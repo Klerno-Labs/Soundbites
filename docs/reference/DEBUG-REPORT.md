@@ -61,9 +61,9 @@ All endpoints tested and working:
 | `Main app/script.js` | ✅ | 31,047 bytes | Quiz logic |
 | `Main app/api-client.js` | ✅ | 4,007 bytes | API communication |
 | `Main app/styles.css` | ✅ | 17,518 bytes | Quiz styling |
-| `Admin App/Soundbites Admin/admin.html` | ✅ | 11,944 bytes | Admin dashboard |
-| `Admin App/Soundbites Admin/admin.js` | ✅ | 35,465 bytes | Dashboard logic |
-| `Admin App/Soundbites Admin/admin-auth.js` | ✅ | 30,613 bytes | Authentication |
+| `admin/index.html` | ✅ | 11,944 bytes | Admin dashboard |
+| `admin/admin.js` | ✅ | 35,465 bytes | Dashboard logic |
+| `admin/admin-auth.js` | ✅ | 30,613 bytes | Authentication |
 
 ### Configuration:
 - ✅ API URL: `http://localhost:3000/api` (correctly configured)

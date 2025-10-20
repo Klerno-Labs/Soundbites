@@ -9,7 +9,7 @@ echo.
 start /B python -m http.server 8000
 timeout /t 2 /nobreak >nul
 
-start chrome "http://localhost:8000/Admin%%20App/Soundbites%%20Admin/admin.html"
+start chrome "http://localhost:8000/admin/admin.html"
 
 echo Admin panel opened in Chrome!
 echo.

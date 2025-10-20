@@ -9,7 +9,7 @@
 - ✅ Falls back to localStorage if API unavailable
 - ✅ All changes are backward compatible!
 
-### 2. **Admin Dashboard (Admin App/Soundbites Admin/admin.js)**
+### 2. **Admin Dashboard (admin/admin.js)**
 - ✅ Loads results from API (`/api/admin/results`)
 - ✅ Loads leads from API (`/api/admin/leads`)
 - ✅ Requires JWT authentication token
@@ -36,7 +36,7 @@
 4. Check console for: `✅ Lead captured via API`
 
 ### **Test 3: Admin Dashboard Shows Real Data**
-1. Open `Admin App/Soundbites Admin/admin.html#sb-admin`
+1. Open `admin/index.html#sb-admin`
 2. Login with:
    - Username: `admin`
    - Password: `Soundbites2025!`

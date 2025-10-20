@@ -62,7 +62,7 @@ https://otis.soundbites.com/Admin%20App/Soundbites%20Admin/admin.html
 
 ### `_redirects` File (Primary Method):
 ```
-/admin    /Admin%20App/Soundbites%20Admin/admin.html    200
+/admin    /admin/index.html    200
 ```
 
 This tells Render:
@@ -144,8 +144,8 @@ otis.soundbites.com/
 │   ├── styles.css                       → TikTok optimized styles
 │   └── api-client.js                    → Backend connection
 └── Admin App/
-    └── Soundbites Admin/
-        ├── admin.html                   → Admin dashboard ⭐
+    └── admin/
+        ├── index.html                   → Admin dashboard ⭐
         ├── admin.js                     → Admin logic
         ├── admin-auth.js                → Authentication
         └── admin.css                    → Admin styles
