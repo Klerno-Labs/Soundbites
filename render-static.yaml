@@ -11,3 +11,6 @@ services:
       - type: rewrite
         source: /admin
         destination: /admin/index.html
+      - type: rewrite
+        source: /admin/*
+        destination: /admin/index.html

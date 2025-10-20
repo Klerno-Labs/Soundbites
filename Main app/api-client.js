@@ -3,7 +3,8 @@
 
 class APIClient {
     constructor(baseURL) {
-        this.baseURL = baseURL || 'https://soundbites-quiz-backend.onrender.com/api';
+        // Use relative '/api' when available so the frontend can talk to the same origin backend
+        this.baseURL = baseURL || '/api';
         this.token = localStorage.getItem('sb-admin-token');
     }
 
@@ -137,6 +138,5 @@ class APIClient {
     }
 }
 
-// Create singleton instance
-// Local development URL
-window.api = new APIClient('http://localhost:3000/api');
+// Create singleton instance pointing to relative /api by default so it works on otis.soundbites.com
+window.api = new APIClient('/api');

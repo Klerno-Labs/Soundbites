@@ -1,6 +1,8 @@
 // Backend auth helper for the admin panel. Posts credentials to the backend API and stores JWT tokens.
 window.AdminAuthBackend = (function(){
-    const storageKey = 'sb_admin_token';
+    // Use unified storage key matching the API client ('sb-admin-token')
+    const storageKey = 'sb-admin-token';
+    const legacyStorageKey = 'sb_admin_token';
 
     async function login(email, password) {
         try {
@@ -18,6 +20,14 @@ window.AdminAuthBackend = (function(){
             const data = await resp.json();
             if (data && data.token) {
                 localStorage.setItem(storageKey, data.token);
+                // keep legacy key for compatibility
+                try { localStorage.setItem(legacyStorageKey, data.token); } catch(e){}
+
+                // Update global API client if present
+                if (window.api && typeof window.api.setToken === 'function') {
+                    try { window.api.setToken(data.token); } catch(e) { console.warn('Failed to set token on window.api', e); }
+                }
+
                 // Notify the app
                 if (window.onAdminLogin) window.onAdminLogin(data);
                 return data;
@@ -31,11 +41,16 @@ window.AdminAuthBackend = (function(){
 
     function logout() {
         localStorage.removeItem(storageKey);
+        try { localStorage.removeItem(legacyStorageKey); } catch(e){}
+        if (window.api && typeof window.api.clearToken === 'function') {
+            try { window.api.clearToken(); } catch(e) { console.warn('Failed to clear token on window.api', e); }
+        }
         if (window.onAdminLogout) window.onAdminLogout();
     }
 
     function getToken() {
-        return localStorage.getItem(storageKey);
+        // Prefer new key, fall back to legacy
+        return localStorage.getItem(storageKey) || localStorage.getItem(legacyStorageKey) || null;
     }
 
     function isAuthenticated() {
