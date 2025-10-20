@@ -25,10 +25,10 @@
 				<img src="../Main app/dot_wave_2.webp" alt="Sound Wave" class="wave-graphic">
 			</div>
 			<nav class="admin-nav">
-				<button id="questions-tab" class="tab-btn" type="button" onclick="if(window.admin){window.admin.switchTab('questions')}else{console.error('window.admin not found')}">Questions</button>
-				<button id="analytics-tab" class="tab-btn active" type="button" onclick="if(window.admin){window.admin.switchTab('analytics')}else{console.error('window.admin not found')}">Analytics</button>
-				<button id="marketing-tab" class="tab-btn" type="button" onclick="if(window.admin){window.admin.switchTab('marketing')}else{console.error('window.admin not found')}">Marketing</button>
-				<button id="otis-tab" class="tab-btn" type="button" onclick="if(window.admin){window.admin.switchTab('otis')}else{console.error('window.admin not found')}">OTIS</button>
+				<button id="questions-tab" class="tab-btn" type="button" onclick="console.log('Questions clicked'); if(window.admin){window.admin.switchTab('questions')}else{console.error('window.admin not found')}">Questions</button>
+				<button id="analytics-tab" class="tab-btn active" type="button" onclick="console.log('Analytics clicked'); if(window.admin){window.admin.switchTab('analytics')}else{console.error('window.admin not found')}">Analytics</button>
+				<button id="marketing-tab" class="tab-btn" type="button" onclick="console.log('Marketing clicked'); if(window.admin){window.admin.switchTab('marketing')}else{console.error('window.admin not found')}">Marketing</button>
+				<button id="otis-tab" class="tab-btn" type="button" onclick="console.log('OTIS clicked'); if(window.admin){window.admin.switchTab('otis')}else{console.error('window.admin not found')}">OTIS</button>
 				<span style="flex:1"></span>
 				<button id="logout-btn" class="btn btn-danger" type="button">Log out</button>
 			</nav>
@@ -66,10 +66,10 @@
 		<div id="analytics-panel" class="admin-panel" style="display: block;">
 			<!-- Analytics content (KPI cards, quick insights, filters) -->
 			<h2>Dashboard Overview</h2>
-			<!-- ...existing analytics HTML continues... -->
+			<!-- Analytics content will be rendered by admin.js -->
 		</div>
 
-		<!-- The rest of the admin HTML will be rendered/handled by admin.js -->
+		<!-- Marketing and OTIS panels will be rendered by admin.js -->
 		</main>
 	</div>
 	<script src="./admin.js" defer></script>

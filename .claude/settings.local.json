@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir admin)",
+      "Bash(echo.)",
+      "Bash(cat render-static.yaml)",
+      "Bash(cat _redirects)",
+      "Bash(git add \"Main app/api-client.js\" admin/index.html)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: Fix admin HTML duplication and enhance API error handling\n\n- Remove duplicate HTML structure in admin/index.html (lines 78-168)\n- Remove hardcoded credentials security vulnerability\n- Add comprehensive error handling to API client\n- Add retry logic with exponential backoff (max 3 retries)\n- Add 30-second configurable timeout per request\n- Add offline/online detection and event emitters\n- Add loading state tracking for UI integration\n- Add custom error classes (NetworkError, TimeoutError, AuthError, ServerError)\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push origin main)",
+      "Bash(xcopy /E /I /Y admin \".backup\\admin-old-backup\")",
+      "Bash(git add -A)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
