@@ -2,7 +2,7 @@
 
 ## Admin login and management
 
-The Admin panel lives at `Admin App/Soundbites Admin/admin.html` and is protected by a lightweight client-side login suitable for static hosting.
+The Admin panel lives at `admin/index.html` and is protected by a lightweight client-side login suitable for static hosting.
 
 - First use (initialize):
   - Open the admin page. If no credentials are set in this browser, click "Initialize Admin".

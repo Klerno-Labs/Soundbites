@@ -171,7 +171,7 @@ To activate on your live site (Render):
    - `admin.html` (modified)
 
 2. **Test production:**
-   - Visit: https://soundbites-quiz-frontend.onrender.com/Admin%20App/Soundbites%20Admin/admin.html
+   - Visit: https://soundbites-quiz-frontend.onrender.com/admin/index.html
    - Login with `admin` / `admin123`
 
 3. **Change default password** (recommended):

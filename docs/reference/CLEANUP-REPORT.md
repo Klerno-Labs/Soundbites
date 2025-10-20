@@ -64,8 +64,8 @@ Quiz/
 │   ├── Play_button_magenta_to_blue_fade.webp
 │   └── dot_wave_2.webp                 # Background image
 │
-├── Admin App/
-│   └── Soundbites Admin/
+├── admin/
+│   └── (consolidated admin files)
 │       ├── admin.html                  # Dashboard UI (12KB)
 │       ├── admin.js                    # Dashboard logic (35KB)
 │       ├── admin-auth.js               # Authentication (30KB)

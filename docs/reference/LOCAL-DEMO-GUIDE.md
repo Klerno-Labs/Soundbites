@@ -8,7 +8,7 @@ Your quiz is now running locally with a full backend!
 - **Backend Server**: http://localhost:3000
 - **Database**: SQLite (soundbites.db with 20 questions)
 - **Quiz Frontend**: file:///C:/Users/Somli/OneDrive/Desktop/Quiz/index.html
-- **Admin Panel**: file:///C:/Users/Somli/OneDrive/Desktop/Quiz/Admin%20App/Soundbites%20Admin/admin.html#sb-admin
+- **Admin Panel**: file:///C:/Users/Somli/OneDrive/Desktop/Quiz/admin/admin.html#sb-admin
 
 ### 🔑 Admin Login Credentials:
 - **Username**: admin
@@ -68,7 +68,7 @@ Start-Process chrome "file:///C:/Users/Somli/OneDrive/Desktop/Quiz/index.html"
 
 ### Open Admin:
 ```powershell
-Start-Process chrome "file:///C:/Users/Somli/OneDrive/Desktop/Quiz/Admin%20App/Soundbites%20Admin/admin.html#sb-admin"
+Start-Process chrome "file:///C:/Users/Somli/OneDrive/Desktop/Quiz/admin/admin.html#sb-admin"
 ```
 
 ---
@@ -110,7 +110,7 @@ Start-Process chrome "file:///C:/Users/Somli/OneDrive/Desktop/Quiz/Admin%20App/S
 | Login | http://localhost:3000/api/auth/login |
 | Get Results | http://localhost:3000/api/admin/results |
 | Quiz Frontend | file:///C:/Users/Somli/OneDrive/Desktop/Quiz/index.html |
-| Admin Panel | file:///C:/Users/Somli/OneDrive/Desktop/Quiz/Admin%20App/Soundbites%20Admin/admin.html#sb-admin |
+| Admin Panel | file:///C:/Users/Somli/OneDrive/Desktop/Quiz/admin/admin.html#sb-admin |
 
 ---
 

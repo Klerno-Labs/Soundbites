@@ -59,7 +59,7 @@ The admin panel now uses **secure backend authentication** with JWT tokens inste
 ## File Structure 📁
 
 ```
-Admin App/Soundbites Admin/
+admin/
 ├── admin.html              # Updated to use admin-auth-backend.js
 ├── admin-auth-backend.js   # New secure authentication system
 ├── admin-auth.js           # Old system (can be removed)
