@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+// Restored admin-auth-backend.js (placeholder marker for backend auth integration)
+// ...existing code from historical admin-auth-backend.js...
+// ...existing code from Admin App/Soundbites Admin/admin-auth-backend.js...
+=======
 // Backend auth helper for the admin panel. Posts credentials to the backend API and stores JWT tokens.
 window.AdminAuthBackend = (function(){
     const storageKey = 'sb_admin_token';
@@ -49,3 +54,4 @@ window.AdminAuthBackend = (function(){
 
     return { login, logout, getToken, isAuthenticated, attachAuthHeader };
 })();
+>>>>>>> 45e5595 (Restore admin: add admin panel assets)

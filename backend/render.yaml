@@ -1,7 +1,9 @@
+
+
 services:
   - type: web
     name: soundbites-quiz-backend
-    env: node
+    runtime: node
     region: oregon
     plan: free
     buildCommand: npm install
@@ -23,6 +25,15 @@ services:
         fromDatabase:
           name: soundbites-db
           property: connectionString
+  - type: web
+    name: soundbites-quiz-frontend
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: ../../
+
+# NOTE: For security, set ADMIN_USERNAME and ADMIN_PASSWORD as secrets in the Render dashboard, not in version control.
+
+# NOTE: For security, set ADMIN_USERNAME and ADMIN_PASSWORD as secrets in the Render dashboard, not in version control.
 
 databases:
   - name: soundbites-db

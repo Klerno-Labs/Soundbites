@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+/* Restored admin.css from historical commit (truncated). */
+/* Full CSS includes layout, nav, KPI cards, forms and responsive rules. */
+
+=======
 /* Admin panel styles (extracted from historical Soundbites admin) */
 :root{
     --sb-primary:#C92A76;
@@ -38,3 +43,4 @@ body{font-family:var(--sb-font);margin:0;background:#f7f7fb;color:#222}
 @media (max-width:900px){
     .kpi-grid{grid-template-columns:repeat(2,1fr)}
 }
+>>>>>>> 45e5595 (Restore admin: add admin panel assets)
