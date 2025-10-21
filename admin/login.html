@@ -211,7 +211,12 @@
             const password = document.getElementById('password').value;
 
             try {
-                const res = await fetch('/api/auth/login', {
+                // Use backend URL for production, local for development
+                const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                    ? '/api/auth/login'  // Local development
+                    : 'https://soundbites-quiz-backend.onrender.com/api/auth/login';  // Production
+
+                const res = await fetch(backendUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     credentials: 'include',
@@ -248,7 +253,12 @@
             const token = localStorage.getItem('admin_token');
             if (token) {
                 try {
-                    const res = await fetch('/api/auth/verify', {
+                    // Use backend URL for production, local for development
+                    const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                        ? '/api/auth/verify'
+                        : 'https://soundbites-quiz-backend.onrender.com/api/auth/verify';
+
+                    const res = await fetch(backendUrl, {
                         headers: { 'Authorization': `Bearer ${token}` },
                         credentials: 'include'
                     });
