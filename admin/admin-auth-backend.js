@@ -6,7 +6,14 @@ window.sbIsAuthed = async function() {
     if (!token) return false;
 
     try {
-        const res = await fetch('/api/auth/verify', {
+        // Use backend URL helper (falls back to direct URL if config not loaded)
+        const verifyURL = window.SoundbitesConfig
+            ? window.SoundbitesConfig.getAPIEndpoint('auth/verify')
+            : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                ? '/api/auth/verify'
+                : 'https://soundbites-quiz-backend.onrender.com/api/auth/verify');
+
+        const res = await fetch(verifyURL, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -53,7 +60,13 @@ window.sbAdminLogout = async function() {
 
         // Call backend logout to invalidate session
         try {
-            await fetch('/api/auth/logout', {
+            const logoutURL = window.SoundbitesConfig
+                ? window.SoundbitesConfig.getAPIEndpoint('auth/logout')
+                : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                    ? '/api/auth/logout'
+                    : 'https://soundbites-quiz-backend.onrender.com/api/auth/logout');
+
+            await fetch(logoutURL, {
                 method: 'POST',
                 credentials: 'include'
             });

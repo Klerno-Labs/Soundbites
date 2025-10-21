@@ -345,5 +345,18 @@ class APIClient {
     }
 }
 
-// Create singleton instance pointing to relative /api by default so it works on otis.soundbites.com
-window.api = new APIClient('/api');
+// Create singleton instance with backend URL detection
+// Use config helper if available, otherwise fallback to environment detection
+const getInitialBaseURL = () => {
+    if (window.SoundbitesConfig) {
+        return window.SoundbitesConfig.getBackendURL();
+    }
+    // Fallback detection
+    const hostname = window.location.hostname;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+        return '/api';  // Local development
+    }
+    return 'https://soundbites-quiz-backend.onrender.com/api';  // Production
+};
+
+window.api = new APIClient(getInitialBaseURL());
