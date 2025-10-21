@@ -19,10 +19,14 @@ router.post('/login', loginLimiter, async (req, res) => {
         }
 
         // Get user from database by email or username
-        const result = await pool.query(
-            'SELECT * FROM admin_users WHERE email = $1 OR username = $1',
-            [loginIdentifier]
-        );
+        // SQLite uses ? placeholders, PostgreSQL uses $1
+        const isSQLite = process.env.DATABASE_URL?.startsWith('sqlite:');
+        const query = isSQLite
+            ? 'SELECT * FROM admin_users WHERE email = ? OR username = ?'
+            : 'SELECT * FROM admin_users WHERE email = $1 OR username = $1';
+        const params = isSQLite ? [loginIdentifier, loginIdentifier] : [loginIdentifier];
+
+        const result = await pool.query(query, params);
 
         if (result.rows.length === 0) {
             return res.status(401).json({ error: 'Invalid credentials' });
@@ -109,10 +113,11 @@ router.post('/create-admin', async (req, res) => {
         }
 
         // Check if username already exists
-        const existingUser = await pool.query(
-            'SELECT id FROM admin_users WHERE username = $1',
-            [username]
-        );
+        const isSQLite = process.env.DATABASE_URL?.startsWith('sqlite:');
+        const checkQuery = isSQLite
+            ? 'SELECT id FROM admin_users WHERE username = ?'
+            : 'SELECT id FROM admin_users WHERE username = $1';
+        const existingUser = await pool.query(checkQuery, [username]);
 
         if (existingUser.rows.length > 0) {
             return res.status(400).json({ error: 'Username already exists' });
@@ -122,15 +127,29 @@ router.post('/create-admin', async (req, res) => {
         const passwordHash = await bcrypt.hash(password, 10);
 
         // Create user
-        const result = await pool.query(
-            'INSERT INTO admin_users (username, password_hash, email) VALUES ($1, $2, $3) RETURNING id, username, email',
-            [username, passwordHash, email || null]
-        );
+        if (isSQLite) {
+            // SQLite doesn't support RETURNING, so we insert and then query
+            await pool.query(
+                'INSERT INTO admin_users (username, password_hash, email) VALUES (?, ?, ?)',
+                [username, passwordHash, email || null]
+            );
+            const result = await pool.query(
+                'SELECT id, username, email FROM admin_users WHERE username = ?',
+                [username]
+            );
+            var user = result.rows[0];
+        } else {
+            const result = await pool.query(
+                'INSERT INTO admin_users (username, password_hash, email) VALUES ($1, $2, $3) RETURNING id, username, email',
+                [username, passwordHash, email || null]
+            );
+            var user = result.rows[0];
+        }
 
         res.json({
             success: true,
             message: 'Admin user created successfully',
-            user: result.rows[0]
+            user: user
         });
 
     } catch (error) {

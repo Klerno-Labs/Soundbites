@@ -561,7 +561,6 @@ class SoundbiteQuiz {
                     <p><strong>${recommendation.action}</strong></p>
                     <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
                         <a href="${ctaUrl}" class="btn btn-secondary" target="_blank" rel="noopener">${ctaText}</a>
-                        <a href="https://www.tiktok.com/shop/store/soundbites/7494162119735018619?source=product_detail&enter_from=product_detail&enter_method=product_info_right_shop&first_entrance=homepage_hot" class="btn btn-secondary" target="_blank" rel="noopener">Try on TikTok Shop</a>
                     </div>
                 </div>
             </div>
@@ -589,56 +588,6 @@ class SoundbiteQuiz {
         requestAnimationFrame(step);
 
         resultsContainer.style.display = 'block';
-        
-        // Add TikTok Shop CTA (prominent call-to-action)
-        setTimeout(() => {
-            this.addTikTokShopCTA(recommendation, score);
-        }, 1000); // Show after score animation
-    }
-    
-    addTikTokShopCTA(recommendation, score) {
-        const resultContent = document.getElementById('result-content');
-        if (!resultContent) return;
-        
-        // Customize TikTok Shop link with UTM parameters
-        const tiktokShopURL = 'https://www.tiktok.com/shop/store/soundbites/7494162119735018619';
-        const utmParams = new URLSearchParams({
-            utm_source: this.utmParams.source,
-            utm_medium: 'quiz-results',
-            utm_campaign: recommendation.level,
-            utm_content: `score-${score}`
-        });
-        
-        const tiktokCTA = `
-            <div class="tiktok-shop-cta">
-                <h3>🎵 Ready to Improve Your Hearing?</h3>
-                <p>Get Soundbites hearing solutions now - available on TikTok Shop!</p>
-                <a href="${tiktokShopURL}?${utmParams.toString()}" 
-                   id="tiktok-shop-btn"
-                   class="btn" 
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    🛒 Shop on TikTok
-                </a>
-            </div>
-        `;
-        
-        resultContent.insertAdjacentHTML('beforeend', tiktokCTA);
-        
-        // Track TikTok Shop button click
-        const shopBtn = document.getElementById('tiktok-shop-btn');
-        if (shopBtn) {
-            shopBtn.addEventListener('click', () => {
-                this.trackTikTokEvent('ClickButton', {
-                    content_name: 'TikTok Shop Button',
-                    content_type: 'cta',
-                    button_location: 'results_page',
-                    value: 10.00,
-                    currency: 'USD',
-                    recommendation: recommendation.level
-                });
-            });
-        }
     }
 
     storeResults(score, recommendation) {
