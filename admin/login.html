@@ -5,58 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login | Soundbites</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='16' fill='%23C92A76'/></svg>" type="image/svg+xml">
+
+    <!-- Fonts - match the quiz page -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Brand CSS for play button and styling -->
+    <link rel="stylesheet" href="/app/brand.css">
+    <link rel="stylesheet" href="/app/styles.css">
+
+    <!-- Header sizing script -->
+    <script src="/app/header-sizer.js"></script>
+
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Montserrat', 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #fff;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            color: #111;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        /* Play button - needs background image */
+        .play-button-accent {
+            background-image: url("/app/Play_button_magenta_to_blue_fade.webp");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            width: var(--sb-play-size, 44px);
+            height: var(--sb-play-size, 44px);
+            display: inline-block;
+            opacity: 0.85;
         }
         .login-card {
             background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            max-width: 400px;
-            width: 100%;
-            padding: 40px 32px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            padding: 2rem;
+        }
+        h1 {
+            font-size: 1.75rem;
+            color: #111;
+            margin-bottom: 8px;
+            font-weight: 800;
+        }
+        p {
+            color: #666;
+            margin-bottom: 2rem;
             text-align: center;
         }
-        .logo { max-width: 200px; margin-bottom: 24px; }
-        h1 { font-size: 1.75rem; color: #111; margin-bottom: 8px; }
-        p { color: #666; margin-bottom: 32px; }
         .form-group { margin-bottom: 20px; text-align: left; }
-        label { display: block; font-weight: 600; margin-bottom: 8px; color: #333; }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
         input {
             width: 100%;
             padding: 14px 16px;
-            border: 2px solid #e5e7eb;
+            border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 1rem;
+            font-family: inherit;
             transition: all 0.2s;
         }
         input:focus {
             outline: none;
-            border-color: #C92A76;
-            box-shadow: 0 0 0 3px rgba(201, 42, 118, 0.1);
+            border-color: #e5b1c9;
+            box-shadow: 0 0 0 3px rgba(201, 42, 118, 0.25);
         }
         .btn-login {
             width: 100%;
             padding: 14px;
             background: #C92A76;
             color: #fff;
-            border: none;
+            border: 2px solid #C92A76;
             border-radius: 8px;
             font-size: 1rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
             margin-top: 8px;
+            font-family: inherit;
         }
-        .btn-login:hover { background: #a31f5f; transform: translateY(-1px); }
+        .btn-login:hover {
+            filter: brightness(0.98);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
         .btn-login:active { transform: translateY(0); }
         .btn-login:disabled {
             opacity: 0.6;
@@ -80,41 +130,69 @@
             border-radius: 6px;
             margin-bottom: 16px;
             display: none;
+            border: 1px solid #fcc;
         }
         .back-link {
-            margin-top: 20px;
+            margin-top: 24px;
             display: inline-block;
-            color: #667eea;
+            color: #111;
             text-decoration: none;
             font-weight: 600;
+            text-align: center;
+            width: 100%;
         }
-        .back-link:hover { text-decoration: underline; }
+        .back-link:hover {
+            color: #C92A76;
+        }
+
+        @media (max-width: 768px) {
+            .brand-logo { max-width: 160px; }
+            .wave-graphic { max-width: 250px; }
+            .login-card { padding: 1.5rem; }
+        }
     </style>
 </head>
 <body>
-    <div class="login-card">
-        <img src="/app/soundbites_logo_magenta.webp" alt="Soundbites" class="logo" onerror="this.style.display='none'">
-        <h1>Admin Login</h1>
-        <p>Enter your credentials to access the dashboard</p>
-
-        <div id="error" class="error"></div>
-
-        <form id="login-form">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required autocomplete="email" autofocus>
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="/app/soundbites_logo_magenta.webp" alt="Soundbites Logo" class="brand-logo">
+                <span class="play-button-accent" aria-hidden="true"></span>
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required autocomplete="current-password">
+            <p class="sb-copy">Admin Dashboard Login</p>
+            <div class="wave-decoration">
+                <img src="/app/dot_wave_2.webp" alt="Sound Wave" class="wave-graphic">
             </div>
-            <button type="submit" class="btn-login">Log In</button>
-        </form>
+        </header>
 
-        <a href="/" class="back-link">← Back to Quiz</a>
+        <div class="login-card">
+            <h1>Admin Login</h1>
+            <p>Enter your credentials to access the dashboard</p>
+
+            <div id="error" class="error"></div>
+
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required autocomplete="email" autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn-login">Log In</button>
+            </form>
+
+            <a href="/" class="back-link">← Back to Quiz</a>
+        </div>
     </div>
 
     <script>
+        // Initialize header sizer for proper logo/wave sizing
+        if (window.initHeaderSizer) {
+            window.initHeaderSizer();
+        }
+
         const form = document.getElementById('login-form');
         const errorDiv = document.getElementById('error');
 
