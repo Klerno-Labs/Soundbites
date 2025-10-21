@@ -134,6 +134,11 @@ app.get('/api/init-database', async (req, res) => {
     }
 });
 
+// Serve static files from the parent directory (where index.html, admin/, app/ are located)
+const path = require('path');
+const frontendPath = path.join(__dirname, '..');
+app.use(express.static(frontendPath));
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/quiz', quizRoutes);
