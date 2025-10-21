@@ -9,6 +9,7 @@ const authRoutes = require('./routes/auth');
 const quizRoutes = require('./routes/quiz');
 const adminRoutes = require('./routes/admin');
 const tiktokEventsRoutes = require('./routes/tiktok-events');
+const healthRoutes = require('./routes/health');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -119,6 +120,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/quiz', quizRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/tiktok-events', tiktokEventsRoutes);
+app.use('/health', healthRoutes);
 
 // Error handling
 app.use((err, req, res, next) => {
