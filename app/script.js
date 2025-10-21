@@ -212,10 +212,11 @@ class SoundbiteQuiz {
         
         // Track quiz start (first question only)
         if (this.currentQuestion === 0 && Object.keys(this.answers).length === 0) {
-            this.trackTikTokEvent('ViewContent', {
+            this.trackTikTokEvent('StartQuiz', {
                 content_type: 'quiz',
-                content_name: 'Hearing Quiz Started',
-                content_category: 'Health Assessment'
+                content_name: 'Soundbites Hearing Quiz',
+                content_category: 'Health Assessment',
+                quiz_length: this.questions.length
             });
         }
         
@@ -397,6 +398,13 @@ class SoundbiteQuiz {
 
     nextQuestion() {
         if (this.currentQuestion < this.questions.length - 1) {
+            // Track quiz step progression
+            this.trackTikTokEvent('QuizStep', {
+                step_number: this.currentQuestion + 1,
+                step_name: this.questions[this.currentQuestion].text.substring(0, 50),
+                total_steps: this.questions.length
+            });
+
             this.currentQuestion++;
             this.renderQuestion();
             this.updateProgress();
@@ -501,19 +509,20 @@ class SoundbiteQuiz {
     submitQuiz() {
         const score = this.calculateScore();
         const recommendation = this.getRecommendation(score);
-        
-        // Track quiz completion
-        this.trackTikTokEvent('CompleteRegistration', {
-            content_name: 'Quiz Completed',
+
+        // Track quiz completion (CompleteQuiz custom event)
+        this.trackTikTokEvent('CompleteQuiz', {
+            content_name: 'Soundbites Hearing Quiz',
             content_type: 'assessment',
-            value: score / 100,
-            currency: 'USD',
-            status: recommendation
+            score: score,
+            recommendation_level: recommendation.level,
+            value: score / 10, // normalize to 0-10
+            currency: 'USD'
         });
-        
+
         // Store results for analytics
         this.storeResults(score, recommendation);
-        
+
         // Show results
         this.showResults(score, recommendation);
     }
@@ -682,14 +691,14 @@ class SoundbiteQuiz {
         const score = this.calculateScore();
         const recommendation = this.getRecommendation(score);
         
-        // Track email capture
-        this.trackTikTokEvent('SubmitForm', {
-            content_name: 'Email Captured',
-            content_type: 'lead',
+        // Track lead capture (standard TikTok event)
+        this.trackTikTokEvent('Lead', {
+            content_name: 'Soundbites Quiz Lead',
+            content_type: 'email_signup',
             value: 5.00,
             currency: 'USD',
             score: score,
-            recommendation: recommendation.level
+            recommendation_level: recommendation.level
         });
         
         // Show loading state
@@ -786,6 +795,25 @@ class SoundbiteQuiz {
 let quiz;
 document.addEventListener('DOMContentLoaded', () => {
     quiz = new SoundbiteQuiz();
+
+    // Deep link handler for TikTok (?start=quiz)
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('start') === 'quiz') {
+        // Auto-start quiz, scroll to top, fire ViewContent event
+        window.scrollTo({ top: 0, behavior: 'instant' });
+        if (quiz && quiz.trackTikTokEvent) {
+            quiz.trackTikTokEvent('ViewContent', {
+                content_type: 'quiz',
+                content_name: 'Soundbites Hearing Quiz',
+                deep_link: true
+            });
+        }
+        // If there's a splash screen, skip it
+        const quizContainer = document.getElementById('quiz-container');
+        if (quizContainer) {
+            quizContainer.scrollIntoView({ behavior: 'instant', block: 'start' });
+        }
+    }
 });
 
 // TikTok embed compatibility

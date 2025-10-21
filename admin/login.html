@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | Soundbites</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='16' fill='%23C92A76'/></svg>" type="image/svg+xml">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Montserrat', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .login-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 100%;
+            padding: 40px 32px;
+            text-align: center;
+        }
+        .logo { max-width: 200px; margin-bottom: 24px; }
+        h1 { font-size: 1.75rem; color: #111; margin-bottom: 8px; }
+        p { color: #666; margin-bottom: 32px; }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; color: #333; }
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #C92A76;
+            box-shadow: 0 0 0 3px rgba(201, 42, 118, 0.1);
+        }
+        .btn-login {
+            width: 100%;
+            padding: 14px;
+            background: #C92A76;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 8px;
+        }
+        .btn-login:hover { background: #a31f5f; transform: translateY(-1px); }
+        .btn-login:active { transform: translateY(0); }
+        .error {
+            background: #fee;
+            color: #c00;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            display: none;
+        }
+        .back-link {
+            margin-top: 20px;
+            display: inline-block;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <img src="/app/soundbites_logo_magenta.webp" alt="Soundbites" class="logo" onerror="this.style.display='none'">
+        <h1>Admin Login</h1>
+        <p>Enter your credentials to access the dashboard</p>
+
+        <div id="error" class="error"></div>
+
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required autocomplete="email" autofocus>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn-login">Log In</button>
+        </form>
+
+        <a href="/" class="back-link">← Back to Quiz</a>
+    </div>
+
+    <script>
+        const form = document.getElementById('login-form');
+        const errorDiv = document.getElementById('error');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            errorDiv.style.display = 'none';
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const res = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (!res.ok) {
+                    const err = await res.json();
+                    throw new Error(err.message || 'Invalid credentials');
+                }
+
+                const data = await res.json();
+
+                // Store token
+                if (data.token) {
+                    localStorage.setItem('admin_token', data.token);
+                }
+
+                // Redirect to admin dashboard
+                window.location.replace('/admin');
+
+            } catch (error) {
+                errorDiv.textContent = error.message || 'Login failed. Please try again.';
+                errorDiv.style.display = 'block';
+            }
+        });
+
+        // Check if already logged in
+        (async () => {
+            const token = localStorage.getItem('admin_token');
+            if (token) {
+                try {
+                    const res = await fetch('/api/admin/verify', {
+                        headers: { 'Authorization': `Bearer ${token}` },
+                        credentials: 'include'
+                    });
+                    if (res.ok) {
+                        window.location.replace('/admin');
+                    }
+                } catch (e) {
+                    // Token invalid, stay on login
+                }
+            }
+        })();
+    </script>
+</body>
+</html>

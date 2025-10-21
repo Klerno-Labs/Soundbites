@@ -1,28 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(dir admin)",
-      "Bash(echo.)",
-      "Bash(cat render-static.yaml)",
-      "Bash(cat _redirects)",
-      "Bash(git add \"Main app/api-client.js\" admin/index.html)",
-      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: Fix admin HTML duplication and enhance API error handling\n\n- Remove duplicate HTML structure in admin/index.html (lines 78-168)\n- Remove hardcoded credentials security vulnerability\n- Add comprehensive error handling to API client\n- Add retry logic with exponential backoff (max 3 retries)\n- Add 30-second configurable timeout per request\n- Add offline/online detection and event emitters\n- Add loading state tracking for UI integration\n- Add custom error classes (NetworkError, TimeoutError, AuthError, ServerError)\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
-      "Bash(git push origin main)",
-      "Bash(xcopy /E /I /Y admin \".backup\\admin-old-backup\")",
-      "Bash(git add -A)",
-      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: Replace admin with polished Admin App version\n\n- Replace basic admin folder with feature-rich Admin App/Soundbites Admin\n- Update all file paths to use relative paths (./admin.css, ../Main app/)\n- Rename admin.html to index.html for proper routing\n- Delete old Admin App folder and admin_prod.html\n- Backup old admin folder to .backup/\n\nNew admin features:\n- Modern KPI cards grid with Total Responses, Conversion Rate, Average Score, Email Leads\n- Analytics & Data Export heading with filters section\n- UTM Source, Medium, Campaign filters\n- Quick preset buttons: Last 7 days, Last 30 days, All time\n- CSV/PDF export functionality\n- Marketing analytics panel with campaign performance\n- OTIS clinical trial data panel\n- Quarterly reminder banner\n- Account recovery system\n- Advanced charting and visualization\n\nRouting verified:\n- /admin → /admin/index.html (configured in render-static.yaml)\n- Matches design shown in screenshot\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
-      "Bash(git add admin/admin.css admin/index.html)",
-      "Bash(git commit -m \"$(cat <<''EOF''\nfix: Add missing CSS variable and cache-busting for admin styles\n\n- Add --sb-bg: #fff variable to CSS root (was undefined causing style issues)\n- Add version query parameter ?v=2.0 to CSS link for cache busting\n- Ensures modern KPI card grid styling displays correctly\n\nThis fixes the admin panel displaying plain text instead of styled cards\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
-      "Bash(git log -1 --format=\"%H %cd\" --date=format:\"%Y-%m-%d %H:%M:%S\")",
-      "Bash(git add admin/index.html)",
-      "Bash(git commit -m \"$(cat <<''EOF''\nfix: Aggressive cache busting for admin panel CSS\n\n- Change CSS version to timestamp: ?v=20251020-1710\n- Add Cache-Control, Pragma, and Expires meta tags\n- Force browsers and CDNs to reload CSS immediately\n- Fixes styled KPI cards not displaying on live site\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
-      "Bash(tree -L 2 -I 'node_modules')",
-      "Bash(cat -A)",
-      "Bash(git add admin/)",
-      "Bash(git commit -m \"$(cat <<''EOF''\nfix: CRITICAL - Remove CSS conflicts breaking admin panel styling\n\nROOT CAUSE FIXED:\n- Line 324 in admin.css was overriding .btn-primary with white background\n- Line 235 was overriding .btn-secondary with conflicting styles\n- These overrides broke all button styling across admin panel\n\nCHANGES:\n- Scoped quarterly banner .btn-primary to .quarterly-banner .btn-primary\n- Removed duplicate .btn-secondary definition (lines 235-259)\n- Removed ALL 12 console.log/error/warn statements from admin.js\n- Updated CSS version to ?v=3.0-fixed for cache bust\n- Added cache control meta tags to force reload\n\nThis fixes the \"terrible version\" issue - admin panel will now display \nwith proper styled KPI cards, borders, and button colors.\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
-      "Bash(tree -L 2 -I 'node_modules|.git')",
-      "Bash(dir /s /b /a:-d)",
-      "Bash(git checkout render-static.yaml _redirects)"
+      "Bash(du -sb app/*.{js,css,webp,json})",
+      "Bash(awk '{sum+=$1} END {print \"\"\"\"Total KB:\"\"\"\", sum/1024}')"
     ],
     "deny": [],
     "ask": []

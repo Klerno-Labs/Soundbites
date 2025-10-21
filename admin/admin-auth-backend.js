@@ -11,10 +11,24 @@ window.enforceAuth = function() {
     return true;
 };
 
-// Logout function - placeholder
-window.sbAdminLogout = function() {
+// Logout function - clears session and redirects to admin login
+window.sbAdminLogout = async function() {
     if (confirm('Are you sure you want to log out?')) {
-        // TODO: Implement actual logout with backend
-        window.location.href = '/';
+        // Clear local tokens
+        localStorage.removeItem('admin_token');
+        sessionStorage.clear();
+
+        // Call backend logout to invalidate session
+        try {
+            await fetch('/api/admin/logout', {
+                method: 'POST',
+                credentials: 'include'
+            });
+        } catch (e) {
+            console.warn('Logout API call failed:', e);
+        }
+
+        // Hard redirect to admin login (no back button access)
+        window.location.replace('/admin/login.html');
     }
 };
