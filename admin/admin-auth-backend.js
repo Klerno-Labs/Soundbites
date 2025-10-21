@@ -1,12 +1,12 @@
 // Admin Auth Guard - Enforce login before rendering admin content
-// Checks JWT token validity via /api/admin/verify
+// Checks JWT token validity via /api/auth/verify
 
 window.sbIsAuthed = async function() {
     const token = localStorage.getItem('admin_token');
     if (!token) return false;
 
     try {
-        const res = await fetch('/api/admin/verify', {
+        const res = await fetch('/api/auth/verify', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -53,7 +53,7 @@ window.sbAdminLogout = async function() {
 
         // Call backend logout to invalidate session
         try {
-            await fetch('/api/admin/logout', {
+            await fetch('/api/auth/logout', {
                 method: 'POST',
                 credentials: 'include'
             });

@@ -86,7 +86,7 @@ app.get('/', (req, res) => {
                 View quiz results (requires authentication)
             </div>
             
-            <p><em>Frontend URL:</em> <a href="https://app.soundbites.com">https://app.soundbites.com</a></p>
+            <p><em>Frontend URL:</em> <a href="https://otis.soundbites.com">https://otis.soundbites.com</a></p>
         </body>
         </html>
     `);

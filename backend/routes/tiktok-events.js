@@ -83,7 +83,7 @@ router.post('/track', async (req, res) => {
                 user_agent: req.headers['user-agent'],
                 ip: req.ip || req.connection.remoteAddress,
                 page: {
-                    url: properties.page_url || req.headers.referer || 'https://app.soundbites.com'
+                    url: properties.page_url || req.headers.referer || 'https://otis.soundbites.com'
                 }
             },
             properties: {
@@ -141,7 +141,7 @@ router.post('/lead', async (req, res) => {
                     email: [hashEmail(email)]
                 },
                 page: {
-                    url: 'https://app.soundbites.com'
+                    url: 'https://otis.soundbites.com'
                 }
             },
             properties: {
@@ -178,7 +178,7 @@ router.post('/complete-quiz', async (req, res) => {
                 user_agent: req.headers['user-agent'],
                 ip: req.ip,
                 page: {
-                    url: 'https://app.soundbites.com'
+                    url: 'https://otis.soundbites.com'
                 }
             },
             properties: {
