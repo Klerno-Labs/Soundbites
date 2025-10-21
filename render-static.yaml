@@ -10,7 +10,4 @@ services:
         destination: /index.html
       - type: rewrite
         source: /admin
-        destination: /admin/index.html
-      - type: rewrite
-        source: /admin/*
-        destination: /admin/index.html
+        destination: /admin/login.html
