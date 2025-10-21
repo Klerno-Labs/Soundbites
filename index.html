@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     
+    
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://analytics.tiktok.com https://cdn.jsdelivr.net https://cdn.emailjs.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://analytics.tiktok.com https://api.emailjs.com /api/*; frame-ancestors 'none';">
     <!-- Primary Meta Tags (TikTok Optimized) -->
     <title>Do You Need Better Hearing? Free 2-Min Quiz | Soundbites</title>
     <meta name="title" content="Do You Need Better Hearing? Free 2-Min Quiz">
@@ -11,10 +14,10 @@
     
     <!-- Open Graph / Facebook / TikTok -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://otis.soundbites.com/">
+    <meta property="og:url" content="https://app.soundbites.com/">
     <meta property="og:title" content="Do You Need Better Hearing? Free Quiz">
     <meta property="og:description" content="Take our 2-minute quiz to discover if Soundbites can improve your hearing experience. Get personalized recommendations!">
-    <meta property="og:image" content="https://otis.soundbites.com/app/og-image-tiktok.jpg">
+    <meta property="og:image" content="https://app.soundbites.com/app/og-image-tiktok.jpg">
     <meta property="og:image:width" content="1080">
     <meta property="og:image:height" content="1920">
     <meta property="og:image:alt" content="Soundbites Hearing Quiz - Test your hearing in 2 minutes">
@@ -22,10 +25,10 @@
 
     <!-- Twitter / TikTok Sharing -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://otis.soundbites.com/">
+    <meta name="twitter:url" content="https://app.soundbites.com/">
     <meta name="twitter:title" content="Do You Need Better Hearing? Free Quiz">
     <meta name="twitter:description" content="2-minute quiz • Personalized results • Improve your hearing experience 🎧">
-    <meta name="twitter:image" content="https://otis.soundbites.com/app/og-image-tiktok.jpg">
+    <meta name="twitter:image" content="https://app.soundbites.com/app/og-image-tiktok.jpg">
     
     <!-- PWA / Mobile -->
     <link rel="manifest" href="app/manifest.json">
@@ -156,3 +159,13 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     </script>
 </body>
 </html>
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('✅ Service Worker registered', reg.scope))
+                    .catch(err => console.warn('❌ SW registration failed:', err));
+            });
+        }
+    </script>

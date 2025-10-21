@@ -2,11 +2,12 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const pool = require('../config/database-local');
+const { loginLimiter, verifyLimiter } = require('../middleware/rate-limit');
 
 const router = express.Router();
 
-// Admin login
-router.post('/login', async (req, res) => {
+// Admin login (with rate limiting)
+router.post('/login', loginLimiter, async (req, res) => {
     try {
         const { username, email, password } = req.body;
         
@@ -59,8 +60,8 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Verify token (check if still valid)
-router.get('/verify', async (req, res) => {
+// Verify token (check if still valid) - with rate limiting
+router.get('/verify', verifyLimiter, async (req, res) => {
     try {
         const token = req.headers.authorization?.split(' ')[1];
         
@@ -74,6 +75,19 @@ router.get('/verify', async (req, res) => {
     } catch (error) {
         res.status(401).json({ valid: false });
     }
+});
+
+// Logout endpoint - clears server session (if using cookies)
+router.post('/logout', (req, res) => {
+    // If using cookies, clear them
+    res.clearCookie('admin_token', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        domain: process.env.COOKIE_DOMAIN || undefined
+    });
+
+    res.json({ success: true, message: 'Logged out successfully' });
 });
 
 // Create new admin user (requires valid admin token)
