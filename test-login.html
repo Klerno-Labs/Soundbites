@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Login - Soundbites</title>
+</head>
+<body>
+    <h1>Backend Login Test</h1>
+    <div id="status">Testing...</div>
+    <div id="result"></div>
+
+    <script>
+        const statusDiv = document.getElementById('status');
+        const resultDiv = document.getElementById('result');
+
+        async function testLogin() {
+            statusDiv.textContent = 'Testing backend connection...';
+
+            try {
+                // Test 1: Health check
+                statusDiv.textContent = 'Step 1: Testing backend health...';
+                const healthRes = await fetch('https://soundbites-quiz-backend.onrender.com/health');
+                const health = await healthRes.json();
+                resultDiv.innerHTML += `<p>✅ Backend Health: ${JSON.stringify(health)}</p>`;
+
+                // Test 2: Login
+                statusDiv.textContent = 'Step 2: Testing login...';
+                const loginRes = await fetch('https://soundbites-quiz-backend.onrender.com/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        email: 'c.hatfield309@gmail.com',
+                        password: 'Hearing2025'
+                    })
+                });
+
+                statusDiv.textContent = `Step 2: Login returned HTTP ${loginRes.status}`;
+
+                if (loginRes.ok) {
+                    const data = await loginRes.json();
+                    resultDiv.innerHTML += `<p>✅ Login Success! Token: ${data.token.substring(0, 20)}...</p>`;
+                    statusDiv.textContent = '✅ ALL TESTS PASSED!';
+                } else {
+                    const error = await loginRes.text();
+                    resultDiv.innerHTML += `<p>❌ Login Failed: ${error}</p>`;
+                    statusDiv.textContent = '❌ Login test failed';
+                }
+
+            } catch (error) {
+                statusDiv.textContent = '❌ Error occurred';
+                resultDiv.innerHTML += `<p>❌ Error: ${error.message}</p>`;
+            }
+        }
+
+        testLogin();
+    </script>
+</body>
+</html>
