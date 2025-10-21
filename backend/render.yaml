@@ -16,7 +16,7 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: FRONTEND_URL
-        value: "*"
+        value: https://otis.soundbites.com
       - key: ADMIN_USERNAME
         value: admin
       - key: ADMIN_PASSWORD

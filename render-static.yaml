@@ -5,6 +5,9 @@ services:
     buildCommand: echo "No build needed"
     staticPublishPath: .
     routes:
+      - type: redirect
+        source: /api/*
+        destination: https://soundbites-quiz-backend.onrender.com/api/*
       - type: rewrite
         source: /
         destination: /index.html
