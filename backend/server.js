@@ -4,6 +4,9 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
+// Force redeploy - v1.0.1
+const APP_VERSION = '1.0.1';
+
 // Import routes (they will auto-detect SQLite via database-local.js)
 const authRoutes = require('./routes/auth');
 const quizRoutes = require('./routes/quiz');
