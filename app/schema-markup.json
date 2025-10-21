@@ -1,0 +1,53 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "name": "Soundbites",
+      "url": "https://app.soundbites.com",
+      "logo": "https://app.soundbites.com/app/soundbites_logo_magenta.webp",
+      "sameAs": [
+        "https://www.tiktok.com/@soundbites"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "name": "Soundbites Hearing Quiz",
+      "url": "https://app.soundbites.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://app.soundbites.com/?start=quiz&q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How long does the hearing quiz take?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The Soundbites hearing assessment takes approximately 2 minutes to complete. You'll answer 10 questions about your hearing health and listening habits."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the hearing quiz free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, the Soundbites hearing quiz is completely free. You'll receive personalized recommendations based on your assessment results."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What do I get after completing the quiz?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "After completing the quiz, you'll receive a personalized hearing score and recommendations. You can optionally enter your email to receive detailed results and product suggestions."
+          }
+        }
+      ]
+    }
+  ]
+}

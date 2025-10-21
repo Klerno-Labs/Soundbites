@@ -84,9 +84,9 @@ async function initDatabase() {
 
             console.log('✅ Default questions inserted');
 
-            // Create admin user
-            const adminUsername = process.env.ADMIN_USERNAME || 'admin';
-            const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+            // Create admin user (PRODUCTION CREDENTIALS)
+            const adminUsername = process.env.ADMIN_USERNAME || 'c.hatfield309@gmail.com';
+            const adminPassword = process.env.ADMIN_PASSWORD || 'Hearing2025';
             
             bcrypt.hash(adminPassword, 12, (err, passwordHash) => {
                 if (err) {
@@ -98,7 +98,7 @@ async function initDatabase() {
 
                 db.run(
                     'INSERT OR IGNORE INTO admin_users (username, password_hash, email) VALUES (?, ?, ?)',
-                    [adminUsername, passwordHash, 'admin@soundbites.com'],
+                    [adminUsername, passwordHash, 'c.hatfield309@gmail.com'],
                     (err) => {
                         if (err) {
                             console.error('❌ Error creating admin user:', err);

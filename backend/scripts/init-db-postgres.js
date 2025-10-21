@@ -96,15 +96,15 @@ async function initDatabase() {
             console.log('ℹ️  Questions already exist, skipping insertion');
         }
 
-        // Create admin user
-        const adminUsername = process.env.ADMIN_USERNAME || 'admin';
-        const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
-        
+        // Create admin user (PRODUCTION CREDENTIALS)
+        const adminUsername = process.env.ADMIN_USERNAME || 'c.hatfield309@gmail.com';
+        const adminPassword = process.env.ADMIN_PASSWORD || 'Hearing2025';
+
         const passwordHash = await bcrypt.hash(adminPassword, 12);
-        
+
         await pool.query(
             'INSERT INTO admin_users (username, password_hash, email) VALUES ($1, $2, $3) ON CONFLICT (username) DO NOTHING',
-            [adminUsername, passwordHash, 'admin@soundbites.com']
+            [adminUsername, passwordHash, 'c.hatfield309@gmail.com']
         );
 
         console.log('✅ Admin user created/verified');
