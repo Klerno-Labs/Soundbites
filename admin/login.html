@@ -217,6 +217,8 @@
                     ? 'http://localhost:3000/api/auth/login'  // Local development
                     : '/api/auth/login';  // Production (proxied via _redirects)
 
+                console.log('Login attempt to:', backendUrl);
+
                 const res = await fetch(backendUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -224,9 +226,18 @@
                     body: JSON.stringify({ email, password })
                 });
 
+                console.log('Response status:', res.status);
+                console.log('Response headers:', res.headers.get('content-type'));
+
+                // Check if response is empty or not JSON
+                const contentType = res.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    throw new Error('Backend server is not responding. Please try again later or contact support.');
+                }
+
                 if (!res.ok) {
-                    const err = await res.json();
-                    throw new Error(err.message || 'Invalid credentials');
+                    const err = await res.json().catch(() => ({ error: 'Login failed' }));
+                    throw new Error(err.error || err.message || 'Invalid credentials');
                 }
 
                 const data = await res.json();
@@ -240,7 +251,17 @@
                 window.location.replace('/admin');
 
             } catch (error) {
-                errorDiv.textContent = error.message || 'Login failed. Please try again.';
+                console.error('Login error:', error);
+
+                // User-friendly error messages
+                let errorMessage = error.message || 'Login failed. Please try again.';
+
+                // Network errors
+                if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                    errorMessage = 'Cannot connect to server. Please check your internet connection.';
+                }
+
+                errorDiv.textContent = errorMessage;
                 errorDiv.style.display = 'block';
             } finally {
                 // Restore button state
@@ -259,15 +280,32 @@
                         ? 'http://localhost:3000/api/auth/verify'
                         : '/api/auth/verify';  // Production (proxied via _redirects)
 
+                    console.log('Checking existing token...');
+
                     const res = await fetch(backendUrl, {
                         headers: { 'Authorization': `Bearer ${token}` },
                         credentials: 'include'
                     });
-                    if (res.ok) {
-                        window.location.replace('/admin');
+
+                    console.log('Token verify status:', res.status);
+
+                    // Check if response is valid JSON
+                    const contentType = res.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json') && res.ok) {
+                        const data = await res.json();
+                        if (data.valid || data.user) {
+                            console.log('Token valid, redirecting to admin...');
+                            window.location.replace('/admin');
+                        }
+                    } else {
+                        // Invalid response or server down, clear token
+                        console.log('Invalid token or server unavailable');
+                        localStorage.removeItem('admin_token');
                     }
                 } catch (e) {
-                    // Token invalid, stay on login
+                    // Token invalid or network error, stay on login
+                    console.log('Token check failed:', e.message);
+                    localStorage.removeItem('admin_token');
                 }
             }
         })();
