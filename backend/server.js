@@ -3,10 +3,12 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
+const swaggerUi = require('swagger-ui-express');
 require('dotenv').config();
 
 // Logger setup
 const logger = require('./config/logger');
+const swaggerSpec = require('./config/swagger');
 
 // Force redeploy - v1.0.2
 const APP_VERSION = '1.0.2';
@@ -167,6 +169,12 @@ app.get('/api/init-database', async (req, res) => {
 const path = require('path');
 const frontendPath = path.join(__dirname, '..');
 app.use(express.static(frontendPath));
+
+// Swagger API Documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    customSiteTitle: 'Soundbites API Docs',
+    customCss: '.swagger-ui .topbar { display: none }'
+}));
 
 // Routes
 app.use('/api/auth', authRoutes);
