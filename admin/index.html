@@ -32,9 +32,8 @@
                 <button id="questions-tab" class="tab-btn" type="button" onclick="console.log('Questions clicked'); if(window.admin){window.admin.switchTab('questions')}else{console.error('window.admin not found')}">Questions</button>
                 <button id="analytics-tab" class="tab-btn active" type="button" onclick="console.log('Analytics clicked'); if(window.admin){window.admin.switchTab('analytics')}else{console.error('window.admin not found')}">Analytics</button>
                 <button id="marketing-tab" class="tab-btn" type="button" onclick="console.log('Marketing clicked'); if(window.admin){window.admin.switchTab('marketing')}else{console.error('window.admin not found')}">Marketing</button>
-                <button id="otis-tab" class="tab-btn" type="button" onclick="console.log('OTIS clicked'); if(window.admin){window.admin.switchTab('otis')}else{console.error('window.admin not found')}">OTIS</button>
                 <span style="flex:1"></span>
-                <button id="logout-btn" class="btn btn-danger" type="button">Log out</button>
+                <button id="logout-btn" class="btn btn-sm btn-danger" type="button">Log out</button>
             </nav>
         </header>
 
@@ -347,123 +346,6 @@
             <div class="analytics-card">
                 <h3>Source/Medium Performance</h3>
                 <div class="chart-container"><canvas id="source-medium-chart"></canvas></div>
-            </div>
-        </div>
-
-        <!-- OTIS Clinical Trial Panel -->
-        <div id="otis-panel" class="admin-panel" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <h2 style="margin: 0;">🔬 OTIS Clinical Trial Data</h2>
-                <span class="section-badge" style="background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);">Research Analytics</span>
-            </div>
-
-            <!-- Trial Summary Stats -->
-            <div class="trial-summary-grid">
-                <div class="trial-stat-card">
-                    <div class="trial-stat-icon">👥</div>
-                    <div class="trial-stat-content">
-                        <div class="trial-stat-label">Total Participants</div>
-                        <div class="trial-stat-value" id="trial-participants">0</div>
-                    </div>
-                </div>
-                <div class="trial-stat-card">
-                    <div class="trial-stat-icon">📊</div>
-                    <div class="trial-stat-content">
-                        <div class="trial-stat-label">Mean Score</div>
-                        <div class="trial-stat-value" id="trial-mean-score">0</div>
-                        <div class="trial-stat-detail" id="trial-std-dev">SD: 0</div>
-                    </div>
-                </div>
-                <div class="trial-stat-card">
-                    <div class="trial-stat-icon">🎯</div>
-                    <div class="trial-stat-content">
-                        <div class="trial-stat-label">High Need Cases</div>
-                        <div class="trial-stat-value" id="trial-high-need">0</div>
-                        <div class="trial-stat-detail" id="trial-high-need-pct">0%</div>
-                    </div>
-                </div>
-                <div class="trial-stat-card">
-                    <div class="trial-stat-icon">📈</div>
-                    <div class="trial-stat-content">
-                        <div class="trial-stat-label">95% CI</div>
-                        <div class="trial-stat-value" id="trial-confidence">—</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Demographics Analysis -->
-            <div class="analytics-card">
-                <h3>📋 Participant Demographics</h3>
-                <div class="table-container">
-                    <table id="demographics-table" class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Age Range</th>
-                                <th>N</th>
-                                <th>Mean Score</th>
-                                <th>SD</th>
-                                <th>High Need %</th>
-                                <th>Conversion %</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td colspan="6" style="text-align: center; color: #999;">Calculating demographics...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Score Distribution & Statistical Analysis -->
-            <div class="analytics-grid">
-                <div class="analytics-card">
-                    <h3>Score Distribution (Histogram)</h3>
-                    <div class="chart-container"><canvas id="trial-score-dist"></canvas></div>
-                </div>
-                <div class="analytics-card">
-                    <h3>Recommendation Breakdown</h3>
-                    <div class="chart-container"><canvas id="trial-recommendation-chart"></canvas></div>
-                </div>
-            </div>
-
-            <!-- Question-Level Analysis -->
-            <div class="analytics-card">
-                <h3>📊 Question Performance Analysis</h3>
-                <div class="table-container">
-                    <table id="question-analysis-table" class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Question</th>
-                                <th>Mean Response</th>
-                                <th>SD</th>
-                                <th>Median</th>
-                                <th>Range</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td colspan="5" style="text-align: center; color: #999;">Analyzing questions...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Correlation Matrix -->
-            <div class="analytics-card">
-                <h3>🔗 Correlations (Score vs. Questions)</h3>
-                <div class="chart-container"><canvas id="correlation-chart"></canvas></div>
-            </div>
-
-            <!-- Export Options for Clinical Trial -->
-            <div class="analytics-card">
-                <h3>📤 Export Trial Data</h3>
-                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                    <button id="export-trial-csv" class="btn btn-primary">📊 Export Raw Data (CSV)</button>
-                    <button id="export-trial-report" class="btn btn-primary">📄 Generate Statistical Report (PDF)</button>
-                    <button id="export-spss" class="btn btn-secondary">💾 Export for SPSS</button>
-                    <button id="export-r" class="btn btn-secondary">📈 Export for R</button>
-                </div>
-                <p style="margin-top: 1rem; color: var(--sb-muted); font-size: 0.875rem;">
-                    Data exports are formatted for clinical trial submission and statistical analysis software.
-                </p>
             </div>
         </div>
 
