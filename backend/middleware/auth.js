@@ -3,10 +3,17 @@ const logger = require('../config/logger');
 
 /**
  * Middleware to verify JWT token
+ * Checks HttpOnly cookie first, then Authorization header
  */
 function requireAuth(req, res, next) {
     try {
-        const token = req.headers.authorization?.split(' ')[1];
+        // Try to get token from HttpOnly cookie first (most secure)
+        let token = req.cookies?.admin_token;
+
+        // Fall back to Authorization header for backward compatibility
+        if (!token) {
+            token = req.headers.authorization?.split(' ')[1];
+        }
 
         if (!token) {
             return res.status(401).json({ error: 'Authentication required' });

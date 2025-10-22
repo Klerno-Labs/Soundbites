@@ -54,9 +54,19 @@ router.post('/login', loginLimiter, loginValidation, async (req, res) => {
             { expiresIn: '24h' }
         );
 
+        // Set HttpOnly cookie for enhanced security
+        res.cookie('admin_token', token, {
+            httpOnly: true,  // Cannot be accessed by JavaScript
+            secure: process.env.NODE_ENV === 'production', // HTTPS only in production
+            sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+            maxAge: 24 * 60 * 60 * 1000, // 24 hours
+            domain: process.env.COOKIE_DOMAIN || undefined
+        });
+
+        // Also return token for backward compatibility (will phase out)
         res.json({
             success: true,
-            token,
+            token, // Keep for now to not break existing clients
             user: {
                 id: user.id,
                 username: user.username,

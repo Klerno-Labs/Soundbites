@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 const swaggerUi = require('swagger-ui-express');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 // Logger setup
@@ -84,6 +85,7 @@ app.use(limiter);
 
 // Body parser
 app.use(express.json());
+app.use(cookieParser()); // Parse cookies for HttpOnly auth
 app.use(express.urlencoded({ extended: true }));
 
 // Root route - API info page

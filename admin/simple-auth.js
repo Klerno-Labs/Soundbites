@@ -55,6 +55,9 @@
         };
 
         try {
+            // Add credentials to send HttpOnly cookies
+            config.credentials = 'include';
+
             const response = await fetch(getAPI(endpoint), config);
             const data = await safeJSON(response);
 
@@ -92,6 +95,7 @@
                 const data = await fetch(getAPI('auth/login'), {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include', // Send/receive cookies
                     body: JSON.stringify({ email, password })
                 }).then(r => safeJSON(r));
 
