@@ -2,6 +2,8 @@ node_modules/
 .env
 *.log
 logs/
+backups/
+coverage/
 .DS_Store
 soundbites.db
 soundbites.db-journal
