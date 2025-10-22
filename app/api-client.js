@@ -41,7 +41,7 @@ class APIClient {
     constructor(baseURL) {
         // Use relative '/api' when available so the frontend can talk to the same origin backend
         this.baseURL = baseURL || '/api';
-        this.token = localStorage.getItem('sb-admin-token');
+        this.token = localStorage.getItem('admin_token');
 
         // Configuration
         this.defaultTimeout = 30000; // 30 seconds
@@ -249,13 +249,13 @@ class APIClient {
     // Set authentication token
     setToken(token) {
         this.token = token;
-        localStorage.setItem('sb-admin-token', token);
+        localStorage.setItem('admin_token', token);
     }
 
     // Clear authentication token
     clearToken() {
         this.token = null;
-        localStorage.removeItem('sb-admin-token');
+        localStorage.removeItem('admin_token');
     }
 
     // ===== Quiz Endpoints =====

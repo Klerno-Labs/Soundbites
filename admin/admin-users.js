@@ -55,22 +55,37 @@
             const token = localStorage.getItem('admin_token');
             if (!token) {
                 console.error('No auth token found');
+                showError('Not authenticated. Please log in again.');
+                setTimeout(() => window.location.href = '/admin/login.html', 2000);
                 return;
             }
 
-            const response = await fetch(`${API_BASE}/api/admin/users`, {
+            const url = `${API_BASE}/api/admin/users`;
+            console.log('Loading users from:', url);
+            console.log('Token exists:', !!token);
+
+            const response = await fetch(url, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
 
+            console.log('Response status:', response.status);
+
             if (!response.ok) {
-                const error = await response.json();
+                if (response.status === 401 || response.status === 403) {
+                    localStorage.removeItem('admin_token');
+                    showError('Session expired. Redirecting to login...');
+                    setTimeout(() => window.location.href = '/admin/login.html', 2000);
+                    return;
+                }
+                const error = await response.json().catch(() => ({ error: 'Failed to load users' }));
                 throw new Error(error.error || 'Failed to load users');
             }
 
             const data = await response.json();
+            console.log('Users loaded:', data.users?.length || 0);
             currentUsers = data.users || [];
             renderUsersTable();
 
@@ -189,7 +204,9 @@
         try {
             const token = localStorage.getItem('admin_token');
             if (!token) {
-                throw new Error('Not authenticated');
+                showError('Not authenticated. Please log in again.');
+                setTimeout(() => window.location.href = '/admin/login.html', 2000);
+                return;
             }
 
             const isEdit = !!userId;
@@ -202,6 +219,9 @@
             const body = { username, email, role };
             if (password) body.password = password;
 
+            console.log(`${method} ${url}`, body);
+            console.log('Token exists:', !!token);
+
             const response = await fetch(url, {
                 method,
                 headers: {
@@ -211,9 +231,17 @@
                 body: JSON.stringify(body)
             });
 
+            console.log('Response status:', response.status);
+
             if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error || 'Failed to save user');
+                if (response.status === 401 || response.status === 403) {
+                    localStorage.removeItem('admin_token');
+                    showError('Session expired. Redirecting to login...');
+                    setTimeout(() => window.location.href = '/admin/login.html', 2000);
+                    return;
+                }
+                const error = await response.json().catch(() => ({ error: 'Failed to save user' }));
+                throw new Error(error.error || error.message || 'Failed to save user');
             }
 
             const data = await response.json();
@@ -243,10 +271,15 @@
         try {
             const token = localStorage.getItem('admin_token');
             if (!token) {
-                throw new Error('Not authenticated');
+                showError('Not authenticated. Please log in again.');
+                setTimeout(() => window.location.href = '/admin/login.html', 2000);
+                return;
             }
 
-            const response = await fetch(`${API_BASE}/api/admin/users/${userId}`, {
+            const url = `${API_BASE}/api/admin/users/${userId}`;
+            console.log(`DELETE ${url}`);
+
+            const response = await fetch(url, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -254,8 +287,16 @@
                 }
             });
 
+            console.log('Response status:', response.status);
+
             if (!response.ok) {
-                const error = await response.json();
+                if (response.status === 401 || response.status === 403) {
+                    localStorage.removeItem('admin_token');
+                    showError('Session expired. Redirecting to login...');
+                    setTimeout(() => window.location.href = '/admin/login.html', 2000);
+                    return;
+                }
+                const error = await response.json().catch(() => ({ error: 'Failed to delete user' }));
                 throw new Error(error.error || 'Failed to delete user');
             }
 

@@ -28,8 +28,9 @@ window.sbIsAuthed = async function() {
             return true;
         }
 
-        // Token invalid/expired - clear it
+        // Token invalid/expired - clear both possible token keys
         localStorage.removeItem('admin_token');
+        localStorage.removeItem('sb-admin-token');  // Legacy key
         return false;
     } catch (error) {
         console.warn('Auth check failed:', error);
@@ -54,8 +55,9 @@ window.enforceAuth = async function() {
 // Logout function - clears session and redirects to admin login
 window.sbAdminLogout = async function() {
     if (confirm('Are you sure you want to log out?')) {
-        // Clear local tokens
+        // Clear all possible token keys
         localStorage.removeItem('admin_token');
+        localStorage.removeItem('sb-admin-token');  // Legacy key
         sessionStorage.clear();
 
         // Call backend logout to invalidate session
