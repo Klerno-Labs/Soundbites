@@ -10,11 +10,11 @@ function getBackendURL() {
 
     // Local development
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
-        return '/api';  // Local backend at http://localhost:3000/api
+        return 'http://localhost:3000';  // Local backend at http://localhost:3000
     }
 
-    // Production
-    return 'https://soundbites-quiz-backend.onrender.com/api';
+    // Production - use relative path (proxied via _redirects)
+    return '';  // Empty string for relative URLs
 }
 
 /**

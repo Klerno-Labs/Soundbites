@@ -214,8 +214,8 @@
             try {
                 // Use backend URL for production, local for development
                 const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-                    ? '/api/auth/login'  // Local development
-                    : 'https://soundbites-quiz-backend.onrender.com/api/auth/login';  // Production
+                    ? 'http://localhost:3000/api/auth/login'  // Local development
+                    : '/api/auth/login';  // Production (proxied via _redirects)
 
                 const res = await fetch(backendUrl, {
                     method: 'POST',
@@ -256,8 +256,8 @@
                 try {
                     // Use backend URL for production, local for development
                     const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-                        ? '/api/auth/verify'
-                        : 'https://soundbites-quiz-backend.onrender.com/api/auth/verify';
+                        ? 'http://localhost:3000/api/auth/verify'
+                        : '/api/auth/verify';  // Production (proxied via _redirects)
 
                     const res = await fetch(backendUrl, {
                         headers: { 'Authorization': `Bearer ${token}` },

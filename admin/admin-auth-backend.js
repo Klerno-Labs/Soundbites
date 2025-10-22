@@ -10,8 +10,8 @@ window.sbIsAuthed = async function() {
         const verifyURL = window.SoundbitesConfig
             ? window.SoundbitesConfig.getAPIEndpoint('auth/verify')
             : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-                ? '/api/auth/verify'
-                : 'https://soundbites-quiz-backend.onrender.com/api/auth/verify');
+                ? 'http://localhost:3000/api/auth/verify'
+                : '/api/auth/verify');  // Production (proxied via _redirects)
 
         const res = await fetch(verifyURL, {
             method: 'GET',
@@ -63,8 +63,8 @@ window.sbAdminLogout = async function() {
             const logoutURL = window.SoundbitesConfig
                 ? window.SoundbitesConfig.getAPIEndpoint('auth/logout')
                 : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-                    ? '/api/auth/logout'
-                    : 'https://soundbites-quiz-backend.onrender.com/api/auth/logout');
+                    ? 'http://localhost:3000/api/auth/logout'
+                    : '/api/auth/logout');  // Production (proxied via _redirects)
 
             await fetch(logoutURL, {
                 method: 'POST',

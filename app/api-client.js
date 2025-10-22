@@ -354,9 +354,9 @@ const getInitialBaseURL = () => {
     // Fallback detection
     const hostname = window.location.hostname;
     if (hostname === 'localhost' || hostname === '127.0.0.1') {
-        return '/api';  // Local development
+        return 'http://localhost:3000';  // Local development
     }
-    return 'https://soundbites-quiz-backend.onrender.com/api';  // Production
+    return '';  // Production - use relative URLs (proxied via _redirects)
 };
 
 window.api = new APIClient(getInitialBaseURL());
