@@ -29,17 +29,30 @@ const allowedOrigins = [
     'http://localhost:3000',
     'http://127.0.0.1:3000',
     'http://localhost:5500',  // Live Server default port
-    'http://127.0.0.1:5500'
+    'http://127.0.0.1:5500',
+    'https://otis.soundbites.com'  // Hardcode production URL as fallback
 ].filter(Boolean); // Remove undefined values
+
+console.log('🔧 CORS Configuration:');
+console.log('   Allowed Origins:', allowedOrigins);
+console.log('   FRONTEND_URL env:', process.env.FRONTEND_URL);
 
 app.use(cors({
     origin: function(origin, callback) {
+        console.log('📡 CORS Request from origin:', origin);
+
         // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
+        if (!origin) {
+            console.log('✅ No origin - allowing');
+            return callback(null, true);
+        }
 
         if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
+            console.log('✅ Origin allowed:', origin);
             callback(null, true);
         } else {
+            console.log('❌ Origin BLOCKED:', origin);
+            console.log('   Not in allowed list:', allowedOrigins);
             callback(new Error('Not allowed by CORS'));
         }
     },
