@@ -1,3 +1,5 @@
 This file forces Render to redeploy the backend.
 Deploy timestamp: $(date)
 Critical fix: CORS headers for https://otis.soundbites.com
+Deploy timestamp: Tue, Oct 21, 2025  9:22:47 PM
+Version: 1.0.2 - CORS headers MUST be present
