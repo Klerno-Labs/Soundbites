@@ -17,6 +17,7 @@ const APP_VERSION = '1.0.2';
 const authRoutes = require('./routes/auth');
 const quizRoutes = require('./routes/quiz');
 const adminRoutes = require('./routes/admin');
+const adminUsersRoutes = require('./routes/admin-users');
 const tiktokEventsRoutes = require('./routes/tiktok-events');
 const healthRoutes = require('./routes/health');
 
@@ -180,6 +181,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
 app.use('/api/auth', authRoutes);
 app.use('/api/quiz', quizRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/admin', adminUsersRoutes);
 app.use('/api/tiktok-events', tiktokEventsRoutes);
 app.use('/health', healthRoutes);
 

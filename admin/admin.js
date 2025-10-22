@@ -229,6 +229,10 @@ class QuizAdmin {
             // Marketing analytics will render automatically
         } else if (tab === 'questions') {
             this.loadQuestionsList();
+        } else if (tab === 'users') {
+            if (window.initUserManagement) {
+                window.initUserManagement();
+            }
         }
     }
 

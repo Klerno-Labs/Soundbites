@@ -32,6 +32,7 @@
                 <button id="questions-tab" class="tab-btn" type="button" onclick="console.log('Questions clicked'); if(window.admin){window.admin.switchTab('questions')}else{console.error('window.admin not found')}">Questions</button>
                 <button id="analytics-tab" class="tab-btn active" type="button" onclick="console.log('Analytics clicked'); if(window.admin){window.admin.switchTab('analytics')}else{console.error('window.admin not found')}">Analytics</button>
                 <button id="marketing-tab" class="tab-btn" type="button" onclick="console.log('Marketing clicked'); if(window.admin){window.admin.switchTab('marketing')}else{console.error('window.admin not found')}">Marketing</button>
+                <button id="users-tab" class="tab-btn" type="button" onclick="console.log('Users clicked'); if(window.admin){window.admin.switchTab('users')}else{console.error('window.admin not found')}">Users</button>
                 <span style="flex:1"></span>
                 <button id="logout-btn" class="btn btn-sm btn-danger" type="button">Log out</button>
             </nav>
@@ -349,11 +350,98 @@
             </div>
         </div>
 
+        <!-- Users Panel -->
+        <div id="users-panel" class="admin-panel" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 style="margin: 0;">👥 User Management</h2>
+                <button id="add-user-btn" class="btn btn-primary">+ Add User</button>
+            </div>
+
+            <!-- User List Table -->
+            <div class="analytics-card">
+                <h3>Admin Users</h3>
+                <div class="table-container">
+                    <table id="users-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td colspan="5" style="text-align: center; color: #999;">Loading users...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Role Descriptions -->
+            <div class="analytics-card" style="margin-top: 1.5rem;">
+                <h3>Role Descriptions</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #c92a76;">
+                        <strong style="color: #c92a76;">Admin</strong>
+                        <p style="margin: 0.5rem 0 0 0; color: #666; font-size: 0.9rem;">Full access to all features including user management</p>
+                    </div>
+                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #6c757d;">
+                        <strong style="color: #6c757d;">Editor</strong>
+                        <p style="margin: 0.5rem 0 0 0; color: #666; font-size: 0.9rem;">Can edit questions and view analytics</p>
+                    </div>
+                    <div style="padding: 1rem; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #17a2b8;">
+                        <strong style="color: #17a2b8;">Viewer</strong>
+                        <p style="margin: 0.5rem 0 0 0; color: #666; font-size: 0.9rem;">Read-only access to analytics</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add/Edit User Modal -->
+        <div id="user-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="user-modal-title">Add User</h3>
+                    <button id="close-user-modal" class="modal-close">&times;</button>
+                </div>
+                <form id="user-form">
+                    <input type="hidden" id="user-id" />
+                    <div class="form-group">
+                        <label for="user-username">Username</label>
+                        <input type="text" id="user-username" required minlength="3" maxlength="50" />
+                    </div>
+                    <div class="form-group">
+                        <label for="user-email">Email</label>
+                        <input type="email" id="user-email" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="user-password">Password</label>
+                        <input type="password" id="user-password" minlength="8" />
+                        <small id="password-hint" style="color: #666; font-size: 0.85rem;">Leave blank to keep existing password</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-role">Role</label>
+                        <select id="user-role" required>
+                            <option value="viewer">Viewer</option>
+                            <option value="editor">Editor</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="cancel-user-btn" class="btn btn-secondary">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save User</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         </main>
     </div>
 
     <script src="/app/api-client.js"></script>
     <script src="/admin/admin.js?v=20251020-1740"></script>
+    <script src="/admin/admin-users.js"></script>
     <script>
         // Invoke auth gate after DOM is ready so login view replaces body safely when not authed
         document.addEventListener('DOMContentLoaded', function(){

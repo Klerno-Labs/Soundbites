@@ -37,14 +37,19 @@ router.post('/login', loginLimiter, loginValidation, async (req, res) => {
 
         // Verify password
         const validPassword = await bcrypt.compare(password, user.password_hash);
-        
+
         if (!validPassword) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
 
-        // Generate JWT token
+        // Generate JWT token with role
         const token = jwt.sign(
-            { id: user.id, username: user.username, email: user.email },
+            {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                role: user.role || 'admin' // Include role in token
+            },
             process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
@@ -55,7 +60,8 @@ router.post('/login', loginLimiter, loginValidation, async (req, res) => {
             user: {
                 id: user.id,
                 username: user.username,
-                email: user.email
+                email: user.email,
+                role: user.role || 'admin'
             }
         });
 

@@ -1,11 +1,11 @@
 const express = require('express');
 const pool = require('../config/database-local');
-const authMiddleware = require('../middleware/auth');
+const { requireAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
 // All admin routes require authentication
-router.use(authMiddleware);
+router.use(requireAuth);
 
 // Get all results with optional filters
 router.get('/results', async (req, res) => {

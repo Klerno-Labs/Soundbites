@@ -1,6 +1,5 @@
 const express = require('express');
 const pool = require('../config/database-local');
-const { generatePersonalizedRecommendations } = require('../services/ai');
 
 const router = express.Router();
 
@@ -42,21 +41,9 @@ router.post('/submit', async (req, res) => {
             ]
         );
 
-        // Generate AI-powered personalized recommendations
-        const personalizedAdvice = await generatePersonalizedRecommendations(
-            score,
-            answers,
-            {
-                listenTime: answers[0], // Assuming first question is music listening hours
-                age: req.body.age || null,
-                concerns: req.body.concerns || null
-            }
-        );
-
         res.json({
             success: true,
-            result: result.rows[0],
-            aiRecommendations: personalizedAdvice // NEW: AI-generated advice
+            result: result.rows[0]
         });
 
     } catch (error) {

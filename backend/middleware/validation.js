@@ -17,8 +17,7 @@ const loginValidation = [
     body('email')
         .optional()
         .isEmail()
-        .withMessage('Invalid email format')
-        .normalizeEmail(),
+        .withMessage('Invalid email format'),
     body('username')
         .optional()
         .trim()
