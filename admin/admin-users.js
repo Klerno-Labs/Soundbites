@@ -6,7 +6,10 @@
 (function() {
     'use strict';
 
-    const API_BASE = window.API_URL || '';
+    const API_BASE = window.SoundbitesConfig ? window.SoundbitesConfig.getBackendURL() :
+                      (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ?
+                       'http://localhost:3000' :
+                       'https://soundbites-quiz-backend.onrender.com');
     let currentUsers = [];
 
     // Initialize user management when panel is shown
