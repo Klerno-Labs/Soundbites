@@ -84,10 +84,17 @@ async function initDatabase() {
 
             console.log('✅ Default questions inserted');
 
-            // Create admin user (PRODUCTION CREDENTIALS)
-            const adminUsername = process.env.ADMIN_USERNAME || 'c.hatfield309@gmail.com';
+            // Create admin user from environment variables
+            const adminEmail = process.env.ADMIN_EMAIL || 'c.hatfield309@gmail.com';
             const adminPassword = process.env.ADMIN_PASSWORD || 'Hearing2025';
-            
+
+            if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD) {
+                console.warn('⚠️  Using DEFAULT admin credentials for development only!');
+                console.warn(`   Email: ${adminEmail}`);
+                console.warn(`   Password: ${adminPassword}`);
+                console.warn('   Set ADMIN_EMAIL and ADMIN_PASSWORD env vars in production!');
+            }
+
             bcrypt.hash(adminPassword, 12, (err, passwordHash) => {
                 if (err) {
                     console.error('❌ Error hashing password:', err);
@@ -98,7 +105,7 @@ async function initDatabase() {
 
                 db.run(
                     'INSERT OR IGNORE INTO admin_users (username, password_hash, email) VALUES (?, ?, ?)',
-                    [adminUsername, passwordHash, 'c.hatfield309@gmail.com'],
+                    [adminEmail, passwordHash, adminEmail],
                     (err) => {
                         if (err) {
                             console.error('❌ Error creating admin user:', err);
@@ -107,12 +114,9 @@ async function initDatabase() {
                             return;
                         }
 
-                        console.log('✅ Admin user created');
-                        console.log(`   Username: ${adminUsername}`);
-                        console.log(`   Password: ${adminPassword}`);
-                        console.log('   ⚠️  CHANGE THIS PASSWORD IN PRODUCTION!');
+                        console.log('✅ Admin user created/verified');
                         console.log('\n🎉 Database initialized successfully!');
-                        
+
                         db.close((err) => {
                             if (err) reject(err);
                             else resolve();

@@ -2,10 +2,14 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const morgan = require('morgan');
 require('dotenv').config();
 
-// Force redeploy - v1.0.1
-const APP_VERSION = '1.0.1';
+// Logger setup
+const logger = require('./config/logger');
+
+// Force redeploy - v1.0.2
+const APP_VERSION = '1.0.2';
 
 // Import routes (they will auto-detect SQLite via database-local.js)
 const authRoutes = require('./routes/auth');
@@ -17,8 +21,17 @@ const healthRoutes = require('./routes/health');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Trust proxy - required for Railway
+// Trust proxy - required for Render
 app.set('trust proxy', 1);
+
+// Request logging with Morgan
+// Skip logging health check endpoint to reduce noise
+app.use(morgan('combined', {
+    skip: (req) => req.url === '/health',
+    stream: {
+        write: (message) => logger.info(message.trim())
+    }
+}));
 
 // Security middleware
 app.use(helmet());
@@ -162,25 +175,45 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/tiktok-events', tiktokEventsRoutes);
 app.use('/health', healthRoutes);
 
-// Error handling
+// Error handling with logging
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ 
-        error: 'Something went wrong!',
-        message: process.env.NODE_ENV === 'development' ? err.message : undefined
+    // Log error with Winston
+    logger.error('Unhandled error:', {
+        error: err.message,
+        stack: err.stack,
+        url: req.url,
+        method: req.method,
+        ip: req.ip,
+        userAgent: req.get('user-agent')
+    });
+
+    // Send response
+    res.status(err.status || 500).json({
+        error: err.message || 'Internal server error',
+        details: process.env.NODE_ENV === 'development' ? err.stack : undefined
     });
 });
 
 // 404 handler
 app.use((req, res) => {
+    logger.warn(`404 Not Found: ${req.method} ${req.url}`, {
+        ip: req.ip,
+        userAgent: req.get('user-agent')
+    });
     res.status(404).json({ error: 'Route not found' });
 });
 
+// Start server
 app.listen(PORT, () => {
+    logger.info(`🚀 Server running on port ${PORT}`);
+    logger.info(`📊 Environment: ${process.env.NODE_ENV}`);
+    logger.info(`🔗 Database configured: ${process.env.DATABASE_URL ? 'Yes' : 'No'}`);
+    logger.info(`📝 Version: ${APP_VERSION}`);
     console.log(`🚀 Server running on port ${PORT}`);
     console.log(`📊 Environment: ${process.env.NODE_ENV}`);
     console.log(`🔗 Database configured: ${process.env.DATABASE_URL ? 'Yes' : 'No'}`);
 }).on('error', (err) => {
+    logger.error('❌ Server failed to start:', err);
     console.error('❌ Server failed to start:', err);
     process.exit(1);
 });

@@ -3,11 +3,12 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const pool = require('../config/database-local');
 const { loginLimiter, verifyLimiter } = require('../middleware/rate-limit');
+const { loginValidation } = require('../middleware/validation');
 
 const router = express.Router();
 
-// Admin login (with rate limiting)
-router.post('/login', loginLimiter, async (req, res) => {
+// Admin login (with rate limiting + validation)
+router.post('/login', loginLimiter, loginValidation, async (req, res) => {
     try {
         const { username, email, password } = req.body;
         

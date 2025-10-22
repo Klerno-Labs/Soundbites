@@ -96,18 +96,23 @@ async function initDatabase() {
             console.log('ℹ️  Questions already exist, skipping insertion');
         }
 
-        // Create admin user (PRODUCTION CREDENTIALS)
-        const adminUsername = process.env.ADMIN_USERNAME || 'c.hatfield309@gmail.com';
-        const adminPassword = process.env.ADMIN_PASSWORD || 'Hearing2025';
+        // Create admin user from environment variables
+        const adminEmail = process.env.ADMIN_EMAIL;
+        const adminPassword = process.env.ADMIN_PASSWORD;
 
-        const passwordHash = await bcrypt.hash(adminPassword, 12);
+        if (!adminEmail || !adminPassword) {
+            console.warn('⚠️  ADMIN_EMAIL and ADMIN_PASSWORD not set! Admin user creation skipped.');
+            console.warn('   Set these in your Render dashboard under Environment Variables');
+        } else {
+            const passwordHash = await bcrypt.hash(adminPassword, 12);
 
-        await pool.query(
-            'INSERT INTO admin_users (username, password_hash, email) VALUES ($1, $2, $3) ON CONFLICT (username) DO NOTHING',
-            [adminUsername, passwordHash, 'c.hatfield309@gmail.com']
-        );
+            await pool.query(
+                'INSERT INTO admin_users (username, password_hash, email) VALUES ($1, $2, $3) ON CONFLICT (username) DO NOTHING',
+                [adminEmail, passwordHash, adminEmail]
+            );
 
-        console.log('✅ Admin user created/verified');
+            console.log('✅ Admin user created/verified');
+        }
         console.log('🎉 Database initialization complete!');
 
         await pool.end();
