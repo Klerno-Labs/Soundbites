@@ -13,8 +13,8 @@ function getBackendURL() {
         return 'http://localhost:3000';  // Local backend at http://localhost:3000
     }
 
-    // Production - use relative path (proxied via _redirects)
-    return '';  // Empty string for relative URLs
+    // Production - use full backend URL
+    return 'https://soundbites-quiz-backend.onrender.com';  // Production backend
 }
 
 /**

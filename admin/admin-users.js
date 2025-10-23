@@ -11,6 +11,11 @@
     // Use SimpleAuth if available, otherwise construct API URLs manually
     const api = window.SimpleAuth ? window.SimpleAuth.api : null;
 
+    // Define API_BASE for production/development
+    const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost:3000'
+        : 'https://soundbites-quiz-backend.onrender.com';
+
     // Initialize user management when panel is shown
     function initUserManagement() {
         console.log('Initializing user management...');
