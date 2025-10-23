@@ -84,8 +84,14 @@ router.post('/login', loginLimiter, loginValidation, async (req, res) => {
 // Verify token (check if still valid) - with rate limiting
 router.get('/verify', verifyLimiter, async (req, res) => {
     try {
-        const token = req.headers.authorization?.split(' ')[1];
-        
+        // Try to get token from HttpOnly cookie first (most secure)
+        let token = req.cookies?.admin_token;
+
+        // Fall back to Authorization header for backward compatibility
+        if (!token) {
+            token = req.headers.authorization?.split(' ')[1];
+        }
+
         if (!token) {
             return res.status(401).json({ valid: false });
         }
