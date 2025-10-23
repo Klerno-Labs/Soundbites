@@ -444,16 +444,22 @@
     <script src="/admin/admin-users.js"></script>
     <script>
         // Invoke auth gate after DOM is ready so login view replaces body safely when not authed
-        document.addEventListener('DOMContentLoaded', function(){
+        document.addEventListener('DOMContentLoaded', async function(){
             if (window.initHeaderSizer) window.initHeaderSizer();
-            if (window.enforceAuth && !window.enforceAuth()) return;
-            if (window.sbIsAuthed && window.sbIsAuthed()) {
-                if (!window.admin && typeof QuizAdmin === 'function') { window.admin = new QuizAdmin(); }
-                // Attach logout handler
-                const logoutBtn = document.getElementById('logout-btn');
-                if (logoutBtn && window.sbAdminLogout) {
-                    logoutBtn.onclick = window.sbAdminLogout;
-                }
+
+            // Properly await the async enforceAuth function
+            const isAuthed = await window.enforceAuth();
+            if (!isAuthed) return;
+
+            // Initialize admin panel
+            if (!window.admin && typeof QuizAdmin === 'function') {
+                window.admin = new QuizAdmin();
+            }
+
+            // Attach logout handler
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn && window.sbAdminLogout) {
+                logoutBtn.onclick = window.sbAdminLogout;
             }
         }, { once: true });
     </script>
