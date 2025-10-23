@@ -54,11 +54,11 @@ router.post('/login', loginLimiter, loginValidation, async (req, res) => {
             { expiresIn: '24h' }
         );
 
-        // Set HttpOnly cookie for enhanced security
+        // Set HttpOnly cookie for enhanced security (works for same-origin)
         res.cookie('admin_token', token, {
             httpOnly: true,  // Cannot be accessed by JavaScript
             secure: process.env.NODE_ENV === 'production', // HTTPS only in production
-            sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' required for cross-origin
             maxAge: 24 * 60 * 60 * 1000, // 24 hours
             domain: process.env.COOKIE_DOMAIN || undefined
         });

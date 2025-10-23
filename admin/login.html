@@ -237,8 +237,13 @@
 
                 const data = await res.json();
 
-                // Token is now stored in HttpOnly cookie by the server
-                // No need to store in localStorage (more secure)
+                // Store token in localStorage (needed for cross-origin requests)
+                // Backend: soundbites-quiz-backend.onrender.com
+                // Frontend: otis.soundbites.com
+                // HttpOnly cookies don't work across different domains
+                if (data.token) {
+                    localStorage.setItem('admin_token', data.token);
+                }
 
                 // Redirect to admin dashboard
                 window.location.replace('/admin');
@@ -266,29 +271,37 @@
             }
         });
 
-        // Check if already logged in via HttpOnly cookie
+        // Check if already logged in (has valid token in localStorage)
         (async () => {
-            try {
-                // Use backend URL for production, local for development
-                const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-                    ? 'http://localhost:3000/api/auth/verify'
-                    : 'https://soundbites-quiz-backend.onrender.com/api/auth/verify';
+            const token = localStorage.getItem('admin_token');
+            if (token) {
+                try {
+                    // Use backend URL for production, local for development
+                    const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                        ? 'http://localhost:3000/api/auth/verify'
+                        : 'https://soundbites-quiz-backend.onrender.com/api/auth/verify';
 
-                const res = await fetch(backendUrl, {
-                    credentials: 'include'  // HttpOnly cookie sent automatically
-                });
+                    const res = await fetch(backendUrl, {
+                        headers: { 'Authorization': `Bearer ${token}` },
+                        credentials: 'include'
+                    });
 
-                // Check if response is valid JSON
-                const contentType = res.headers.get('content-type');
-                if (contentType && contentType.includes('application/json') && res.ok) {
-                    const data = await res.json();
-                    if (data.valid || data.user) {
-                        // Already logged in, redirect to admin
-                        window.location.replace('/admin');
+                    // Check if response is valid JSON
+                    const contentType = res.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json') && res.ok) {
+                        const data = await res.json();
+                        if (data.valid || data.user) {
+                            // Already logged in, redirect to admin
+                            window.location.replace('/admin');
+                        }
+                    } else {
+                        // Invalid token, clear it
+                        localStorage.removeItem('admin_token');
                     }
+                } catch (e) {
+                    // Token invalid or network error, clear it
+                    localStorage.removeItem('admin_token');
                 }
-            } catch (e) {
-                // Not logged in or network error, stay on login page
             }
         })();
     </script>
