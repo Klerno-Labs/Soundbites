@@ -443,25 +443,52 @@
     <script src="/admin/admin.js?v=20251020-1740"></script>
     <script src="/admin/admin-users.js"></script>
     <script>
-        // Invoke auth gate after DOM is ready so login view replaces body safely when not authed
-        document.addEventListener('DOMContentLoaded', async function(){
-            if (window.initHeaderSizer) window.initHeaderSizer();
+        // Admin initialization with proper auth check and error handling
+        async function initAdminDashboard() {
+            try {
+                // Hide content immediately to prevent flash
+                document.body.style.visibility = 'hidden';
 
-            // Properly await the async enforceAuth function
-            const isAuthed = await window.enforceAuth();
-            if (!isAuthed) return;
+                // Initialize header sizer
+                if (window.initHeaderSizer) {
+                    window.initHeaderSizer();
+                }
 
-            // Initialize admin panel
-            if (!window.admin && typeof QuizAdmin === 'function') {
-                window.admin = new QuizAdmin();
+                // Verify authentication (redirects to login if not authed)
+                const isAuthed = await window.enforceAuth();
+                if (!isAuthed) {
+                    // enforceAuth handles redirect, just exit
+                    return;
+                }
+
+                // User is authenticated - initialize admin panel
+                if (!window.admin && typeof QuizAdmin === 'function') {
+                    window.admin = new QuizAdmin();
+                }
+
+                // Attach logout handler
+                const logoutBtn = document.getElementById('logout-btn');
+                if (logoutBtn && window.sbAdminLogout) {
+                    logoutBtn.onclick = window.sbAdminLogout;
+                }
+
+                // Show content after everything is ready
+                document.body.style.visibility = 'visible';
+
+            } catch (error) {
+                console.error('Failed to initialize admin dashboard:', error);
+                // On any error, redirect to login for safety
+                window.location.replace('/admin/login.html');
             }
+        }
 
-            // Attach logout handler
-            const logoutBtn = document.getElementById('logout-btn');
-            if (logoutBtn && window.sbAdminLogout) {
-                logoutBtn.onclick = window.sbAdminLogout;
-            }
-        }, { once: true });
+        // Run initialization when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initAdminDashboard);
+        } else {
+            // DOM already loaded (shouldn't happen, but handle it)
+            initAdminDashboard();
+        }
     </script>
   </body>
 </html>

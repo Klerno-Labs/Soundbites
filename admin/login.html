@@ -253,6 +253,9 @@
             } catch (error) {
                 console.error('Login error:', error);
 
+                // Clear password field for security
+                document.getElementById('password').value = '';
+
                 // User-friendly error messages
                 let errorMessage = error.message || 'Login failed. Please try again.';
 

@@ -34,7 +34,13 @@
       "Bash(timeout 10 curl:*)",
       "Bash(node keep-alive.js:*)",
       "Bash(timeout 60 curl:*)",
-      "Bash(timeout 30 curl:*)"
+      "Bash(timeout 30 curl:*)",
+      "Bash(for i in {1..5})",
+      "Bash(do echo \"Attempt $i...\")",
+      "Bash(timeout 15 curl:*)",
+      "Bash(done)",
+      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYy5oYXRmaWVsZDMwOUBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjEyMTgzMzgsImV4cCI6MTc2MTMwNDczOH0.LGCRuHIMGXj0egO7TLKQK8Q0UAWH6eUBeabMDELtmTk\")",
+      "Bash(git rm:*)"
     ],
     "deny": [],
     "ask": []
