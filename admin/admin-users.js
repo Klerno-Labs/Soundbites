@@ -19,6 +19,21 @@
     // Initialize user management when panel is shown
     function initUserManagement() {
         console.log('Initializing user management...');
+
+        // Check if user has admin role
+        const userRole = window.adminUser?.role || 'viewer';
+        if (userRole !== 'admin') {
+            console.warn('User management requires admin role. Current role:', userRole);
+            showError('User management is only available to administrators.');
+            renderUsersTable([]); // Show empty table
+
+            // Hide the "Add User" button for non-admins
+            const addUserBtn = document.getElementById('add-user-btn');
+            if (addUserBtn) addUserBtn.style.display = 'none';
+
+            return; // Don't load users or setup event listeners
+        }
+
         loadUsers();
         setupEventListeners();
     }
@@ -78,10 +93,16 @@
             console.log('Response status:', response.status);
 
             if (!response.ok) {
-                if (response.status === 401 || response.status === 403) {
+                if (response.status === 401) {
+                    // 401 = expired/invalid token - clear token and redirect to login
                     localStorage.removeItem('admin_token');
                     showError('Session expired. Redirecting to login...');
                     setTimeout(() => window.location.href = '/admin/login.html', 2000);
+                    return;
+                } else if (response.status === 403) {
+                    // 403 = insufficient permissions - show error but don't logout
+                    showError('You do not have permission to manage users. Contact an administrator.');
+                    renderUsersTable([]); // Show empty table
                     return;
                 }
                 const error = await response.json().catch(() => ({ error: 'Failed to load users' }));
@@ -238,10 +259,13 @@
             console.log('Response status:', response.status);
 
             if (!response.ok) {
-                if (response.status === 401 || response.status === 403) {
+                if (response.status === 401) {
                     localStorage.removeItem('admin_token');
                     showError('Session expired. Redirecting to login...');
                     setTimeout(() => window.location.href = '/admin/login.html', 2000);
+                    return;
+                } else if (response.status === 403) {
+                    showError('You do not have permission to manage users.');
                     return;
                 }
                 const error = await response.json().catch(() => ({ error: 'Failed to save user' }));
@@ -294,10 +318,13 @@
             console.log('Response status:', response.status);
 
             if (!response.ok) {
-                if (response.status === 401 || response.status === 403) {
+                if (response.status === 401) {
                     localStorage.removeItem('admin_token');
                     showError('Session expired. Redirecting to login...');
                     setTimeout(() => window.location.href = '/admin/login.html', 2000);
+                    return;
+                } else if (response.status === 403) {
+                    showError('You do not have permission to delete users.');
                     return;
                 }
                 const error = await response.json().catch(() => ({ error: 'Failed to delete user' }));

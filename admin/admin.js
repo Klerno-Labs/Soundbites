@@ -347,11 +347,18 @@ class QuizAdmin {
 
     addQuestion(event) {
         event.preventDefault();
-        
+
+        // Permission check - only editor and admin can add/edit questions
+        const userRole = window.currentUserRole || 'viewer';
+        if (userRole === 'viewer') {
+            alert('⛔ You do not have permission to edit questions. Contact an administrator.');
+            return;
+        }
+
         const formData = new FormData(event.target);
         const questionText = document.getElementById('question-text').value;
         const questionType = document.getElementById('question-type').value;
-        
+
         // Check if we're editing an existing question
         const isEditing = this.editingQuestionId !== undefined && this.editingQuestionId !== null;
         
@@ -553,10 +560,17 @@ class QuizAdmin {
     }
 
     deleteQuestion(id, confirm = true) {
+        // Permission check - only editor and admin can delete questions
+        const userRole = window.currentUserRole || 'viewer';
+        if (userRole === 'viewer') {
+            alert('⛔ You do not have permission to delete questions. Contact an administrator.');
+            return;
+        }
+
         if (confirm && !window.confirm('Are you sure you want to delete this question?')) {
             return;
         }
-        
+
         this.questions = this.questions.filter(q => q.id !== id);
         this.saveQuestions();
         this.loadQuestionsList();
@@ -1437,6 +1451,13 @@ class QuizAdmin {
     }
 
     clearData() {
+        // Permission check - only admin can clear data
+        const userRole = window.currentUserRole || 'viewer';
+        if (userRole !== 'admin') {
+            alert('⛔ Only administrators can clear data. This is a destructive action.');
+            return;
+        }
+
         if (confirm('Are you sure you want to clear all quiz data? This action cannot be undone.')) {
             localStorage.removeItem('quiz-results');
             localStorage.removeItem('quiz-leads');
@@ -1460,7 +1481,14 @@ class QuizAdmin {
 
     saveQuizSettings(event) {
         event.preventDefault();
-        
+
+        // Permission check - only editor and admin can save settings
+        const userRole = window.currentUserRole || 'viewer';
+        if (userRole === 'viewer') {
+            alert('⛔ You do not have permission to modify settings. Contact an administrator.');
+            return;
+        }
+
         const settings = {
             passingScore: document.getElementById('passing-score').value,
             companyEmail: document.getElementById('company-email').value,

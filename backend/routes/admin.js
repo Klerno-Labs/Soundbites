@@ -1,6 +1,6 @@
 const express = require('express');
 const pool = require('../config/database-local');
-const { requireAuth } = require('../middleware/auth');
+const { requireAuth, requireRole } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -120,8 +120,8 @@ router.get('/questions', async (req, res) => {
     }
 });
 
-// Add or update question
-router.post('/questions', async (req, res) => {
+// Add or update question (editor and admin only)
+router.post('/questions', requireRole('editor', 'admin'), async (req, res) => {
     try {
         const { id, question, type, options, weight } = req.body;
 
@@ -161,8 +161,8 @@ router.post('/questions', async (req, res) => {
     }
 });
 
-// Delete question
-router.delete('/questions/:id', async (req, res) => {
+// Delete question (editor and admin only)
+router.delete('/questions/:id', requireRole('editor', 'admin'), async (req, res) => {
     try {
         const { id } = req.params;
 

@@ -472,6 +472,9 @@
                     logoutBtn.onclick = window.sbAdminLogout;
                 }
 
+                // Apply role-based permissions
+                applyRolePermissions();
+
                 // Show content after everything is ready
                 document.body.style.visibility = 'visible';
 
@@ -479,6 +482,101 @@
                 console.error('Failed to initialize admin dashboard:', error);
                 // On any error, redirect to login for safety
                 window.location.replace('/admin/login.html');
+            }
+        }
+
+        /**
+         * Apply role-based permissions to UI elements
+         * - Viewer: Analytics and Marketing only (read-only)
+         * - Editor: All tabs except Users, can edit Questions and Settings
+         * - Admin: Full access to everything
+         */
+        function applyRolePermissions() {
+            const userRole = window.adminUser?.role || 'viewer';
+            console.log('Applying permissions for role:', userRole);
+
+            // Store role globally for other scripts to use
+            window.currentUserRole = userRole;
+
+            // Get UI elements
+            const questionsTab = document.getElementById('questions-tab');
+            const analyticsTab = document.getElementById('analytics-tab');
+            const marketingTab = document.getElementById('marketing-tab');
+            const usersTab = document.getElementById('users-tab');
+
+            // Role-specific permissions
+            if (userRole === 'viewer') {
+                // Viewer: Only Analytics and Marketing (read-only)
+                if (questionsTab) questionsTab.style.display = 'none';
+                if (usersTab) usersTab.style.display = 'none';
+
+                // Disable all editing controls
+                disableEditingControls();
+
+                console.log('Viewer permissions applied: Analytics & Marketing (read-only)');
+
+            } else if (userRole === 'editor') {
+                // Editor: Everything except Users tab
+                if (usersTab) usersTab.style.display = 'none';
+
+                // Enable editing for Questions and Settings
+                console.log('Editor permissions applied: Full access except Users');
+
+            } else if (userRole === 'admin') {
+                // Admin: Full access - all tabs visible, all editing enabled
+                console.log('Admin permissions applied: Full access');
+            }
+        }
+
+        /**
+         * Disable editing controls for viewer role
+         */
+        function disableEditingControls() {
+            // Hide all action buttons (Export, Clear Data, etc.)
+            const editButtons = [
+                'export-csv',
+                'export-pdf',
+                'clear-data',
+                'question-form',
+                'generate-recovery',
+                'auto-export-quarter'
+            ];
+
+            editButtons.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.style.display = 'none';
+                }
+            });
+
+            // Hide company email input
+            const companyEmail = document.getElementById('company-email');
+            if (companyEmail) {
+                companyEmail.disabled = true;
+                companyEmail.style.opacity = '0.6';
+            }
+
+            // Hide quiz settings form
+            const quizSettings = document.getElementById('quiz-settings');
+            if (quizSettings) {
+                quizSettings.style.display = 'none';
+            }
+
+            // Add read-only banner
+            const analyticsPanel = document.getElementById('analytics-panel');
+            if (analyticsPanel) {
+                const banner = document.createElement('div');
+                banner.style.cssText = `
+                    background: #e3f2fd;
+                    color: #1976d2;
+                    padding: 12px 16px;
+                    border-radius: 8px;
+                    margin-bottom: 16px;
+                    border-left: 4px solid #1976d2;
+                    font-weight: 600;
+                `;
+                banner.textContent = '👁️ Viewer Mode: You have read-only access to Analytics and Marketing';
+                analyticsPanel.insertBefore(banner, analyticsPanel.firstChild);
             }
         }
 
