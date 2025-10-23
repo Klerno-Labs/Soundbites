@@ -215,7 +215,7 @@
                 // Use backend URL for production, local for development
                 const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
                     ? 'http://localhost:3000/api/auth/login'  // Local development
-                    : '/api/auth/login';  // Production (proxied via _redirects)
+                    : 'https://soundbites-quiz-backend.onrender.com/api/auth/login';  // Production - full backend URL
 
                 console.log('Login attempt to:', backendUrl);
 
@@ -278,7 +278,7 @@
                     // Use backend URL for production, local for development
                     const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
                         ? 'http://localhost:3000/api/auth/verify'
-                        : '/api/auth/verify';  // Production (proxied via _redirects)
+                        : 'https://soundbites-quiz-backend.onrender.com/api/auth/verify';  // Production - full backend URL
 
                     console.log('Checking existing token...');
 

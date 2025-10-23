@@ -27,7 +27,14 @@
       "Bash(npm uninstall:*)",
       "Bash(node scripts/add-user-roles.js:*)",
       "Bash(timeout 3 bash:*)",
-      "Bash(node test-login.js:*)"
+      "Bash(node test-login.js:*)",
+      "Bash(git log:*)",
+      "Bash(timeout 5 bash:*)",
+      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYy5oYXRmaWVsZDMwOUBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjExNzE3MTksImV4cCI6MTc2MTI1ODExOX0.qv2ycEAgfhHUrYPyRhzeVdKhhaSLyYtlkBNr_2aWs-Y\")",
+      "Bash(timeout 10 curl:*)",
+      "Bash(node keep-alive.js:*)",
+      "Bash(timeout 60 curl:*)",
+      "Bash(timeout 30 curl:*)"
     ],
     "deny": [],
     "ask": []
