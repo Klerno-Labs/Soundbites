@@ -50,28 +50,22 @@ const allowedOrigins = [
     'https://otis.soundbites.com'  // Hardcode production URL as fallback
 ].filter(Boolean); // Remove undefined values
 
-console.log('🔧 CORS Configuration:');
-console.log('   Allowed Origins:', allowedOrigins);
-console.log('   FRONTEND_URL env:', process.env.FRONTEND_URL);
+// Log CORS config once on startup
+logger.info('CORS configured', { origins: allowedOrigins });
 
 app.use(cors({
     origin: function(origin, callback) {
-        console.log('📡 CORS Request from origin:', origin);
+        // Fast path: allow no origin
+        if (!origin) return callback(null, true);
 
-        // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) {
-            console.log('✅ No origin - allowing');
+        // Fast path: check whitelist
+        if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
             return callback(null, true);
         }
 
-        if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
-            console.log('✅ Origin allowed:', origin);
-            callback(null, true);
-        } else {
-            console.log('❌ Origin BLOCKED:', origin);
-            console.log('   Not in allowed list:', allowedOrigins);
-            callback(new Error('Not allowed by CORS'));
-        }
+        // Log blocked requests only
+        logger.warn('CORS blocked', { origin });
+        callback(new Error('Not allowed by CORS'));
     },
     credentials: true
 }));
