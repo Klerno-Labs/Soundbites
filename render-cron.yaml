@@ -1,0 +1,12 @@
+# Render Cron Job Configuration
+# This keeps the backend awake by pinging it every 14 minutes
+# Add this as a Cron Job service in your Render dashboard
+
+services:
+  - type: cron
+    name: soundbites-keep-alive
+    env: node
+    schedule: "*/14 * * * *"  # Every 14 minutes
+    buildCommand: "echo 'No build needed'"
+    startCommand: "curl -s https://soundbites-quiz-backend.onrender.com/health"
+    plan: free
