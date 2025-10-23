@@ -212,10 +212,12 @@
             const password = document.getElementById('password').value;
 
             try {
-                // Use backend URL for production, local for development
-                const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-                    ? 'http://localhost:3000/api/auth/login'  // Local development
-                    : 'https://soundbites-quiz-backend.onrender.com/api/auth/login';  // Production - full backend URL
+                // Use SoundbitesConfig helper for consistent API URLs
+                const backendUrl = window.SoundbitesConfig
+                    ? window.SoundbitesConfig.getAPIEndpoint('auth/login')
+                    : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                        ? 'http://localhost:3000/api/auth/login'
+                        : 'https://soundbites-quiz-backend.onrender.com/api/auth/login');
 
                 const res = await fetch(backendUrl, {
                     method: 'POST',
@@ -245,8 +247,8 @@
                     localStorage.setItem('admin_token', data.token);
                 }
 
-                // Redirect to admin dashboard
-                window.location.replace('/admin');
+                // Redirect to admin dashboard (index.html, not login.html)
+                window.location.replace('/admin/index.html');
 
             } catch (error) {
                 console.error('Login error:', error);
@@ -276,10 +278,12 @@
             const token = localStorage.getItem('admin_token');
             if (token) {
                 try {
-                    // Use backend URL for production, local for development
-                    const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-                        ? 'http://localhost:3000/api/auth/verify'
-                        : 'https://soundbites-quiz-backend.onrender.com/api/auth/verify';
+                    // Use SoundbitesConfig helper for consistent API URLs
+                    const backendUrl = window.SoundbitesConfig
+                        ? window.SoundbitesConfig.getAPIEndpoint('auth/verify')
+                        : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                            ? 'http://localhost:3000/api/auth/verify'
+                            : 'https://soundbites-quiz-backend.onrender.com/api/auth/verify');
 
                     const res = await fetch(backendUrl, {
                         headers: { 'Authorization': `Bearer ${token}` },
@@ -291,8 +295,8 @@
                     if (contentType && contentType.includes('application/json') && res.ok) {
                         const data = await res.json();
                         if (data.valid || data.user) {
-                            // Already logged in, redirect to admin
-                            window.location.replace('/admin');
+                            // Already logged in, redirect to admin dashboard
+                            window.location.replace('/admin/index.html');
                         }
                     } else {
                         // Invalid token, clear it

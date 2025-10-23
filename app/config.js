@@ -19,14 +19,15 @@ function getBackendURL() {
 
 /**
  * Get full API endpoint URL
- * @param {string} endpoint - API endpoint path (e.g., '/auth/login')
+ * @param {string} endpoint - API endpoint path (e.g., 'auth/login' or '/auth/login')
  * @returns {string} Full URL to the endpoint
  */
 function getAPIEndpoint(endpoint) {
     const baseURL = getBackendURL();
     // Remove leading slash from endpoint if present to avoid double slashes
     const cleanEndpoint = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
-    return `${baseURL}/${cleanEndpoint}`;
+    // Add /api prefix for production endpoints
+    return `${baseURL}/api/${cleanEndpoint}`;
 }
 
 // Export for use in other scripts

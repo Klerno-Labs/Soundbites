@@ -1,5 +1,6 @@
 # Proxy API requests to backend server
 /api/*    https://soundbites-quiz-backend.onrender.com/api/:splat    200
 
-# Admin routes
-/admin    /admin/index.html    200
+# Admin routes - login first, then dashboard after auth
+/admin    /admin/login.html    200
+/admin/    /admin/login.html    200
