@@ -343,44 +343,6 @@ textarea:focus-visible,
     margin-top: 2rem;
 }
 
-/* Email Form */
-.email-form {
-    margin-top: 2rem;
-    padding: 2rem;
-    background: #f8f9fa;
-    border-radius: 10px;
-}
-
-.email-form h3 {
-    margin-bottom: 1rem;
-    color: #333;
-}
-
-.email-form p {
-    margin-bottom: 1.5rem;
-    color: #666;
-}
-
-.email-form form {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.email-form input[type="email"] {
-    flex: 1;
-    padding: 12px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    min-width: 250px;
-}
-
-.email-form input[type="email"]:focus {
-    outline: none;
-    border-color: #e91e63;
-}
-
 /* Results Styles */
 .result-summary {
     text-align: center;
