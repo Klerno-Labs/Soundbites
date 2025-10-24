@@ -1,11 +1,41 @@
 // Quiz Application - Main JavaScript
 class SoundbiteQuiz {
     constructor() {
+        this.rateLimiter = new window.QuizRateLimiter(24); // 24-hour cooldown
         this.currentQuestion = 0;
         this.answers = {};
+
+        // Check rate limit before allowing quiz
+        this.checkRateLimit();
+
         this.questions = this.getDefaultQuestions();
         this.utmParams = this.captureUTMParams();
         this.init();
+    }
+
+    checkRateLimit() {
+        if (!this.rateLimiter.canTakeQuiz()) {
+            const timeRemaining = this.rateLimiter.getTimeUntilNextQuiz();
+            const formatted = this.rateLimiter.formatTimeRemaining(timeRemaining);
+
+            document.getElementById('quiz-container').innerHTML = `
+                <div style="text-align: center; padding: 3rem;">
+                    <h2 style="color: var(--sb-primary); margin-bottom: 1rem;">⏰ Quiz Cooldown Active</h2>
+                    <p style="font-size: 1.1rem; margin-bottom: 1rem;">
+                        You've recently completed this quiz. To ensure accurate analytics and prevent data contamination,
+                        please wait <strong>${formatted}</strong> before taking it again.
+                    </p>
+                    <p style="color: #666;">
+                        In the meantime, explore our products:
+                    </p>
+                    <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <a href="https://soundbites.com" class="btn btn-primary">Visit Soundbites.com</a>
+                        <a href="https://www.keephearing.org" class="btn btn-secondary">Learn at KeepHearing.org</a>
+                    </div>
+                </div>
+            `;
+            throw new Error('Rate limit active');
+        }
     }
 
     // Capture UTM parameters from URL
@@ -79,7 +109,7 @@ class SoundbiteQuiz {
             },
             {
                 id: 5,
-                text: "How often do you experience ringing in your ears (tinnitus)?",
+                text: "How often do you experience ringing in your ears?",
                 type: "multiple-choice",
                 options: [
                     { value: 1, text: "Never" },
@@ -102,7 +132,7 @@ class SoundbiteQuiz {
             },
             {
                 id: 7,
-                text: "Do you avoid social gatherings because of hearing difficulties?",
+                text: "Do you avoid social gatherings because of listening challenges?",
                 type: "yes-no",
                 weight: 3
             },
@@ -485,23 +515,23 @@ class SoundbiteQuiz {
         if (score >= 70) {
             return {
                 level: 'high-need',
-                title: 'Soundbites Highly Recommended',
-                message: 'Based on your responses, you would significantly benefit from Soundbites. Your hearing challenges are affecting your daily life, and our solution can help improve your listening experience.',
-                action: 'Get Soundbites now and improve your hearing experience!'
+                title: 'Soundbites May Support Your Needs',
+                message: 'Based on your responses, Soundbites may support your audio listening needs. You\'ve indicated challenges in daily listening situations, and our product is designed to enhance audio clarity.',
+                action: 'Try Soundbites to enhance your audio listening experience'
             };
         } else if (score >= 40) {
             return {
                 level: 'moderate-need',
-                title: 'Soundbites Could Help',
-                message: 'You show some signs of hearing difficulties that Soundbites could help address. Consider trying our solution to enhance your listening experience.',
-                action: 'Try Soundbites to see the difference it can make.'
+                title: 'Soundbites May Enhance Your Experience',
+                message: 'You\'ve indicated some listening challenges that Soundbites is designed to support. Consider our product to enhance your audio experience.',
+                action: 'Explore Soundbites for better audio clarity'
             };
         } else {
             return {
                 level: 'low-need',
-                title: 'Good Hearing Health',
-                message: 'Your hearing appears to be in good condition. Soundbites could still enhance your listening experience, especially in challenging environments.',
-                action: 'Keep monitoring your hearing health!'
+                title: 'Comfortable Listening Experience',
+                message: 'You experience comfortable listening in most situations. Soundbites can still enhance audio clarity in challenging environments.',
+                action: 'Continue being mindful of your listening comfort'
             };
         }
     }
@@ -522,6 +552,9 @@ class SoundbiteQuiz {
 
         // Store results for analytics
         this.storeResults(score, recommendation);
+
+        // Record submission for rate limiting
+        this.rateLimiter.recordSubmission();
 
         // Show results
         this.showResults(score, recommendation);
@@ -566,7 +599,7 @@ class SoundbiteQuiz {
                             <a href="https://soundbites.com" class="btn btn-primary" target="_blank" rel="noopener" style="background: white; color: ${accent}; border: 2px solid white; font-weight: 700;">
                                 🎧 Visit Soundbites.com
                             </a>
-                            <a href="https://www.tiktok.com/@soundbiteshearing/shop" class="btn btn-primary" target="_blank" rel="noopener" style="background: white; color: ${accent}; border: 2px solid white; font-weight: 700;">
+                            <a href="https://www.tiktok.com/shop/store/soundbites/7494162119735018619?source=product_detail&enter_from=product_detail&enter_method=product_info_right_shop&first_entrance=homepage_hot" class="btn btn-primary" target="_blank" rel="noopener" style="background: white; color: ${accent}; border: 2px solid white; font-weight: 700;">
                                 🛍️ Shop on TikTok
                             </a>
                             <a href="https://www.keephearing.org" class="btn btn-primary" target="_blank" rel="noopener" style="background: white; color: ${accent}; border: 2px solid white; font-weight: 700;">
@@ -577,6 +610,14 @@ class SoundbiteQuiz {
                 </div>
             </div>
         `;
+
+        // Add DSHEA disclaimer for high-need and moderate-need recommendations
+        if (recommendation.level === 'high-need' || recommendation.level === 'moderate-need') {
+            const disclaimerContainer = document.createElement('div');
+            disclaimerContainer.style.marginTop = '1.5rem';
+            disclaimerContainer.appendChild(window.createSupplementDisclaimer(accent));
+            resultContent.appendChild(disclaimerContainer);
+        }
 
         // Animate the ring and number up to the score
         const ring = document.getElementById('score-ring');

@@ -8,15 +8,15 @@
     <!-- Content Security Policy -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://analytics.tiktok.com https://cdn.jsdelivr.net https://cdn.emailjs.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://analytics.tiktok.com https://api.emailjs.com /api/*; frame-ancestors 'none';">
     <!-- Primary Meta Tags (TikTok Optimized) -->
-    <title>Do You Need Better Hearing? Free 2-Min Quiz | Soundbites</title>
-    <meta name="title" content="Do You Need Better Hearing? Free 2-Min Quiz">
-    <meta name="description" content="Take our quick hearing assessment to discover if Soundbites can improve your listening experience. Get personalized recommendations instantly! 🎧">
+    <title>Could Soundbites Enhance Your Listening? | Free 2-Min Quiz</title>
+    <meta name="title" content="Could Soundbites Enhance Your Listening? Free Quiz">
+    <meta name="description" content="Take our quick listening experience quiz to discover if Soundbites audio enhancement may support your needs. Get personalized recommendations instantly! 🎧">
     
     <!-- Open Graph / Facebook / TikTok -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://otis.soundbites.com/">
-    <meta property="og:title" content="Do You Need Better Hearing? Free Quiz">
-    <meta property="og:description" content="Take our 2-minute quiz to discover if Soundbites can improve your hearing experience. Get personalized recommendations!">
+    <meta property="og:title" content="Could Soundbites Enhance Your Listening? Free Quiz">
+    <meta property="og:description" content="Take our 2-minute listening quiz to discover if Soundbites may support your audio experience. Get personalized recommendations!">
     <meta property="og:image" content="https://otis.soundbites.com/app/og-image-tiktok.jpg">
     <meta property="og:image:width" content="1080">
     <meta property="og:image:height" content="1920">
@@ -26,8 +26,8 @@
     <!-- Twitter / TikTok Sharing -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://otis.soundbites.com/">
-    <meta name="twitter:title" content="Do You Need Better Hearing? Free Quiz">
-    <meta name="twitter:description" content="2-minute quiz • Personalized results • Improve your hearing experience 🎧">
+    <meta name="twitter:title" content="Could Soundbites Enhance Your Listening? Free Quiz">
+    <meta name="twitter:description" content="2-minute quiz • Personalized results • Enhanced audio listening experience 🎧">
     <meta name="twitter:image" content="https://otis.soundbites.com/app/og-image-tiktok.jpg">
     
     <!-- PWA / Mobile -->
@@ -69,6 +69,8 @@
     <script src="app/api-client.js"></script>
     <script src="app/header-sizer.js"></script>
     <script src="app/a11y-enhancements.js"></script>
+    <script src="app/utils/rateLimiter.js"></script>
+    <script src="app/components/SupplementDisclaimer.js"></script>
     
     <!-- TikTok Pixel Code Start -->
     <script>
@@ -94,7 +96,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
     <!-- Loading Spinner -->
     <div id="app-loader" class="app-loader">
         <div class="loader-spinner"></div>
-        <p>Loading your hearing assessment...</p>
+        <p>Loading your listening quiz...</p>
     </div>
     
     <a href="#main" class="skip-link">Skip to content</a>
@@ -105,7 +107,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
                 <span class="play-button-accent" aria-hidden="true"></span>
             </div>
             
-            <p class="sb-copy">Discover if Soundbites can improve your hearing experience</p>
+            <p class="sb-copy">Discover if Soundbites may enhance your audio listening experience</p>
             <div class="wave-decoration">
                 <img src="app/dot_wave_2.webp" alt="Sound Wave" class="wave-graphic">
             </div>
@@ -135,7 +137,7 @@ var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n
             
             <div class="email-form">
                 <h3>Get Your Detailed Results</h3>
-                <p>Enter your email to receive personalized recommendations and your complete hearing assessment.</p>
+                <p>Enter your email to receive personalized recommendations and your complete quiz results.</p>
                 <form id="email-form">
                     <input type="email" id="user-email" placeholder="Enter your email address" required>
                     <button type="submit" class="btn btn-primary">Send My Results</button>
