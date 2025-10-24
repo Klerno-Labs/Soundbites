@@ -559,8 +559,20 @@ class SoundbiteQuiz {
                     <h3>${title}</h3>
                     <p>${message}</p>
                     <p><strong>${recommendation.action}</strong></p>
-                    <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                        <a href="${ctaUrl}" class="btn btn-secondary" target="_blank" rel="noopener">${ctaText}</a>
+
+                    <div style="margin-top: 2rem; border-top: 2px solid rgba(255,255,255,0.3); padding-top: 2rem;">
+                        <h4 style="margin-bottom: 1rem; font-size: 1.2rem; font-weight: 700;">Take Action Now</h4>
+                        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                            <a href="https://soundbites.com" class="btn btn-primary" target="_blank" rel="noopener" style="background: white; color: ${accent}; border: 2px solid white; font-weight: 700;">
+                                🎧 Visit Soundbites.com
+                            </a>
+                            <a href="https://www.tiktok.com/@soundbiteshearing/shop" class="btn btn-primary" target="_blank" rel="noopener" style="background: white; color: ${accent}; border: 2px solid white; font-weight: 700;">
+                                🛍️ Shop on TikTok
+                            </a>
+                            <a href="https://www.keephearing.org" class="btn btn-primary" target="_blank" rel="noopener" style="background: white; color: ${accent}; border: 2px solid white; font-weight: 700;">
+                                📚 Learn More at KeepHearing.org
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

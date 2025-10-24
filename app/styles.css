@@ -81,10 +81,7 @@ header h1 {
     font-size: 2.5rem;
     margin-bottom: 0.5rem;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    background: linear-gradient(45deg, var(--sb-pink), var(--sb-purple), var(--sb-indigo));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--sb-primary);
     font-weight: 700;
     font-family: var(--sb-font-heading);
 }
@@ -240,7 +237,7 @@ header p {
 
 .option:hover {
     border-color: var(--sb-pink);
-    background: linear-gradient(135deg, rgba(233, 30, 99, 0.1), rgba(156, 39, 176, 0.1));
+    background: rgba(201, 42, 118, 0.1);
 }
 
 .option.selected {
@@ -276,17 +273,19 @@ header p {
 .btn-secondary:hover { background: var(--sb-primary); color: #fff; transition: color 0.2s ease, background 0.2s ease; }
 
 .btn-success {
-    background: linear-gradient(135deg, var(--sb-green), #2bb673);
+    background: var(--sb-primary);
     color: white;
+    border: 2px solid var(--sb-primary);
 }
 
 .btn-success:hover {
-    background: #218838;
+    background: #b02467;
 }
 
 .btn-danger {
-    background: linear-gradient(135deg, var(--sb-red), #ff4d4d);
+    background: var(--sb-red);
     color: white;
+    border: 2px solid var(--sb-red);
 }
 
 .btn-danger:hover {
@@ -381,10 +380,7 @@ textarea:focus-visible,
 .score-display {
     font-size: 3rem;
     font-weight: bold;
-    background: linear-gradient(45deg, #e91e63, #9c27b0, #3f51b5);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--sb-primary);
     margin: 1rem 0;
 }
 
@@ -444,17 +440,14 @@ textarea:focus-visible,
     font-size: 2.2rem;
     font-weight: 800;
     line-height: 1;
-    background: linear-gradient(45deg, #e91e63, #9c27b0);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--sb-primary);
 }
 
 .score-number .score-max {
     font-size: 1.2rem;
     font-weight: 700;
-    color: #7b1fa2;
-    opacity: 0.9;
+    color: var(--sb-primary);
+    opacity: 0.7;
 }
 
 /* Fallback horizontal progress bar (hidden by default; could be toggled if needed) */
@@ -469,7 +462,7 @@ textarea:focus-visible,
 .score-fill {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, var(--sb-pink), var(--sb-purple));
+    background: var(--sb-primary);
     border-radius: inherit;
 }
 
@@ -547,7 +540,7 @@ textarea:focus-visible,
 }
 
 .stat-card {
-    background: linear-gradient(135deg, #e91e63, #9c27b0);
+    background: var(--sb-primary);
     color: white;
     padding: 1.5rem;
     border-radius: 10px;
@@ -735,10 +728,7 @@ textarea:focus-visible,
 }
 
 .brand-accent {
-    background: linear-gradient(45deg, #e91e63, #9c27b0, #3f51b5);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--sb-primary);
     font-weight: bold;
 }
 
@@ -753,27 +743,7 @@ body {
     background-image: none !important;
 }
 
-/* Skip link visibility and focus style */
-.skip-link {
-    position: absolute;
-    left: -9999px;
-    top: auto;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-}
-.skip-link:focus {
-    left: 1rem;
-    top: 1rem;
-    width: auto;
-    height: auto;
-    background: #000;
-    color: #fff;
-    padding: 0.5rem 0.75rem;
-    border-radius: 6px;
-    z-index: 10000;
-    box-shadow: var(--sb-focus);
-}
+/* Duplicate skip-link styles removed - consolidated above */
 
 /* Next button brand color override (match logo magenta) */
 #next-btn.btn-primary {
@@ -812,14 +782,14 @@ body {
    TIKTOK MOBILE OPTIMIZATIONS
    ========================================== */
 
-/* Loading Spinner (TikTok-style) */
+/* Loading Spinner */
 .app-loader {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, #C92A76 0%, #6E49B2 100%);
+    background: var(--sb-primary);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -850,9 +820,7 @@ body {
     opacity: 0.9;
 }
 
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
+/* Duplicate @keyframes spin removed - consolidated above */
 
 /* Bigger touch targets for mobile users */
 @media (max-width: 768px) {
@@ -985,7 +953,7 @@ body {
 
 /* More prominent email capture CTA */
 .email-form {
-    background: linear-gradient(135deg, #C92A76 0%, #6E49B2 100%);
+    background: var(--sb-primary);
     color: white;
     padding: 2rem;
     border-radius: 14px;
@@ -1038,28 +1006,40 @@ body {
     box-shadow: 0 6px 16px rgba(255, 255, 255, 0.5) !important;
 }
 
-/* Progress bar enhancement */
-#progress-bar {
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 2rem;
-    height: 12px;
-}
-
-#progress {
-    height: 100%;
-    background: linear-gradient(90deg, #C92A76 0%, #6E49B2 100%);
-    transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-    border-radius: 12px;
-}
+/* Duplicate progress bar styles removed - consolidated above */
 
 /* Results scoring visual enhancement */
 .results-container h2 {
     font-size: 2rem;
     margin-bottom: 1.5rem;
-    background: linear-gradient(45deg, #C92A76, #6E49B2);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--sb-primary);
+}
+
+/* CTA Button Styles - Top 0.01% Quality */
+.recommendation .btn {
+    min-width: 200px;
+    padding: 14px 24px;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 10px;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.recommendation .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+    .recommendation .btn {
+        width: 100%;
+        max-width: 400px;
+        min-height: 52px;
+        font-size: 1.05rem;
+    }
 }

@@ -97,12 +97,9 @@ header {
   font-weight: 700; /* Bold */
 }
 
-/* Accent gradient for a single emphasized word in headlines */
+/* Accent color for emphasized words in headlines */
 .sb-accent-word {
-  background: linear-gradient(45deg, var(--sb-pink), var(--sb-purple), var(--sb-indigo));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--sb-primary);
 }
 
 /* Signature (logo + dot wave) ratio helpers */
