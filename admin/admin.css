@@ -9,7 +9,7 @@
   --sb-font: 'Montserrat','Segoe UI',Tahoma,Verdana,sans-serif;
 }
 * { box-sizing: border-box; }
-html, body { height: 100%; }
+html, body { height: 100%; overflow-x: hidden; }
 body { margin: 0; font-family: var(--sb-font); color: var(--sb-text); background: #fff; }
 .brand-gradient { background: linear-gradient(45deg, #e91e63, #9c27b0, #3f51b5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .gradient.pink-purple { background: linear-gradient(135deg, #e91e63, #9c27b0); color: #fff; }
@@ -83,6 +83,38 @@ h3 { margin: .5rem 0 .35rem; }
     width: 100%;
     margin-top: 0.5rem;
     font-size: 0.9rem;
+  }
+
+  /* Stack form fields vertically on mobile */
+  .form-row {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .form-col {
+    width: 100%;
+  }
+
+  /* Ensure inputs don't overflow */
+  input, select, textarea {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Container and admin-panel overflow fix */
+  .container {
+    padding: 15px;
+    overflow-x: hidden;
+  }
+
+  .admin-panel {
+    overflow-x: hidden;
+  }
+
+  /* Filters section mobile fix */
+  .filters-section {
+    overflow-x: hidden;
   }
 }
 .skip-link { position:absolute; left:-9999px; }
@@ -511,13 +543,29 @@ h3 { margin: .5rem 0 .35rem; }
     .analytics-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .table-container {
         font-size: 0.75rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        max-width: 100%;
     }
-    
+
+    .data-table {
+        min-width: 100%;
+        display: block;
+        overflow-x: auto;
+    }
+
     .data-table th,
     .data-table td {
         padding: 0.5rem;
+        white-space: nowrap;
+    }
+
+    /* Analytics card mobile fit */
+    .analytics-card {
+        padding: 1rem;
+        overflow-x: hidden;
     }
 }
