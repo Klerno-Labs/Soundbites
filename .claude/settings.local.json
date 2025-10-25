@@ -40,7 +40,10 @@
       "Bash(timeout 15 curl:*)",
       "Bash(done)",
       "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYy5oYXRmaWVsZDMwOUBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjEyMTgzMzgsImV4cCI6MTc2MTMwNDczOH0.LGCRuHIMGXj0egO7TLKQK8Q0UAWH6eUBeabMDELtmTk\")",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhZG1pbiIsImVtYWlsIjoiYy5oYXRmaWVsZDMwOUBnbWFpbC5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE3NjEyNTk0NzQsImV4cCI6MTc2MTM0NTg3NH0.qnO5qG09N6unamPuzrJYliDtIz7oU0cWpYkiZism67Y\")",
+      "Bash(node scripts/check-compliance.js:*)",
+      "Bash(dir:*)"
     ],
     "deny": [],
     "ask": []

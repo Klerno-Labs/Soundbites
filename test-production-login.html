@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Production Login Test</title>
+    <style>
+        body { font-family: Arial; max-width: 800px; margin: 50px auto; }
+        .test { background: #f0f0f0; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .success { background: #d4edda; border-left: 4px solid #28a745; }
+        .error { background: #f8d7da; border-left: 4px solid #dc3545; }
+        button { padding: 10px 20px; margin: 5px; }
+        pre { background: #fff; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Production Login Flow Test</h1>
+
+    <div id="results"></div>
+
+    <button onclick="testLoginFlow()">Test Complete Login Flow</button>
+    <button onclick="clearStorage()">Clear localStorage</button>
+
+    <script>
+        const BACKEND_URL = 'https://soundbites-quiz-backend.onrender.com';
+        const results = document.getElementById('results');
+
+        function log(message, type = 'test') {
+            const div = document.createElement('div');
+            div.className = `test ${type}`;
+            div.innerHTML = message;
+            results.appendChild(div);
+        }
+
+        function clearStorage() {
+            localStorage.clear();
+            log('✅ localStorage cleared', 'success');
+        }
+
+        async function testLoginFlow() {
+            results.innerHTML = '';
+            log('<h3>Starting Login Flow Test...</h3>');
+
+            try {
+                // Step 1: Login
+                log('<strong>Step 1: Testing Login...</strong>');
+                const loginRes = await fetch(`${BACKEND_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({
+                        email: 'c.hatfield309@gmail.com',
+                        password: 'Hearing2025'
+                    })
+                });
+
+                if (!loginRes.ok) {
+                    throw new Error(`Login failed: ${loginRes.status}`);
+                }
+
+                const loginData = await loginRes.json();
+                log(`✅ Login successful<pre>${JSON.stringify(loginData, null, 2)}</pre>`, 'success');
+
+                // Step 2: Store token
+                log('<strong>Step 2: Storing token in localStorage...</strong>');
+                if (loginData.token) {
+                    localStorage.setItem('admin_token', loginData.token);
+                    log(`✅ Token stored: ${loginData.token.substring(0, 50)}...`, 'success');
+                } else {
+                    throw new Error('No token in response!');
+                }
+
+                // Step 3: Verify token immediately
+                log('<strong>Step 3: Verifying token...</strong>');
+                const token = localStorage.getItem('admin_token');
+                const verifyRes = await fetch(`${BACKEND_URL}/api/auth/verify`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    credentials: 'include'
+                });
+
+                const verifyData = await verifyRes.json();
+                log(`Response: <pre>${JSON.stringify(verifyData, null, 2)}</pre>`, verifyData.valid ? 'success' : 'error');
+
+                if (!verifyData.valid) {
+                    log(`❌ TOKEN VERIFICATION FAILED! This is the problem!<br>
+                         The token was just created but verification says it's invalid.<br>
+                         This means JWT_SECRET changed between login and verify.`, 'error');
+                } else {
+                    log('✅ Token verified successfully!', 'success');
+                }
+
+                // Step 4: Test what admin-auth-backend.js does
+                log('<strong>Step 4: Simulating admin-auth-backend.js check...</strong>');
+                const authCheckRes = await fetch(`${BACKEND_URL}/api/auth/verify`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    credentials: 'include'
+                });
+
+                if (authCheckRes.ok) {
+                    const data = await authCheckRes.json();
+                    if (data.valid) {
+                        log('✅ Auth check passed - Dashboard would load', 'success');
+                    } else {
+                        log('❌ Auth check failed - Would redirect to login', 'error');
+                    }
+                } else {
+                    log(`❌ Auth check HTTP error: ${authCheckRes.status}`, 'error');
+                }
+
+            } catch (error) {
+                log(`❌ Error: ${error.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -536,7 +536,7 @@ class SoundbiteQuiz {
         }
     }
 
-    submitQuiz() {
+    async submitQuiz() {
         const score = this.calculateScore();
         const recommendation = this.getRecommendation(score);
 
@@ -550,8 +550,8 @@ class SoundbiteQuiz {
             currency: 'USD'
         });
 
-        // Store results for analytics
-        this.storeResults(score, recommendation);
+        // Store results for analytics (wait for result ID)
+        await this.storeResults(score, recommendation);
 
         // Record submission for rate limiting
         this.rateLimiter.recordSubmission();
@@ -643,7 +643,7 @@ class SoundbiteQuiz {
         resultsContainer.style.display = 'block';
     }
 
-    storeResults(score, recommendation) {
+    async storeResults(score, recommendation) {
         // Capture UTM for better analytics attribution
         const params = new URLSearchParams(window.location.search);
         const utm = {
@@ -663,18 +663,35 @@ class SoundbiteQuiz {
             referrer: document.referrer,
             utm
         };
-        
-        // Submit to API if available, fallback to localStorage
-        if (window.api) {
-            window.api.submitQuiz(results)
-                .then(response => {
-                    console.log('✅ Results submitted to API:', response);
+
+        try {
+            // Submit to backend API
+            const response = await fetch(SoundbitesConfig.getAPIEndpoint('quiz/submit'), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    score: score,
+                    answers: Object.values(this.answers),
+                    utm: utm
                 })
-                .catch(err => {
-                    console.error('Failed to submit to API, storing locally:', err);
-                    this.storeResultsLocally(results);
-                });
-        } else {
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('✅ Results submitted to API:', data);
+
+                // Store result ID for email sending
+                if (data.result && data.result.id) {
+                    this.currentResultId = data.result.id;
+                    console.log('📝 Stored result ID:', this.currentResultId);
+                }
+            } else {
+                throw new Error('Failed to submit to API');
+            }
+        } catch (err) {
+            console.error('Failed to submit to API, storing locally:', err);
             this.storeResultsLocally(results);
         }
     }
@@ -688,11 +705,11 @@ class SoundbiteQuiz {
 
     async sendResults(event) {
         event.preventDefault();
-        
+
         const email = document.getElementById('user-email').value;
         const score = this.calculateScore();
         const recommendation = this.getRecommendation(score);
-        
+
         // Track lead capture (standard TikTok event)
         this.trackTikTokEvent('Lead', {
             content_name: 'Soundbites Quiz Lead',
@@ -702,50 +719,61 @@ class SoundbiteQuiz {
             score: score,
             recommendation_level: recommendation.level
         });
-        
+
         // Show loading state
         const submitBtn = event.target.querySelector('button[type="submit"]');
         const originalText = submitBtn.textContent;
-        submitBtn.textContent = 'Sending...';
+        submitBtn.textContent = '📧 Sending...';
         submitBtn.disabled = true;
-        
+
         try {
-            // Initialize EmailJS (you'll need to configure this)
-            const emailSettings = JSON.parse(localStorage.getItem('email-settings') || '{}');
-            
-            if (emailSettings.serviceId && emailSettings.templateId && emailSettings.userId && typeof emailjs !== 'undefined') {
-                const subject = `[Soundbites Results] ${recommendation.title} (${score}/100)`;
-                await emailjs.send(
-                    emailSettings.serviceId,
-                    emailSettings.templateId,
-                    {
-                        to_email: email,
-                        subject: subject,
-                        email_subject: subject,
-                        user_score: score,
-                        recommendation_level: recommendation.level,
-                        recommendation_title: recommendation.title,
-                        recommendation_message: recommendation.message,
-                        answers: JSON.stringify(this.answers, null, 2)
-                    },
-                    emailSettings.userId
-                );
-                
-                alert('Results sent successfully! Check your email for detailed recommendations.');
-            } else {
-                console.log('Email not configured. Results would be sent to:', email);
-                alert('Thank you! Your results have been processed.');
+            // Send lead and quiz results to backend
+            const response = await fetch(SoundbitesConfig.getAPIEndpoint('quiz/lead'), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    name: null,
+                    phone: null,
+                    resultId: this.currentResultId // Store result ID after quiz submission
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to send results');
             }
-            
-            // Store lead information
-            this.storeLead(email, score, recommendation);
-            
+
+            const data = await response.json();
+            console.log('✅ Lead captured:', data);
+
+            // Success message
+            submitBtn.textContent = '✅ Sent!';
+            submitBtn.style.background = '#10b981';
+
+            // Show success message
+            const successMsg = document.createElement('p');
+            successMsg.style.cssText = 'color: white; margin-top: 1rem; font-weight: 600; text-align: center;';
+            successMsg.textContent = '✨ Check your email! Your personalized results are on the way.';
+            event.target.appendChild(successMsg);
+
+            // Hide form after 2 seconds
+            setTimeout(() => {
+                event.target.style.display = 'none';
+            }, 3000);
+
         } catch (error) {
             console.error('Error sending email:', error);
-            alert('There was an error sending your results. Please try again.');
-        } finally {
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
+            submitBtn.textContent = '❌ Error - Try Again';
+            submitBtn.style.background = '#ef4444';
+
+            setTimeout(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.style.background = '';
+                submitBtn.disabled = false;
+            }, 3000);
         }
     }
 
